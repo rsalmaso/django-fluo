@@ -22,6 +22,7 @@ Contents:
 
     copying
     requirements
+    coding
 
 Indices and tables
 ==================
