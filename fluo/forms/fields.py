@@ -20,42 +20,16 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from django.db import models
-from django.utils.translation import ugettext_lazy as _
-from fluo import forms
+from django import forms
 
 __all__ = (
-    'StatusField', 'STATUS_CHOICES',
     'OrderField',
 )
 
-STATUS_CHOICES = (
-    ('active', _('Active')),
-    ('inactive', _('Inactive')),
-)
-
-class StatusField(models.CharField):
-    def __init__(self,
-                 choices=STATUS_CHOICES,
-                 max_length=10,
-                 default='active',
-                 verbose_name=_('status'),
-                 help_text=_('Is active?')):
-        super(StatusField, self).__init__(
-            choices=choices,
-            max_length=max_length,
-            default=default,
-            verbose_name=verbose_name,
-            help_text=help_text
-        )
-
-class OrderField(models.IntegerField):
-    def __init__(self, *args, **kwargs):
-        kwargs['default'] = 0
-        models.Field.__init__(self, *args, **kwargs)
-
-    def formfield(self, **kwargs):
-        defaults = {'form_class': forms.OrderField}
-        defaults.update(kwargs)
-        return super(OrderField, self).formfield(**defaults)
+try:
+    # new from django-admin-ui branch
+    from django.forms import OrderField
+except ImportError:
+    class OrderField(forms.IntegerField):
+        pass
 
