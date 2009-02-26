@@ -42,3 +42,10 @@ and these methods:
     * ``up()`` -- Move up the object, and push down all others
     * ``down()`` -- Move down the object, and push up all others
 
+TreeOrderedModel
+================
+
+``TreeOrderedModel`` derives from OrderedModel, and it has these field:
+
+    * parent -- Optional. The parent node. A ``ForeignKey`` to ``TreeOrderedModel``
+

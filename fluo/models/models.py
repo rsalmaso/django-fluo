@@ -84,3 +84,22 @@ class OrderedModel(models.Model):
                     max = brother.ordering
         self.ordering = max + 1
 
+class TreeOrderedModel(OrderedModel):
+    parent = models.ForeignKey(
+        'self',
+        blank=True,
+        null=True,
+        related_name='children',
+        verbose_name=_('Parent node'),
+        help_text=_('The parent node of this field.'),
+    )
+
+    class Meta:
+        abstract = True
+
+    def brothers_and_me(self):
+        if self.parent:
+            return self._default_manager.filter(parent=self.parent)
+        else:
+            return self._default_manager.filter(parent__isnull=True)
+
