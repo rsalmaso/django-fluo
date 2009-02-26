@@ -1,0 +1,14 @@
+docs/_build
+.svnignore
+.DS_Store
+.svn
+Thumbs.db
+.directory
+
+syntax: glob
+*.swp
+*~
+*-
+*.pyc
+*.kpf
+
