@@ -23,6 +23,7 @@ Contents:
     copying
     requirements
     coding
+    shortcuts
 
 Indices and tables
 ==================
