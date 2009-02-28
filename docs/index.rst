@@ -25,6 +25,7 @@ Contents:
     coding
     models
     shortcuts
+    views/index
 
 Indices and tables
 ==================
