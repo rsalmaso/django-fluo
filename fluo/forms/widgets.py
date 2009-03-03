@@ -20,7 +20,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from django.forms import *
-from fluo.forms.fields import *
-from fluo.forms.widgets import *
+from django.contrib.admin.widgets import AdminDateWidget as DateWidget
+from django.contrib.admin.widgets import AdminTimeWidget as TimeWidget
+from django.contrib.admin.widgets import AdminSplitDateTime as DateTimeWidget
+
+__all__ = (
+    'DateWidget', 'TimeWidget', 'DateTimeWidget',
+)
 
