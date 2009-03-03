@@ -24,6 +24,12 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from fluo.models import fields
 
+class StatusModel(models.Model):
+    status = fields.StatusField()
+
+    class Meta:
+        abstract = True
+
 class OrderedModel(models.Model):
     ordering = fields.OrderField(
         default=0,
