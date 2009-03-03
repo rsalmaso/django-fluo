@@ -21,27 +21,42 @@
 # THE SOFTWARE.
 
 from optparse import make_option
-from django.core.management.base import BaseCommand
+from django.core.management import call_command
+from django.conf import settings
+from fluo.management import DatabaseCommand
+from fluo.management.commands.db import connection, CreateDBError, DropDBError
+INSTALLED_APPS = settings.INSTALLED_APPS
 
-__all__ = ['DatabaseCommand']
+class Command(DatabaseCommand):
+    help = "(Re)create and initialize database with common data"
 
-class DatabaseCommand(BaseCommand):
-    option_list = BaseCommand.option_list + (
-        make_option('--noinput', action='store_false',
-            dest='interactive', default=True,
-            help='Tells Django to NOT prompt the user for input of any kind.'),
-        make_option('--no-utf8', action='store_true',
-            dest='no_utf8_support', default=False,
-            help='Tells Django to not create a UTF-8 charset database'),
-        make_option('-U', '--user', action='store',
-            dest='user', default=None,
-            help='Use another user for the database then defined in settings.py'),
-        make_option('-P', '--password', action='store',
-            dest='password', default=None,
-            help='Use another password for the database then defined in settings.py'),
-        make_option('-D', '--dbname', action='store',
-            dest='dbname', default=None,
-            help='Use another database name then defined in settings.py (For PostgreSQL this defaults to "template1")'),
-    )
-    requires_model_validation = False
+    def handle(self, *args, **options):
+        if options.get('interactive'):
+            confirm = raw_input("""
+You have requested a database reset.
+This will IRREVERSIBLY DESTROY
+ALL data in the database "%s".
+Are you sure you want to do this?
+
+Type 'yes' to continue, or 'no' to cancel: """ % (settings.DATABASE_NAME,))
+        else:
+            confirm = 'yes'
+
+        if confirm != 'yes':
+            print "Reset cancelled."
+            return
+
+        try:
+            connection.dropdb()
+        except DropDBError, e:
+            print e
+            call_command('resetdb')
+        else:
+            try:
+                connection.createdb()
+            except CreateDBError, e:
+                print e
+        connection.close()
+
+        call_command('syncdb', interactive=False)
 
