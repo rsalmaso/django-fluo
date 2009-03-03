@@ -24,6 +24,7 @@ from django import forms
 
 __all__ = (
     'OrderField',
+    'TextField',
 )
 
 try:
@@ -32,4 +33,7 @@ try:
 except ImportError:
     class OrderField(forms.IntegerField):
         pass
+
+class TextField(forms.CharField):
+    widget = forms.Textarea
 
