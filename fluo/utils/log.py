@@ -20,8 +20,32 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from django.conf import settings
+import logging
+import logging.handlers
+import sys
 
-LOGGING_FORMAT = getattr(settings, 'LOGGING_FORMAT', '%(asctime)s %(levelname)s %(message)s')
-LOGGING_FILENAME = getattr(settings, 'LOGGING_FILENAME', '/tmp/fluo.log')
+from fluo import settings
+
+exception = logging.exception
+error = logging.error
+warning = logging.warning
+info = logging.info
+debug = logging.debug
+
+def logger_init():
+    logger = logging.getLogger()
+    err_fmt = logging.Formatter(settings.LOGGING_FORMAT)
+
+    sys_ev_handler = logging.FileHandler(settings.LOGGING_FILENAME)
+    sys_ev_handler.setFormatter(err_fmt)
+    logger.addHandler(sys_ev_handler)
+
+    err_handler = logging.StreamHandler()
+    err_handler.setFormatter(err_fmt)
+    err_handler.setLevel(logging.DEBUG)
+    logger.addHandler(err_handler)
+
+    logger.setLevel(logging.DEBUG)
+
+logger_init()
 
