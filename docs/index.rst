@@ -26,6 +26,7 @@ Contents:
     models
     shortcuts
     email
+    admin
     views/index
 
 Indices and tables
