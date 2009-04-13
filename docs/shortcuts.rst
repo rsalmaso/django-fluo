@@ -86,3 +86,38 @@ And the same filled with a :class:`~django.http.RequestContext` created from the
         users=User.objects.all(),
     )
 
+``reverse``
+===========
+
+.. function:: fluo.shortcuts.reverse(viewname, \*args, \*\*kwargs)
+
+**Description:**
+
+A simpler ``reverse`` function which wraps the :function:`django.core.urlresolvers.reverse` functionality
+for common use. For more complex use to use function to render a template with a context.
+
+**Required aruments:**
+
+    * ``viewname``: the name of the template to render
+
+**Optional arguments:**
+
+    * ``args``: a positional arguments list, used for URL matching
+
+    * ``kwargs``: a named keyword list, used for URL matching
+
+**Example:**
+
+Retrieve the URL for `summary` view::
+
+    # in urls.py
+
+    url(r'(?P<year>\d{4})/(?P<month>\d{1,2})/((?P<day>\d{1,2}))/', summary_view, name='summary')
+
+    # in views.py
+
+    from fluo.shortcuts import reverse
+
+    def myview(request):
+        return HttpResponseRedirect(reverse('summary', 1945, day=8, month=9))
+

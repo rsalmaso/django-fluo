@@ -23,6 +23,12 @@
 from django.template import RequestContext
 from django.template import loader
 from django.http import HttpResponse
+from django.core.urlresolvers import reverse as django_reverse
+
+__all__ = [
+    'render_to_string', 'render_to_response',
+    'reverse',
+]
 
 def render_to_string(template_name, request=None, **kwargs):
     if request:
@@ -49,4 +55,7 @@ def render_to_response(template_name, request=None, mimetype=None, content_type=
         mimetype=mimetype,
         content_type=content_type,
     )
+
+def reverse(viewname, *args, **kwargs):
+    return django_reverse(viewname, args=args, kwargs=kwargs)
 
