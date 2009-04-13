@@ -35,7 +35,7 @@ def render_to_string(template_name, request=None, **kwargs):
         context_instance=context_instance,
     )
 
-def render_to_response(template_name, request=None, mimetype=None, **kwargs):
+def render_to_response(template_name, request=None, mimetype=None, content_type=None, **kwargs):
     if request:
         context_instance = RequestContext(request)
     else:
@@ -47,5 +47,6 @@ def render_to_response(template_name, request=None, mimetype=None, **kwargs):
             context_instance=context_instance,
         ),
         mimetype=mimetype,
+        content_type=content_type,
     )
 

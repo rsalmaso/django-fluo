@@ -62,6 +62,9 @@ A simple to use function to return an :class:`~HttpResponse` object.
     * ``mimetype``: the MIME type to use for the resulting document. Defaults
             to the value of the ``DEFAULT_CONTENT_TYPE`` setting.
 
+    * ``content_type``: an alias for ``mimetype`` that corresponds more closely to the HTTP
+            header Content-Type.
+
     * ``kwargs``: a named keyword list, passed as  context to the template renderer
 
 **Example:**
