@@ -25,6 +25,7 @@ Contents:
     coding
     models
     shortcuts
+    email
     views/index
 
 Indices and tables
