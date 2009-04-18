@@ -22,7 +22,9 @@
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import get_language
 from fluo.models import fields
+from fluo import settings
 
 class StatusModel(models.Model):
     status = fields.StatusField()
@@ -108,4 +110,37 @@ class TreeOrderedModel(OrderedModel):
             return self._default_manager.filter(parent=self.parent)
         else:
             return self._default_manager.filter(parent__isnull=True)
+
+class I18NProxy(object):
+    def __init__(self, tr, original):
+        self._tr = tr
+        self._original = original
+    def __getattr__(self, name):
+        attr = getattr(self._tr, name, None)
+        if not attr or (attr and (attr == '' or attr == u'')):
+            attr = getattr(self._original, name)
+        return attr
+
+class I18NModel(models.Model):
+    def translate(self, language=None):
+        language = language or get_language()[:2]
+        try:
+            return I18NProxy(self.translations.get(language__startswith=language), self)
+        except models.ObjectDoesNotExist:
+            return self
+
+    class Meta:
+        abstract = True
+
+class TranslationModel(models.Model):
+    language = models.CharField(
+        max_length=5,
+        choices=settings.LANGUAGES,
+        db_index=True,
+        verbose_name=_('language'),
+    )
+
+    class Meta:
+        abstract = True
+        ordering = ('language',)
 
