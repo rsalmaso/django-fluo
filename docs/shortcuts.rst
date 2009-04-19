@@ -86,6 +86,56 @@ And the same filled with a :class:`~django.http.RequestContext` created from the
         users=User.objects.all(),
     )
 
+``render_from_string``
+======================
+
+.. function:: fluo.shortcuts.render_from_string(template_string, request=None, \*\*kwargs)
+
+**Description:**
+
+A simple to use function to render a string template with a context.
+
+**Required aruments:**
+
+    * ``template_string``: the name of the template to render
+
+**Optional arguments:**
+
+    * ``request``: an :class:`~django.http.HttpRequest` object, it creates a RequestContext
+
+    * ``kwargs``: a named keyword list, passed as  context to the template renderer
+
+**Example:**
+
+Render a mail boby message filled with only a :class:`~django.http.Context`::
+
+    TEMPLATE = """
+    From: {{ from }}
+
+    {{ body }}
+    """
+
+    mail = render_from_string(
+        TEMPLATE,
+        from='webmaster@example.com',
+        body='Welcome to example.com',
+    )
+
+And the same filled with a :class:`~django.http.RequestContext` created from the ``request``::
+
+    TEMPLATE = """
+    From: {{ from }}
+
+    {{ body }}
+    """
+
+    mail = render_from_string(
+        TEMPLATE,
+        request=request,
+        from='webmaster@example.com',
+        body='Welcome to example.com',
+    )
+
 ``reverse``
 ===========
 

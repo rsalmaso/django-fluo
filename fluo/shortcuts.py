@@ -20,13 +20,13 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from django.template import RequestContext
+from django.template import Template, Context, RequestContext
 from django.template import loader
 from django.http import HttpResponse
 from django.core.urlresolvers import reverse as django_reverse
 
 __all__ = [
-    'render_to_string', 'render_to_response',
+    'render_to_string', 'render_to_response', 'render_from_string',
     'reverse',
 ]
 
@@ -55,6 +55,14 @@ def render_to_response(template_name, request=None, mimetype=None, content_type=
         mimetype=mimetype,
         content_type=content_type,
     )
+
+def render_from_string(template_string, request=None, **kwargs):
+    t = Template(template_string)
+    if request:
+        context_instance = RequestContext(request, kwargs)
+    else:
+        context_instance = Context(kwargs)
+    return t.render(context_instance)
 
 def reverse(viewname, *args, **kwargs):
     return django_reverse(viewname, args=args, kwargs=kwargs)
