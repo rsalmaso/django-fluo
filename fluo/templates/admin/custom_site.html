@@ -1,0 +1,14 @@
+{% extends "admin/base.html" %}
+{% load i18n %}
+
+{% block nav-global %}{% endblock %}
+{% block userlinks %}
+<span style="float: right; padding-left: 4px; vertical-align: middle;">
+    {{ block.super }} / <a href="/">{% trans "Back to site" %}</a>
+</span>
+{% block languages %}
+ <div id="flags" style="float: right;">
+     {% include 'admin/languages.html' %}
+ </div>
+{% endblock %}
+{% endblock %}

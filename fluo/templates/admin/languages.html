@@ -1,0 +1,12 @@
+{% load i18n %}
+{% get_available_languages as languages %}
+<div id="flags" style="float: right;">
+    {% for lang in languages %}
+    <span style="float: right; padding-right: 4px; vertical-align: middle;">
+        <form action="/i18n/setlang/" method="post">
+            <input type="hidden" name="language" value="{{ lang.0 }}" alt="{{ lang.1 }}"/>
+            <input type="image" src="{{ MEDIA_URL }}fluo/flags/{{ lang.0 }}.gif" name="language_{{ lang.0 }}" value="{{ lang.0 }}" alt="{{ lang.1 }}"/>
+        </form>
+    </span>
+    {% endfor %}
+</div>
