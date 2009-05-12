@@ -23,6 +23,7 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import get_language
+from django.template.defaultfilters import slugify
 from fluo.models import fields
 from fluo import settings
 
@@ -143,4 +144,48 @@ class TranslationModel(models.Model):
     class Meta:
         abstract = True
         ordering = ('language',)
+
+class CategoryModelManager(models.Manager):
+    def default(self):
+        return self.get_query_set().get(default=True)
+
+class CategoryModel(StatusModel, OrderedModel):
+    objects = CategoryModelManager()
+
+    name = models.CharField(
+        unique=True,
+        max_length=25,
+        verbose_name=_('category name'),
+    )
+    slug = models.SlugField(
+        unique=True,
+        editable=False,
+        verbose_name=_('slug'),
+        help_text=('A "slug" is a unique URL-friendly title for the object automatically generated from the "name" field.'),
+    )
+    default = models.BooleanField(
+        default=False,
+        verbose_name=_('default'),
+        help_text=_('Is the default one?'),
+    )
+
+    class Meta:
+        abstract = True
+        ordering = ('name',)
+
+    def __unicode__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(CategoryModel, self).save(*args, **kwargs)
+        if self.default:
+            for c in self._default_manager.exclude(pk=self.id):
+                c.default = False
+                c.save(*args, **kwargs)
+        try:
+            c = self._default_manager.get(default=True)
+        except models.ObjectDoesNotExist:
+            self.default = True
+            super(CategoryModel, self).save(*args, **kwargs)
 
