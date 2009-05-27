@@ -26,14 +26,31 @@ from fluo import settings
 register = template.Library()
 
 @register.simple_tag
-def css(script):
-    return '<link rel="stylesheet" type="text/css" href="%(media)s%(script)s" />' % {
-        'media': settings.MEDIA_URL,
+def css(script, media="all"):
+    return '<link rel="stylesheet" type="text/css" href="%(media_url)s%(script)s" media="%(media)s"/>' % {
+        'media_url': settings.MEDIA_URL,
         'script': script,
+        'media': media,
     }
 
 @register.simple_tag
-def javascript(script):
+def css_print(script):
+    return css(script, media="print")
+
+@register.simple_tag
+def css_ie(script, media="all"):
+    return """<!--[if IE]>%s<![endif]-->""" % css(script, media)
+
+@register.simple_tag
+def css_ie6(script, media="all"):
+    return """<!--[if IE 6]>%s<![endif]-->""" % css(script, media)
+
+@register.simple_tag
+def css_ie7(script, media="all"):
+    return """<!--[if IE 7]>%s<![endif]-->""" % css(script, media)
+
+@register.simple_tag
+def js(script):
     return '<script type="text/javascript" src="%(media)s%(script)s"></script>' % {
         'media': settings.MEDIA_URL,
         'script': script,
