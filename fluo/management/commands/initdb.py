@@ -59,5 +59,8 @@ Type 'yes' to continue, or 'no' to cancel: """ % (settings.DATABASE_NAME,))
         connection.close()
 
         call_command('syncdb', interactive=False)
+        if 'south' in INSTALLED_APPS:
+            call_command('migrate')
+
         call_command('load_admin_data')
 
