@@ -1,0 +1,10 @@
+{% load i18n %}
+{% get_available_languages as languages %}
+{% get_current_language as lang %}
+<form action="/i18n/setlang/" method="post">
+<select onchange="this.form.submit();" name="language">
+{% for language in languages %}
+<option{% ifequal language.0 lang %} selected="selected"{% endifequal %} value="{{ language.0 }}">{{ language.1 }}</option>
+{% endfor %}
+</select>
+</form>
