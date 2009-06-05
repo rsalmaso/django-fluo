@@ -20,12 +20,18 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+# Original code for CreationDateTimeField and ModificationDateTimeField
+# taken from django-extensions
+# Copyright (c) 2007 Michael Trier
+
+import datetime
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from fluo import forms
 
 __all__ = (
     'StatusField', 'STATUS_CHOICES',
+    'CreationDateTimeField', 'ModificationDateTimeField',
     'OrderField',
 )
 
@@ -48,6 +54,35 @@ class StatusField(models.CharField):
             verbose_name=verbose_name,
             help_text=help_text
         )
+
+class CreationDateTimeField(models.DateTimeField):
+    """
+    By default, sets editable=False, blank=True, default=datetime.now
+    """
+
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault('editable', False)
+        kwargs.setdefault('blank', True)
+        kwargs.setdefault('default', datetime.datetime.now)
+        super(CreationDateTimeField, self).__init__(*args, **kwargs)
+
+    def get_internal_type(self):
+        return "DateTimeField"
+
+class ModificationDateTimeField(CreationDateTimeField):
+    """
+    By default, sets editable=False, blank=True, default=datetime.now
+
+    Sets value to datetime.now() on each save of the model.
+    """
+
+    def pre_save(self, model, add):
+        value = datetime.datetime.now()
+        setattr(model, self.attname, value)
+        return value
+
+    def get_internal_type(self):
+        return "DateTimeField"
 
 class OrderField(models.IntegerField):
     def __init__(self, *args, **kwargs):
