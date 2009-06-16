@@ -20,10 +20,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from django.contrib.admin.options import HORIZONTAL, VERTICAL
-from django.contrib.admin.options import StackedInline, TabularInline
-from django.contrib.admin.sites import AdminSite, site
-from django.contrib.admin import autodiscover, ModelAdmin
-from fluo.admin.models import OrderedModelAdmin, TreeOrderedModelAdmin
-import fluo.admin.hack
+def __init__():
+    from django import VERSION
+    if VERSION < (1, 1):
+        from django.contrib import admin
+        from django.core.urlresolvers import reverse
+        admin.site.root_path = reverse('%sadmin_index' % admin.site.name)
+__init__()
 
