@@ -20,8 +20,15 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+"""
+Creates permissions for all installed apps that need permissions.
+"""
+
 from optparse import make_option
+from django.db.models import get_models, signals
+from django.contrib.auth import models as auth_app
 from django.core.management.base import BaseCommand
+from fluo import settings
 
 __all__ = ['DatabaseCommand']
 
@@ -44,4 +51,30 @@ class DatabaseCommand(BaseCommand):
             help='Use another database name then defined in settings.py (For PostgreSQL this defaults to "template1")'),
     )
     requires_model_validation = False
+
+def _get_permission_codename(action, opts):
+    return u'%s_%s' % (action, opts.object_name.lower())
+
+def _get_all_permissions(opts):
+    "Returns (codename, name) for all permissions in the given opts."
+    perms = []
+    for action in settings.DEFAULT_PERMISSIONS:
+        perms.append((_get_permission_codename(action, opts), u'Can %s %s' % (action, opts.verbose_name_raw)))
+    return perms + list(opts.permissions)
+
+def create_permissions(app, created_models, verbosity, **kwargs):
+    from django.contrib.contenttypes.models import ContentType
+    from django.contrib.auth.models import Permission
+    app_models = get_models(app)
+    if not app_models:
+        return
+    for klass in app_models:
+        ctype = ContentType.objects.get_for_model(klass)
+        for codename, name in _get_all_permissions(klass._meta):
+            p, created = Permission.objects.get_or_create(codename=codename, content_type__pk=ctype.id,
+                defaults={'name': name, 'content_type': ctype})
+            if created and verbosity >= 2:
+                print "Adding permission '%s'" % p
+
+signals.post_syncdb.connect(create_permissions, dispatch_uid = "fluo.management.create_permissions")
 

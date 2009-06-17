@@ -25,4 +25,9 @@ from django.conf import settings
 LANGUAGES = getattr(settings, 'LANGUAGES')
 LOGGING_FORMAT = getattr(settings, 'LOGGING_FORMAT', '%(asctime)s %(levelname)s %(message)s')
 LOGGING_FILENAME = getattr(settings, 'LOGGING_FILENAME', '/tmp/fluo.log')
+DEFAULT_PERMISSIONS = ('list', 'view',)
+try:
+    DEFAULT_PERMISSIONS += list(getattr(settings, 'DEFAULT_PERMISSIONS'))
+except:
+    pass
 
