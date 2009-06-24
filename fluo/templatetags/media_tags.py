@@ -56,3 +56,11 @@ def js(script):
         'script': script,
     }
 
+@register.simple_tag
+def media_url():
+    return settings.MEDIA_URL
+
+@register.simple_tag
+def admin_media_prefix():
+    return settings.ADMIN_MEDIA_PREFIX
+

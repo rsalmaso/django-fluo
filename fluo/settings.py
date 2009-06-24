@@ -22,6 +22,8 @@
 
 from django.conf import settings
 
+MEDIA_URL = getattr(settings, 'MEDIA_URL')
+ADMIN_MEDIA_PREFIX = getattr(settings, 'ADMIN_MEDIA_PREFIX')
 LANGUAGES = getattr(settings, 'LANGUAGES')
 LOGGING_FORMAT = getattr(settings, 'LOGGING_FORMAT', '%(asctime)s %(levelname)s %(message)s')
 LOGGING_FILENAME = getattr(settings, 'LOGGING_FILENAME', '/tmp/fluo.log')
