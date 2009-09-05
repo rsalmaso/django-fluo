@@ -57,6 +57,13 @@ def js(script):
     }
 
 @register.simple_tag
+def jquery():
+    return '<script type="text/javascript" src="%(media)sfluo/jquery/%(jquery)s"></script>' % {
+        'media': settings.MEDIA_URL,
+        'jquery': { True: 'jquery.min.js', False: 'jquery.js'}[settings.JQUERY_MINIFIED],
+    }
+
+@register.simple_tag
 def media_url():
     return settings.MEDIA_URL
 
