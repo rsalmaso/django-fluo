@@ -21,6 +21,7 @@
 # THE SOFTWARE.
 
 from django import template
+from django.utils.translation import get_language
 from fluo import settings
 
 register = template.Library()
@@ -61,6 +62,14 @@ def jquery():
     return '<script type="text/javascript" src="%(media)sfluo/jquery/%(jquery)s"></script>' % {
         'media': settings.MEDIA_URL,
         'jquery': { True: 'jquery.min.js', False: 'jquery.js'}[settings.JQUERY_MINIFIED],
+    }
+
+@register.simple_tag
+def jqueryui():
+    return '''<script type="text/javascript" src="%(media)sfluo/jqueryui/%(jqueryui)s"></script><script type="text/javascript" src="%(media)sfluo/jqueryui/i18n/%(i18n)s"></script>''' % {
+        'media': settings.MEDIA_URL,
+        'jqueryui': {True: 'jquery-ui.min.js', False: 'jquery-ui.js'}[settings.JQUERY_MINIFIED],
+        'i18n': {True: 'ui.datepicker-%s.min.js', False: 'ui.datepicker-%s.js'}[settings.JQUERY_MINIFIED] % get_language()[:2],
     }
 
 @register.simple_tag
