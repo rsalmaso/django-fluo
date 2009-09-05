@@ -73,6 +73,15 @@ def jqueryui():
     }
 
 @register.simple_tag
+def thickbox():
+    return """<link rel="stylesheet" type="text/css" href="%(media)sfluo/thickbox/css/thickbox.css" />
+        <script type="text/javascript">var tb_pathToImage = "%(media)sfluo/thickbox/images/loadingAnimation.gif";</script>
+        <script type="text/javascript" src="%(media)sfluo/thickbox/js/%(thickbox)s"></script>""" % {
+        'media': settings.MEDIA_URL,
+        'thickbox': {True: 'thickbox.min.js', False: 'thickbox.js'}[settings.JQUERY_MINIFIED],
+    }
+
+@register.simple_tag
 def media_url():
     return settings.MEDIA_URL
 
