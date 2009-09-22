@@ -21,6 +21,8 @@
 # THE SOFTWARE.
 
 from django.db.models import *
+from django.contrib.contenttypes.models import ContentTypeManager, ContentType
+from django.contrib.contenttypes.generic import GenericForeignKey, GenericRelation
 from fluo.models.fields import *
 from fluo.models.models import *
 

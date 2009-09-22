@@ -21,6 +21,7 @@
 # THE SOFTWARE.
 
 from django.forms import *
+from django.contrib.contenttypes.generic import BaseGenericInlineFormSet, generic_inlineformset_factory
 from fluo.forms.fields import *
 from fluo.forms.widgets import *
 
