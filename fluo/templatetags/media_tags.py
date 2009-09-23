@@ -110,6 +110,13 @@ def jquery_tablednd():
     }
 
 @register.simple_tag
+def jquery_bgiframe():
+    return '<script type="text/javascript" src="%(media)sfluo/jquery-bgiframe/%(js)s"></script>' % {
+        'media': settings.MEDIA_URL,
+        'js': { True: 'jquery.bgiframe.min.js', False: 'jquery.bgiframe.js'}[settings.JQUERY_MINIFIED],
+    }
+
+@register.simple_tag
 def media_url():
     return settings.MEDIA_URL
 
