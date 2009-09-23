@@ -82,6 +82,13 @@ def thickbox():
     }
 
 @register.simple_tag
+def jquery_ajaxqueue():
+    return '<script type="text/javascript" src="%(media)sfluo/jquery-ajaxqueue/%(js)s"></script>' % {
+        'media': settings.MEDIA_URL,
+        'js': { True: 'jquery.ajaxqueue.min.js', False: 'jquery.ajaxqueue.js'}[settings.JQUERY_MINIFIED],
+    }
+
+@register.simple_tag
 def media_url():
     return settings.MEDIA_URL
 
