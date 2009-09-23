@@ -96,6 +96,13 @@ def jquery_autocomplete():
     }
 
 @register.simple_tag
+def jquery_listreorder():
+    return '<script type="text/javascript" src="%(media)sfluo/jquery-listreorder/%(js)s"></script>' % {
+        'media': settings.MEDIA_URL,
+        'js': { True: 'jquery.listreorder.min.js', False: 'jquery.listreorder.js'}[settings.JQUERY_MINIFIED],
+    }
+
+@register.simple_tag
 def media_url():
     return settings.MEDIA_URL
 
