@@ -103,6 +103,13 @@ def jquery_listreorder():
     }
 
 @register.simple_tag
+def jquery_tablednd():
+    return '<script type="text/javascript" src="%(media)sfluo/jquery-tablednd/%(js)s"></script>' % {
+        'media': settings.MEDIA_URL,
+        'js': { True: 'jquery.tablednd.min.js', False: 'jquery.tablednd.js'}[settings.JQUERY_MINIFIED],
+    }
+
+@register.simple_tag
 def media_url():
     return settings.MEDIA_URL
 
