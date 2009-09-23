@@ -117,6 +117,12 @@ def jquery_bgiframe():
     }
 
 @register.simple_tag
+def jquery_disable_text_select():
+    return '<script type="text/javascript" src="%(media)sfluo/jquery-disable-text-select/jquery.disable.text.select.pack.js"></script>' % {
+        'media': settings.MEDIA_URL,
+    }
+
+@register.simple_tag
 def media_url():
     return settings.MEDIA_URL
 
