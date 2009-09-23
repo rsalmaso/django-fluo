@@ -89,6 +89,13 @@ def jquery_ajaxqueue():
     }
 
 @register.simple_tag
+def jquery_autocomplete():
+    return '<script type="text/javascript" src="%(media)sfluo/jquery-autocomplete/%(js)s"></script>' % {
+        'media': settings.MEDIA_URL,
+        'js': { True: 'jquery.autocomplete.min.js', False: 'jquery.autocomplete.js'}[settings.JQUERY_MINIFIED],
+    }
+
+@register.simple_tag
 def media_url():
     return settings.MEDIA_URL
 
