@@ -25,6 +25,8 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import get_language
 from django.template.defaultfilters import slugify
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.generic import GenericForeignKey
 from fluo.models import fields
 from fluo import settings
 
@@ -200,4 +202,20 @@ class CategoryModel(StatusModel, OrderedModel):
         except models.ObjectDoesNotExist:
             self.default = True
             super(CategoryModel, self).save(*args, **kwargs)
+
+class GenericModel(models.Model):
+    content_type = models.ForeignKey(
+        ContentType,
+        verbose_name=_('Object Type'),
+    )
+    object_id = models.PositiveIntegerField(
+        verbose_name=_('Object ID'),
+    )
+    content_object = GenericForeignKey(
+        'content_type',
+        'object_id',
+    )
+
+    class Meta:
+        abstract = True
 
