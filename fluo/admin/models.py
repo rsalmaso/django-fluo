@@ -43,11 +43,11 @@ class OrderedModelAdmin(admin.ModelAdmin):
     def get_urls(self):
         from django.conf.urls.defaults import patterns, url
 
-        info = self.admin_site.name, self.model._meta.app_label, self.model._meta.module_name
+        info = self.model._meta.app_label, self.model._meta.module_name
 
         return patterns('',
-            url(r'^(?P<id>\d+)/up/$', self.admin_site.admin_view(self.up), name='%sadmin_%s_%s_up' % info),
-            url(r'^(?P<id>\d+)/down/$', self.admin_site.admin_view(self.down), name='%sadmin_%s_%s_down' % info),
+            url(r'^(?P<id>\d+)/up/$', self.admin_site.admin_view(self.up), name='%s_%s_up' % info),
+            url(r'^(?P<id>\d+)/down/$', self.admin_site.admin_view(self.down), name='%s_%s_down' % info),
         ) + super(OrderedModelAdmin, self).get_urls()
     def up(self, request, id):
         node = self.model._default_manager.get(pk=id)
