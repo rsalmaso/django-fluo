@@ -83,3 +83,12 @@ class TreeOrderedModelAdmin(OrderedModelAdmin):
     def queryset(self, request):
         return super(TreeOrderedModelAdmin, self).queryset(request).filter(parent__isnull=True)
 
+class CategoryModelAdmin(OrderedModelAdmin):
+    search_fields = ('status', 'name',)
+    ordering = ('ordering', 'name',)
+    fieldsets = (
+        (_('visualization admin'), {'fields': ('ordering',), 'classes': ('collapse',),}),
+        (_('general admin'), {'fields': ('status', 'default'),}),
+        (None, {"fields": ("name",),}),
+    )
+

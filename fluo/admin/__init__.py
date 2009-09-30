@@ -25,6 +25,6 @@ from django.contrib.admin.options import StackedInline, TabularInline
 from django.contrib.admin.sites import AdminSite, site
 from django.contrib.admin import autodiscover, ModelAdmin
 from django.contrib.contenttypes.generic import GenericInlineModelAdmin, GenericStackedInline, GenericTabularInline
-from fluo.admin.models import OrderedModelAdmin, TreeOrderedModelAdmin
+from fluo.admin.models import OrderedModelAdmin, TreeOrderedModelAdmin, CategoryModelAdmin
 import fluo.admin.hack
 
