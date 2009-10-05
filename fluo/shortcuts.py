@@ -20,12 +20,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+from django.shortcuts import get_object_or_404, get_list_or_404, redirect
 from django.template import Template, Context, RequestContext
 from django.template import loader
 from django.http import HttpResponse
 from django.core.urlresolvers import reverse as django_reverse
 
 __all__ = [
+    'get_object_or_404', 'get_list_or_404', 'redirect',
     'render_to_string', 'render_to_response', 'render_from_string',
     'reverse',
 ]
