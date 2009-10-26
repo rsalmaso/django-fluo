@@ -19,26 +19,3 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
-
-# taken and adapted from django-cms
-# Copyright (c) 2008, Batiste Bieler
-
-from django import template
-from django.utils.translation import get_language
-from django.conf import settings
-from fluo.middleware.locale import get_language_from_request
-
-register = template.Library()
-
-@register.inclusion_tag('fluo/tags/languages.html', takes_context=True)
-def languages_as_li(context, template='fluo/tags/languages_as_li.html'):
-    request = context['request']
-    context['current_language'] = get_language_from_request(request)
-    context['template'] = template
-    return context
-
-@register.inclusion_tag('fluo/tags/content.html', takes_context=True)
-def page_language_url(context, lang):
-    request = context['request']
-    return { 'content': ur'/%s%s' % (lang, request.get_full_path()) }
-
