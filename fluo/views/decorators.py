@@ -21,6 +21,9 @@
 # THE SOFTWARE.
 
 from django.http import HttpResponseBadRequest
+from django.contrib.auth import REDIRECT_FIELD_NAME
+from django.contrib.auth.decorators import user_passes_test
+from fluo.utils.decorators import update_wrapper, wraps, auto_adapt_to_methods
 
 def ajax_required(func):
     # taken from djangosnippets.org
@@ -40,4 +43,24 @@ def ajax_required(func):
     wrap.__doc__ = func.__doc__
     wrap.__name__ = func.__name__
     return wrap
+
+def login_required(function=None, required=False, redirect_field_name=REDIRECT_FIELD_NAME):
+    """
+    Decorator for views that, if required, checks that the user is logged in and redirect
+    to the log-in page if necessary.
+    """
+    if required:
+        actual_decorator = user_passes_test(
+            lambda u: u.is_authenticated(),
+            redirect_field_name=redirect_field_name
+        )
+        if function:
+            return actual_decorator(function)
+        return actual_decorator
+    # login not required
+    def decorator(view_func):
+        def _wrapper(request, *args, **kwargs):
+            return function(request, *args, **kwargs)
+        return wraps(function)(_wrapper)
+    return auto_adapt_to_methods(decorator)
 
