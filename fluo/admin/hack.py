@@ -21,10 +21,22 @@
 # THE SOFTWARE.
 
 def __init__():
+    from django.conf import settings
     from django import VERSION
+    from django.contrib import admin
+
     if VERSION < (1, 1):
-        from django.contrib import admin
         from django.core.urlresolvers import reverse
         admin.site.root_path = reverse('%sadmin_index' % admin.site.name)
+
+    if 'django.contrib.auth' in settings.INSTALLED_APPS:
+        from django.contrib.auth.models import User
+        from django.contrib.auth.admin import UserAdmin
+
+        admin.site.unregister(User)
+        class FluoUserAdmin(UserAdmin):
+            list_display = ('username', 'email', 'first_name', 'last_name', 'is_active', 'is_superuser', 'is_staff',)
+            filter_horizontal = ('user_permissions', 'groups',)
+        admin.site.register(User, FluoUserAdmin)
 __init__()
 
