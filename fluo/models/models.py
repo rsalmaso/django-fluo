@@ -47,15 +47,15 @@ class OrderedModel(models.Model):
     class Meta:
         abstract = True
 
-    def save(self, force_insert=False, force_update=False):
+    def save(self, *args, **kwargs):
         ordering = False
         if not self.ordering:
             self.ordering = 1
             ordering = True
-        super(OrderedModel, self).save(force_insert=force_insert, force_update=force_update)
+        super(OrderedModel, self).save(*args, **kwargs)
         if ordering:
             self._set_default_ordering()
-            super(OrderedModel, self).save(force_insert=force_insert, force_update=force_update)
+            super(OrderedModel, self).save(*args, **kwargs)
     def brothers_and_me(self):
         return self._default_manager.all()
     def brothers(self):
