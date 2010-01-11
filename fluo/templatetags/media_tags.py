@@ -27,7 +27,7 @@ from fluo import settings
 
 register = template.Library()
 
-MEDIA = iri_to_uri(settings.MEDIA_URL)
+MEDIA_URL = iri_to_uri(settings.MEDIA_URL)
 ADMIN_MEDIA_PREFIX = iri_to_uri(settings.ADMIN_MEDIA_PREFIX)
 
 @register.simple_tag
