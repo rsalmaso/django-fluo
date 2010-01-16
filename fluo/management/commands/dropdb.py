@@ -21,12 +21,14 @@
 # THE SOFTWARE.
 
 from fluo.management import DatabaseCommand
-from fluo.management.commands.db import connection, DropDBError
+from fluo.management.commands.db import get_connection, DropDBError
 
 class Command(DatabaseCommand):
     help = "Drop the database!"
 
-    def handle(self, *args, **options):
+    def db_handle(self, database, args, options):
+        connection = get_connection(database)
+
         try:
             connection.dropdb()
         except DropDBError, e:

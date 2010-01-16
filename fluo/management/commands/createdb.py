@@ -21,12 +21,14 @@
 # THE SOFTWARE.
 
 from fluo.management import DatabaseCommand
-from fluo.management.commands.db import connection, CreateDBError
+from fluo.management.commands.db import get_connection, CreateDBError
 
 class Command(DatabaseCommand):
     help = "Try to (re)create the database!"
 
-    def handle(self, *args, **options):
+    def db_handle(self, database, args, options):
+        connection = get_connection(database)
+
         try:
             connection.createdb()
         except CreateDBError, e:

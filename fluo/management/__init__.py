@@ -25,6 +25,7 @@ Creates permissions for all installed apps that need permissions.
 """
 
 from optparse import make_option
+from django.db import DEFAULT_DB_ALIAS, connections
 from django.db.models import get_models, signals
 from django.contrib.auth import models as auth_app
 from django.core.management.base import BaseCommand
@@ -49,8 +50,36 @@ class DatabaseCommand(BaseCommand):
         make_option('-D', '--dbname', action='store',
             dest='dbname', default=None,
             help='Use another database name then defined in settings.py (For PostgreSQL this defaults to "template1")'),
+        make_option('--database', action='store', dest='database',
+            default=DEFAULT_DB_ALIAS, help='Nominates a database to synchronize. '
+                'Defaults to the "default" database.'),
+        make_option('-e', '--exclude', dest='exclude',action='append', default=[],
+            help='App to exclude (use multiple --exclude to exclude multiple apps).'),
     )
     requires_model_validation = False
+
+    def handle(self, *args, **options):
+        database = settings.DATABASES[options.get('database', DEFAULT_DB_ALIAS)]
+
+        if options.get('interactive'):
+            confirm = raw_input("""
+You have requested a database reset.
+This will IRREVERSIBLY DESTROY
+ALL data in the database "%s".
+Are you sure you want to do this?
+
+Type 'yes' to continue, or 'no' to cancel: """ % database['NAME'])
+        else:
+            confirm = 'yes'
+
+        if confirm != 'yes':
+            print "Reset cancelled."
+            return
+
+        self.db_handle(database, args, options)
+
+    def db_handle(self, database, args, options):
+        pass
 
 def _get_permission_codename(action, opts):
     return u'%s_%s' % (action, opts.object_name.lower())

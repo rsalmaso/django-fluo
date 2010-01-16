@@ -22,6 +22,7 @@
 
 from django.conf import settings
 
+DATABASES = getattr(settings, 'DATABASES')
 MEDIA_URL = getattr(settings, 'MEDIA_URL')
 MEDIA_ROOT = getattr(settings, 'MEDIA_ROOT')
 JQUERY_MINIFIED = getattr(settings, 'JQUERY_MINIFIED', True)

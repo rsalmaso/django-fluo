@@ -23,28 +23,17 @@
 from optparse import make_option
 from django.core.management import call_command
 from django.conf import settings
+from django.db import DEFAULT_DB_ALIAS, connections
 from fluo.management import DatabaseCommand
-from fluo.management.commands.db import connection, CreateDBError, DropDBError
+from fluo.management.commands.db import get_connection, CreateDBError, DropDBError
 INSTALLED_APPS = settings.INSTALLED_APPS
 
 class Command(DatabaseCommand):
     help = "(Re)create and initialize database with common data"
 
-    def handle(self, *args, **options):
-        if options.get('interactive'):
-            confirm = raw_input("""
-You have requested a database reset.
-This will IRREVERSIBLY DESTROY
-ALL data in the database "%s".
-Are you sure you want to do this?
-
-Type 'yes' to continue, or 'no' to cancel: """ % (settings.DATABASE_NAME,))
-        else:
-            confirm = 'yes'
-
-        if confirm != 'yes':
-            print "Reset cancelled."
-            return
+    def db_handle(self, database, args, options):
+        interactive = options.get('interactive', True)
+        connection = get_connection(database)
 
         try:
             connection.dropdb()

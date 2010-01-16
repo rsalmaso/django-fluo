@@ -25,18 +25,17 @@ from django.utils.importlib import import_module
 from django.core.exceptions import ImproperlyConfigured
 from fluo.management.commands.db.backends import ConnectionError, CreateDBError, DropDBError
 
-__all__ = ['connection', 'ImproperlyConfigured', 'CreateDBError', 'DropDBError', 'ConnectionError']
+__all__ = ['get_connection', 'ImproperlyConfigured', 'CreateDBError', 'DropDBError', 'ConnectionError']
 
-def _get_connection():
-    from django.conf import settings
-    engine = settings.DATABASE_ENGINE
+def get_connection(database):
+    engine = database['ENGINE'].split('.')[-1]
     options = {
-        'host': settings.DATABASE_HOST,
-        'port': settings.DATABASE_PORT,
-        'password': settings.DATABASE_PASSWORD,
-        'name': settings.DATABASE_NAME,
-        'user': settings.DATABASE_USER,
-        'db_dict': {'database': settings.DATABASE_NAME},
+        'host': database['HOST'],
+        'port': database['PORT'],
+        'password': database['PASSWORD'],
+        'name': database['NAME'],
+        'user': database['USER'],
+        'db_dict': {'database': database['NAME']},
     }
     try:
         module = import_module('fluo.management.commands.db.backends.%s' % engine)
@@ -65,5 +64,4 @@ def _get_connection():
     except Exception, e:
         print e
         raise ConnectionError('Cannot connect to database %(name)s' % options)
-connection = _get_connection()
 

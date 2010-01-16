@@ -30,9 +30,9 @@ class Postgresql(BaseDatabase):
     def connect(self):
         module = import_module(self.module)
         if self.name == '':
-            raise AssertionError("You must specify a value for DATABASE_NAME in local_settings.py.")
+            raise AssertionError("You must specify a value for DATABASES NAME in local_settings.py.")
         if self.user == '':
-            raise AssertionError("You must specify a value for DATABASE_USER in local_settings.py.")
+            raise AssertionError("You must specify a value for DATABASES USER in local_settings.py.")
         conn_string = [ "dbname=template1" ]
         if self.user:
             conn_string.append("user=%s" % self.user)
