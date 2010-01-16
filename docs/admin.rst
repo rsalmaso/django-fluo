@@ -48,7 +48,7 @@ a lot of space when you have a lot of filters.
 ModelAdmin extensions
 =====================
 
-:class:`~fluo..admin.OrderedModelAdmin`
+:class:`~fluo.admin.OrderedModelAdmin`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Useful for :class:`~fluo.db.models.OrderedModel` subclasses: it implements an interface
