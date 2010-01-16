@@ -28,6 +28,7 @@ Contents:
     email
     admin
     views/index
+    customizations
 
 Indices and tables
 ==================
