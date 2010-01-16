@@ -1,3 +1,5 @@
+.. _decorators:
+
 Contents:
 
 .. toctree::
