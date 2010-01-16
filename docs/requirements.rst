@@ -16,5 +16,5 @@ Fluo uses django trunk version.
 Python
 ======
 
-Although I try to write with 2.4 in mind, I use esclusively python 2.5 and python 2.6.
+Fluo works with python 2.5 and python 2.6.
 
