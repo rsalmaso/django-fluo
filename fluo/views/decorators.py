@@ -21,9 +21,9 @@
 # THE SOFTWARE.
 
 from django.http import HttpResponseBadRequest
+from django.utils.decorators import wraps, method_decorator
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.contrib.auth.decorators import user_passes_test
-from fluo.utils.decorators import update_wrapper, wraps, auto_adapt_to_methods
 
 def ajax_required(func):
     # taken from djangosnippets.org
@@ -62,5 +62,5 @@ def login_required(function=None, required=False, redirect_field_name=REDIRECT_F
         def _wrapper(request, *args, **kwargs):
             return function(request, *args, **kwargs)
         return wraps(function)(_wrapper)
-    return auto_adapt_to_methods(decorator)
+    return method_decorator(decorator)
 
