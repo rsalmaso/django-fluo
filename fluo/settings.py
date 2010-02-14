@@ -24,6 +24,7 @@ from django.conf import settings
 
 DATABASES = getattr(settings, 'DATABASES')
 MEDIA_URL = getattr(settings, 'MEDIA_URL')
+FLUO_MEDIA_URL = MEDIA_URL + 'fluo/'
 MEDIA_ROOT = getattr(settings, 'MEDIA_ROOT')
 JQUERY_MINIFIED = getattr(settings, 'JQUERY_MINIFIED', True)
 ADMIN_MEDIA_PREFIX = getattr(settings, 'ADMIN_MEDIA_PREFIX')
