@@ -23,7 +23,7 @@
 from django import template
 from django.utils.translation import get_language
 from django.utils.encoding import iri_to_uri
-from fluo.settings import MEDIA_URL, JQUERY_MINIFIED, ADMIN_MEDIA_PREFIX
+from fluo.settings import MEDIA_URL, JQUERY_MEDIA_URL, JQUERY_MINIFIED, ADMIN_MEDIA_PREFIX
 
 register = template.Library()
 
@@ -60,8 +60,8 @@ def js(script):
 
 @register.simple_tag
 def jquery():
-    return '<script type="text/javascript" src="%(media)sfluo/jquery/%(jquery)s"></script>' % {
-        'media': MEDIA_URL,
+    return '<script type="text/javascript" src="%(media)s%(jquery)s"></script>' % {
+        'media': JQUERY_MEDIA_URL,
         'jquery': { True: 'jquery.min.js', False: 'jquery.js'}[JQUERY_MINIFIED],
     }
 

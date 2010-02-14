@@ -27,6 +27,7 @@ DATABASES = getattr(settings, 'DATABASES')
 MEDIA_URL = iri_to_uri(getattr(settings, 'MEDIA_URL'))
 FLUO_MEDIA_URL = MEDIA_URL + 'fluo/'
 MEDIA_ROOT = getattr(settings, 'MEDIA_ROOT')
+JQUERY_MEDIA_URL = FLUO_MEDIA_URL + 'jquery/'
 JQUERY_MINIFIED = getattr(settings, 'JQUERY_MINIFIED', True)
 ADMIN_MEDIA_PREFIX = iri_to_uri(getattr(settings, 'ADMIN_MEDIA_PREFIX'))
 LANGUAGES = getattr(settings, 'LANGUAGES')
