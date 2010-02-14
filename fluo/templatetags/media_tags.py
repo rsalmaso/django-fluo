@@ -74,6 +74,12 @@ def jqueryui():
     }
 
 @register.simple_tag
+def jqueryui_default_theme():
+    return '<link rel="stylesheet" type="text/css" href="%(media_url)stheme/jquery.ui.css" media="all"/>' % {
+        'media_url': JQUERY_MEDIA_URL,
+    }
+
+@register.simple_tag
 def thickbox():
     return """<link rel="stylesheet" type="text/css" href="%(media)sthickbox/css/thickbox.css" />
         <script type="text/javascript">var tb_pathToImage = "%(media)sfluo/thickbox/images/loadingAnimation.gif";</script>
