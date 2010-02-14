@@ -23,12 +23,9 @@
 from django import template
 from django.utils.translation import get_language
 from django.utils.encoding import iri_to_uri
-from fluo import settings
+from fluo.settings import MEDIA_URL, JQUERY_MINIFIED, ADMIN_MEDIA_PREFIX
 
 register = template.Library()
-
-MEDIA_URL = iri_to_uri(settings.MEDIA_URL)
-ADMIN_MEDIA_PREFIX = iri_to_uri(settings.ADMIN_MEDIA_PREFIX)
 
 @register.simple_tag
 def css(script, media="all"):
@@ -65,15 +62,15 @@ def js(script):
 def jquery():
     return '<script type="text/javascript" src="%(media)sfluo/jquery/%(jquery)s"></script>' % {
         'media': MEDIA_URL,
-        'jquery': { True: 'jquery.min.js', False: 'jquery.js'}[settings.JQUERY_MINIFIED],
+        'jquery': { True: 'jquery.min.js', False: 'jquery.js'}[JQUERY_MINIFIED],
     }
 
 @register.simple_tag
 def jqueryui():
     return '''<script type="text/javascript" src="%(media)sfluo/jqueryui/%(jqueryui)s"></script><script type="text/javascript" src="%(media)sfluo/jqueryui/i18n/%(i18n)s"></script>''' % {
         'media': MEDIA_URL,
-        'jqueryui': {True: 'jquery-ui.min.js', False: 'jquery-ui.js'}[settings.JQUERY_MINIFIED],
-        'i18n': {True: 'ui.datepicker-%s.min.js', False: 'ui.datepicker-%s.js'}[settings.JQUERY_MINIFIED] % get_language()[:2],
+        'jqueryui': {True: 'jquery-ui.min.js', False: 'jquery-ui.js'}[JQUERY_MINIFIED],
+        'i18n': {True: 'ui.datepicker-%s.min.js', False: 'ui.datepicker-%s.js'}[JQUERY_MINIFIED] % get_language()[:2],
     }
 
 @register.simple_tag
@@ -82,42 +79,42 @@ def thickbox():
         <script type="text/javascript">var tb_pathToImage = "%(media)sfluo/thickbox/images/loadingAnimation.gif";</script>
         <script type="text/javascript" src="%(media)sfluo/thickbox/js/%(thickbox)s"></script>""" % {
         'media': MEDIA_URL,
-        'thickbox': {True: 'thickbox.min.js', False: 'thickbox.js'}[settings.JQUERY_MINIFIED],
+        'thickbox': {True: 'thickbox.min.js', False: 'thickbox.js'}[JQUERY_MINIFIED],
     }
 
 @register.simple_tag
 def jquery_ajaxqueue():
     return '<script type="text/javascript" src="%(media)sfluo/jquery-ajaxqueue/%(js)s"></script>' % {
         'media': MEDIA_URL,
-        'js': { True: 'jquery.ajaxqueue.min.js', False: 'jquery.ajaxqueue.js'}[settings.JQUERY_MINIFIED],
+        'js': { True: 'jquery.ajaxqueue.min.js', False: 'jquery.ajaxqueue.js'}[JQUERY_MINIFIED],
     }
 
 @register.simple_tag
 def jquery_autocomplete():
     return '<script type="text/javascript" src="%(media)sfluo/jquery-autocomplete/%(js)s"></script>' % {
         'media': MEDIA_URL,
-        'js': { True: 'jquery.autocomplete.min.js', False: 'jquery.autocomplete.js'}[settings.JQUERY_MINIFIED],
+        'js': { True: 'jquery.autocomplete.min.js', False: 'jquery.autocomplete.js'}[JQUERY_MINIFIED],
     }
 
 @register.simple_tag
 def jquery_listreorder():
     return '<script type="text/javascript" src="%(media)sfluo/jquery-listreorder/%(js)s"></script>' % {
         'media': MEDIA_URL,
-        'js': { True: 'jquery.listreorder.min.js', False: 'jquery.listreorder.js'}[settings.JQUERY_MINIFIED],
+        'js': { True: 'jquery.listreorder.min.js', False: 'jquery.listreorder.js'}[JQUERY_MINIFIED],
     }
 
 @register.simple_tag
 def jquery_tablednd():
     return '<script type="text/javascript" src="%(media)sfluo/jquery-tablednd/%(js)s"></script>' % {
         'media': MEDIA_URL,
-        'js': { True: 'jquery.tablednd.min.js', False: 'jquery.tablednd.js'}[settings.JQUERY_MINIFIED],
+        'js': { True: 'jquery.tablednd.min.js', False: 'jquery.tablednd.js'}[JQUERY_MINIFIED],
     }
 
 @register.simple_tag
 def jquery_bgiframe():
     return '<script type="text/javascript" src="%(media)sfluo/jquery-bgiframe/%(js)s"></script>' % {
         'media': MEDIA_URL,
-        'js': { True: 'jquery.bgiframe.min.js', False: 'jquery.bgiframe.js'}[settings.JQUERY_MINIFIED],
+        'js': { True: 'jquery.bgiframe.min.js', False: 'jquery.bgiframe.js'}[JQUERY_MINIFIED],
     }
 
 @register.simple_tag
