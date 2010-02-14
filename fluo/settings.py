@@ -21,13 +21,14 @@
 # THE SOFTWARE.
 
 from django.conf import settings
+from django.utils.encoding import iri_to_uri
 
 DATABASES = getattr(settings, 'DATABASES')
-MEDIA_URL = getattr(settings, 'MEDIA_URL')
+MEDIA_URL = iri_to_uri(getattr(settings, 'MEDIA_URL'))
 FLUO_MEDIA_URL = MEDIA_URL + 'fluo/'
 MEDIA_ROOT = getattr(settings, 'MEDIA_ROOT')
 JQUERY_MINIFIED = getattr(settings, 'JQUERY_MINIFIED', True)
-ADMIN_MEDIA_PREFIX = getattr(settings, 'ADMIN_MEDIA_PREFIX')
+ADMIN_MEDIA_PREFIX = iri_to_uri(getattr(settings, 'ADMIN_MEDIA_PREFIX'))
 LANGUAGES = getattr(settings, 'LANGUAGES')
 LOGGING_FORMAT = getattr(settings, 'LOGGING_FORMAT', '%(asctime)s %(levelname)s %(message)s')
 LOGGING_FILENAME = getattr(settings, 'LOGGING_FILENAME', '/tmp/fluo.log')
