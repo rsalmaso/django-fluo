@@ -67,10 +67,10 @@ def jquery():
 
 @register.simple_tag
 def jqueryui():
-    return '''<script type="text/javascript" src="%(media)sfluo/jqueryui/%(jqueryui)s"></script><script type="text/javascript" src="%(media)sfluo/jqueryui/i18n/%(i18n)s"></script>''' % {
-        'media': MEDIA_URL,
-        'jqueryui': {True: 'jquery-ui.min.js', False: 'jquery-ui.js'}[JQUERY_MINIFIED],
-        'i18n': {True: 'ui.datepicker-%s.min.js', False: 'ui.datepicker-%s.js'}[JQUERY_MINIFIED] % get_language()[:2],
+    return '''<script type="text/javascript" src="%(media)s%(jqueryui)s"></script><script type="text/javascript" src="%(media)si18n/%(i18n)s"></script>''' % {
+        'media': JQUERY_MEDIA_URL,
+        'jqueryui': {True: 'jquery.ui.min.js', False: 'jquery.ui.js'}[JQUERY_MINIFIED],
+        'i18n': {True: 'jquery.ui.datepicker-%s.min.js', False: 'jquery.ui.datepicker-%s.js'}[JQUERY_MINIFIED] % get_language()[:2],
     }
 
 @register.simple_tag
