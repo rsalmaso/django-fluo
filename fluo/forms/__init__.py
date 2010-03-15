@@ -22,6 +22,7 @@
 
 from django.forms import *
 from django.contrib.contenttypes.generic import BaseGenericInlineFormSet, generic_inlineformset_factory
+from django.forms.extras.widgets import SelectDateWidget
 from fluo.forms.fields import *
 from fluo.forms.widgets import *
 
