@@ -34,6 +34,8 @@ DATABASES = {
         'HOST': '',
         # Set to empty string for default. Not used with sqlite3.
         'PORT': '',
+        # force to use InnoDB storage engine, only for mysql
+        #'OPTIONS': {"init_command": "SET storage_engine=INNODB"},
     }
 }
 
