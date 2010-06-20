@@ -123,8 +123,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
-    # Uncomment the next line to enable the admin:
-    # 'django.contrib.admin',
+    # Comment the next line to disable the admin:
+    'django.contrib.admin',
     'fluo',
     '{{ project_name }}',
 )

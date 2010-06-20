@@ -3,9 +3,9 @@
 from django.conf import settings
 from django.conf.urls.defaults import *
 
-# Uncomment the next two lines to enable the admin:
-# from django.contrib import admin
-# admin.autodiscover()
+# Comment the next two lines to disable the admin:
+import {{ project_name }}.admin
+from fluo import admin
 
 if settings.DEBUG:
     urlpatterns = patterns('',
@@ -26,7 +26,7 @@ urlpatterns += patterns('',
     # to INSTALLED_APPS to enable admin documentation:
     # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
-    # Uncomment the next line to enable the admin:
-    # (r'^admin/', include(admin.site.urls)),
+    # Comment the next line to disable the admin:
+    (r'^admin/', include(admin.site.urls)),
 )
 
