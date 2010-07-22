@@ -125,6 +125,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     # Comment the next line to disable the admin:
     'django.contrib.admin',
+    # Uncomment the next line to enable south data migration:
+    #'south',
     'fluo',
     '{{ project_name }}',
 )
