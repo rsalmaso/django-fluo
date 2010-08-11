@@ -30,6 +30,15 @@ from django.contrib.contenttypes.generic import GenericForeignKey
 from fluo.models import fields
 from fluo import settings
 
+__all__ = [
+    'StatusModel',
+    'OrderedModel', 'TreeOrderedModel',
+    'TimestampModel',
+    'I18NProxy', 'I18NModel', 'TranslationModel',
+    'CategoryModelManager', 'CategoryModel',
+    'GenericModel',
+]
+
 class StatusModel(models.Model):
     status = fields.StatusField()
 
