@@ -25,6 +25,11 @@ from django.utils.decorators import wraps, method_decorator
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.contrib.auth.decorators import user_passes_test
 
+__all__ = [
+    'ajax_required', 'ajax_required_m',
+    'login_required', 'login_required_m',
+]
+
 def ajax_required(func):
     # taken from djangosnippets.org
     """
