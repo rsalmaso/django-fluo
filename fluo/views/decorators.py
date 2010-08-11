@@ -43,6 +43,7 @@ def ajax_required(func):
     wrap.__doc__ = func.__doc__
     wrap.__name__ = func.__name__
     return wrap
+ajax_required_m = method_decorator(ajax_required)
 
 def login_required(function=None, required=False, redirect_field_name=REDIRECT_FIELD_NAME):
     """
@@ -63,4 +64,5 @@ def login_required(function=None, required=False, redirect_field_name=REDIRECT_F
             return function(request, *args, **kwargs)
         return wraps(function)(_wrapper)
     return method_decorator(decorator)
+login_required_m = method_decorator(login_required)
 
