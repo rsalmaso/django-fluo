@@ -22,16 +22,11 @@
 
 def __init__():
     from django.conf import settings
-    from django import VERSION
-    from django.contrib import admin
-
-    if VERSION < (1, 1):
-        from django.core.urlresolvers import reverse
-        admin.site.root_path = reverse('%sadmin_index' % admin.site.name)
 
     if 'django.contrib.auth' in settings.INSTALLED_APPS:
         from django.contrib.auth.models import User
         from django.contrib.auth.admin import UserAdmin
+        from django.contrib import admin
 
         admin.site.unregister(User)
         class FluoUserAdmin(UserAdmin):
