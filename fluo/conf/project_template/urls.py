@@ -18,9 +18,9 @@ urlpatterns += patterns('',
     # Example:
     # (r'^{{ project_name }}/', include('{{ project_name }}.foo.urls')),
 
-    # uncomment to enable i18n
-    #(r'^i18n/', include('django.conf.urls.i18n')),
-    #url(r'^jsi18n/$', 'django.views.i18n.javascript_catalog', name='jsi18n'),
+    # Comment to disable i18n
+    (r'^i18n/', include('django.conf.urls.i18n')),
+    url(r'^jsi18n/$', 'django.views.i18n.javascript_catalog', name='jsi18n'),
 
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
     # to INSTALLED_APPS to enable admin documentation:
