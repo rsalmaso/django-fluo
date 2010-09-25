@@ -35,7 +35,7 @@ __all__ = [
     'OrderedModel', 'TreeOrderedModel',
     'TimestampModel',
     'I18NProxy', 'I18NModel', 'TranslationModel',
-    'CategoryModelManager', 'CategoryModel',
+    'CategoryModelManager', 'CategoryModel', 'CategoryTranslationModel',
     'GenericModel',
 ]
 
@@ -211,6 +211,15 @@ class CategoryModel(StatusModel, OrderedModel):
         except models.ObjectDoesNotExist:
             self.default = True
             super(CategoryModel, self).save(*args, **kwargs)
+
+class CategoryTranslationModel(TranslationModel):
+    name = models.CharField(
+        max_length=25,
+        verbose_name=_('category name'),
+    )
+
+    class Meta:
+        abstract = True
 
 class GenericModel(models.Model):
     content_type = models.ForeignKey(
