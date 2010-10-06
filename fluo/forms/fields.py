@@ -21,10 +21,15 @@
 # THE SOFTWARE.
 
 from django import forms
+from django.utils.translation import ugettext
+from django.core.exceptions import ValidationError
+from django.utils.encoding import smart_unicode
+from fluo.forms.widgets import GroupedSelect
 
 __all__ = (
     'OrderField',
     'TextField',
+    'GroupedChoiceField',
 )
 
 try:
@@ -36,4 +41,36 @@ except ImportError:
 
 class TextField(forms.CharField):
     widget = forms.Textarea
+
+# taken and adapted from http://djangosnippets.org/snippets/200/
+class GroupedChoiceField(forms.ChoiceField):
+    widget = GroupedSelect
+
+    def __init__(self, choices=(), required=True, widget=None, label=None, initial=None, help_text=None, *args, **kwargs):
+        super(GroupedChoiceField, self).__init__(
+            #choices=choices,
+            required=required,
+            widget=widget,
+            label=label,
+            initial=initial,
+            help_text=help_text,
+            *args, **kwargs)
+        self.choices = choices
+
+    def clean(self, value):
+        """
+        Validates that the input is in self.choices.
+        """
+        value = super(GroupedChoiceField, self).clean(value)
+        if value in (None, ''):
+            value = u''
+        value = smart_unicode(value)
+        if value == u'':
+            return value
+        valid_values = []
+        for group_label, group in self.choices:
+            valid_values += [str(k) for k, v in group]
+        if value not in valid_values:
+            raise ValidationError(ugettext(u'Select a valid choice. That choice is not one of the available choices.'))
+        return value
 
