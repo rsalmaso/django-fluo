@@ -271,3 +271,48 @@ class OrderField(models.IntegerField):
         defaults.update(kwargs)
         return super(OrderField, self).formfield(**defaults)
 
+from django.conf import settings
+if 'south' in settings.INSTALLED_APPS:
+    from south.modelsinspector import add_introspection_rules
+    rules = [
+        (
+            (StatusField,),
+            [],
+            {
+                "max_length": ["max_length", {"default": 10}],
+                "default": ["default", {"default": "active"}],
+            },
+        ),
+        (
+            (CreationDateTimeField,),
+            [],
+            {
+            },
+        ),
+        (
+            (ModificationDateTimeField,),
+            [],
+            {
+            },
+        ),
+        (
+            (AutoSlugField,),
+            [],
+            {
+            },
+        ),
+        (
+            (UUIDField,),
+            [],
+            {
+            },
+        ),
+        (
+            (OrderField,),
+            [],
+            {
+            },
+        ),
+    ]
+    add_introspection_rules(rules, ["^fluo\.models\.fields",])
+
