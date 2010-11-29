@@ -177,7 +177,6 @@ class CategoryModel(StatusModel, OrderedModel):
 
     name = models.CharField(
         unique=True,
-        verbose_name=_('category name'),
         max_length=255,
     )
     slug = models.SlugField(
@@ -214,7 +213,6 @@ class CategoryModel(StatusModel, OrderedModel):
 
 class CategoryTranslationModel(TranslationModel):
     name = models.CharField(
-        verbose_name=_('category name'),
         max_length=255,
     )
 
