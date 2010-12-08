@@ -55,12 +55,16 @@ class StatusField(models.CharField):
                  choices=STATUS_CHOICES,
                  max_length=10,
                  default='active',
+                 blank=False,
+                 null=False,
                  verbose_name=_('status'),
                  help_text=_('Is active?')):
         super(StatusField, self).__init__(
             choices=choices,
             max_length=max_length,
             default=default,
+            blank=blank,
+            null=null,
             verbose_name=verbose_name,
             help_text=help_text
         )
