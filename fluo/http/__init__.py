@@ -21,11 +21,28 @@
 # THE SOFTWARE.
 
 from django.utils import simplejson
-from django.http import HttpResponse
+from django.http import *
 from django.conf import settings
 
 __all__ = [
     'JsonResponse',
+    'HttpResponse',
+    'HttpResponseRedirect',
+    'HttpResponsePermanentRedirect',
+    'HttpResponseNotModified',
+    'HttpResponseBadRequest',
+    'HttpResponseNotFound',
+    'HttpResponseForbidden',
+    'HttpResponseNotAllowed',
+    'HttpResponseGone',
+    'HttpResponseServerError',
+    'Http404',
+    'HttpRequest',
+    'SimpleCookie',
+    'CompatCookie',
+    'parse_cookie',
+    'QueryDict',
+    'BadHeaderError',
 ]
 
 class JsonResponse(HttpResponse):
