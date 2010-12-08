@@ -22,17 +22,21 @@
 
 from django.utils import simplejson
 from django.http import HttpResponse
+from django.conf import settings
 
 __all__ = [
     'JsonResponse',
 ]
 
 class JsonResponse(HttpResponse):
-    def __init__(self, **kwargs):
+    def __init__(self, content=None, mimetype="text/javascript", status=200, indent=None):
         """
-        return JsonResponse(status=200, message='', data=[], indent=None)
+        return JsonResponse(content={'status': 200, 'message': '', 'data': [] })
         """
-        indent = None
-        json = content=simplejson.dumps(dict(**kwargs), indent=indent)
-        super(JsonResponse, self).__init__(content=json, mimetype="text/javascript", status=200)
+        if content is None:
+            content = {}
+        if settings.DEBUG and indent is None:
+            indent = 4
+        json = content=simplejson.dumps(content, indent=indent)
+        super(JsonResponse, self).__init__(content=json, mimetype=mimetype, status=status)
 
