@@ -12,7 +12,7 @@ PAPEROPT_letter = -D latex_paper_size=letter
 ALLSPHINXOPTS   = -d _build/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) .
 OPEN = xdg-open
 
-.PHONY: help clean html web htmlhelp latex changes linkcheck pdf
+.PHONY: help clean html web htmlhelp latex changes linkcheck pdf epub
 all: html
 
 help:
@@ -62,6 +62,11 @@ pdf:
 	mkdir -p _build/latex _build/doctrees
 	$(SPHINXBUILD) -b latex $(ALLSPHINXOPTS) _build/latex
 	@cd _build/latex && $(MAKE) all-pdf && $(OPEN) fluo.pdf
+
+epub:
+	mkdir -p _build/epub _build/doctrees
+	$(SPHINXBUILD) -b epub $(ALLSPHINXOPTS) _build/epub
+	@cd _build/epub && $(OPEN) Fluo.epub
 
 changes:
 	mkdir -p _build/changes _build/doctrees
