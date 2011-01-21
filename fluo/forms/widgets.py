@@ -25,11 +25,13 @@ from django.utils.encoding import smart_unicode
 from django.utils.html import escape
 from django.forms.util import flatatt
 from django.utils.safestring import mark_safe
+from django.forms.extras.widgets import SelectDateWidget
 from django.contrib.admin.widgets import AdminDateWidget as DateWidget
 from django.contrib.admin.widgets import AdminTimeWidget as TimeWidget
 from django.contrib.admin.widgets import AdminSplitDateTime as DateTimeWidget
 
 __all__ = (
+    'SelectDateWidget',
     'DateWidget', 'TimeWidget', 'DateTimeWidget',
     'GroupedSelect',
 )
