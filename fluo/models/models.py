@@ -150,7 +150,7 @@ class I18NModel(models.Model):
         language = language or get_language()[:2]
         try:
             return I18NProxy(self.translations.get(language__startswith=language), self)
-        except models.ObjectDoesNotExist:
+        except (models.ObjectDoesNotExist, AttributeError):
             return self
 
     class Meta:
