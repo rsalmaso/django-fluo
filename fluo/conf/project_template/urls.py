@@ -10,6 +10,7 @@ from fluo import admin
 if settings.DEBUG:
     urlpatterns = patterns('',
         (r'^%s/(?P<path>.*)$' % settings.MEDIA_URL[1:-1], 'django.views.static.serve', { 'document_root': settings.MEDIA_ROOT, }),
+        (r'^%s/(?P<path>.*)$' % settings.STATIC_URL[1:-1], 'django.contrib.staticfiles.views.serve'),
     )
 else:
     urlpatterns = patterns('')

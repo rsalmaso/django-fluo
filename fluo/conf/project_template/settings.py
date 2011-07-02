@@ -11,6 +11,7 @@ import os
 
 PROJECT_NAME = '{{ project_name }}'
 PROJECT_PATH, _ = os.path.split(os.path.realpath(__file__))
+SITE_PACKAGES = os.path.join(os.path.split(PROJECT_PATH)[0], 'site-packages')
 
 DEBUG = True
 
@@ -76,6 +77,34 @@ MEDIA_URL = '/media/'
 # Examples: "http://foo.com/media/", "/media/".
 ADMIN_MEDIA_PREFIX = '/media/admin/'
 
+# Absolute path to the directory that holds static files after they are
+# collected by
+# ./manage.py collectstatic
+STATIC_ROOT = ''.join([PROJECT_PATH, '/static/'])
+
+# URL that handles the media served from STATIC_ROOT. Make sure to use a
+# trailing slash if there is a path component (optional in other cases).
+# Examples: "http://media.lawrence.com", "http://example.com/media/"
+STATIC_URL = '/static/'
+
+# Additional locations of static files
+STATICFILES_DIRS = (
+    # Put strings here, like "/home/html/static" or "C:/www/django/static".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+
+    #''.join([PROJECT_PATH, '/static/']),
+    #''.join([SITE_PACKAGES, 'django', 'django', 'contrib', 'admin', 'media']),
+)
+
+# List of finder classes that know how to find static files in
+# various locations.
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+)
+
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = ''
 
@@ -94,6 +123,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     #'django.middleware.http.ConditionalGetMiddleware',
     #'django.middleware.gzip.GZipMiddleware',
+    # Uncomment the next line for simple clickjacking protection:
+    #'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
 ROOT_URLCONF = '{{ project_name }}.urls'
@@ -106,11 +137,15 @@ TEMPLATE_DIRS = (
     #''.join([PROJECT_PATH, '/templates/']),
 )
 
+# List of processors used by RequestContext to populate the context.
+# Each one should be a callable that takes the request object as its
+# only parameter and returns a dictionary to add to the context.
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.debug',
     'django.core.context_processors.i18n',
     'django.core.context_processors.media',
+    'django.core.context_processors.static',
     'django.core.context_processors.request',
     #'django.core.context_processors.csrf',
     'django.contrib.messages.context_processors.messages',
@@ -123,13 +158,46 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
+    'django.contrib.staticfiles',
     # Comment the next line to disable the admin:
     'django.contrib.admin',
-    # Uncomment the next line to enable south data migration:
-    #'south',
+    # Uncomment the next line to enable admin documentation:
+    # 'django.contrib.admindocs',
+    # Comment the next line to disable south data migration:
+    'south',
     'fluo',
     '{{ project_name }}',
 )
+
+# A sample logging configuration. The only tangible logging
+# performed by this configuration is to send an email to
+# the site admins on every HTTP 500 error when DEBUG=False.
+# See http://docs.djangoproject.com/en/dev/topics/logging for
+# more details on how to customize your logging configuration.
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.CallbackFilter',
+            'callback': lambda r: not DEBUG
+        }
+    },
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler'
+        }
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    }
+}
 
 try:
     from local_settings import *
