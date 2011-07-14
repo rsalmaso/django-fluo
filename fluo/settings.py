@@ -25,7 +25,8 @@ from django.utils.encoding import iri_to_uri
 
 DATABASES = getattr(settings, 'DATABASES')
 MEDIA_URL = iri_to_uri(getattr(settings, 'MEDIA_URL'))
-FLUO_MEDIA_URL = getattr(settings, 'FLUO_MEDIA_URL', MEDIA_URL + 'fluo/')
+STATIC_URL = iri_to_uri(getattr(settings, 'STATIC_URL'))
+FLUO_MEDIA_URL = getattr(settings, 'FLUO_MEDIA_URL', STATIC_URL + 'fluo/')
 MEDIA_ROOT = getattr(settings, 'MEDIA_ROOT')
 JQUERY_MEDIA_URL = FLUO_MEDIA_URL + 'jquery/'
 JQUERY_MINIFIED = getattr(settings, 'JQUERY_MINIFIED', True)
