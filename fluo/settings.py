@@ -24,13 +24,18 @@ from django.conf import settings
 from django.utils.encoding import iri_to_uri
 
 DATABASES = getattr(settings, 'DATABASES')
+
 MEDIA_URL = iri_to_uri(getattr(settings, 'MEDIA_URL'))
-STATIC_URL = iri_to_uri(getattr(settings, 'STATIC_URL'))
-FLUO_MEDIA_URL = getattr(settings, 'FLUO_MEDIA_URL', STATIC_URL + 'fluo/')
 MEDIA_ROOT = getattr(settings, 'MEDIA_ROOT')
+FLUO_MEDIA_URL = getattr(settings, 'FLUO_MEDIA_URL', MEDIA_URL + 'fluo/')
 JQUERY_MEDIA_URL = FLUO_MEDIA_URL + 'jquery/'
+
+STATIC_URL = iri_to_uri(getattr(settings, 'STATIC_URL'))
+STATIC_ROOT = getattr(settings, 'STATIC_ROOT')
+FLUO_STATIC_URL = getattr(settings, 'FLUO_STATIC_URL', STATIC_URL + 'fluo/')
+JQUERY_STATIC_URL = FLUO_STATIC_URL + 'jquery/'
+
 JQUERY_MINIFIED = getattr(settings, 'JQUERY_MINIFIED', True)
-ADMIN_MEDIA_PREFIX = iri_to_uri(getattr(settings, 'ADMIN_MEDIA_PREFIX'))
 LANGUAGES = getattr(settings, 'LANGUAGES')
 LOGGING_FORMAT = getattr(settings, 'LOGGING_FORMAT', '%(asctime)s %(levelname)s %(message)s')
 LOGGING_FILENAME = getattr(settings, 'LOGGING_FILENAME', '/tmp/fluo.log')

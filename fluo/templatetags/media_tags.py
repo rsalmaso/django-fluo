@@ -23,16 +23,16 @@
 from django import template
 from django.utils.translation import get_language
 from django.utils.encoding import iri_to_uri
-from fluo.settings import MEDIA_URL, FLUO_MEDIA_URL, JQUERY_MEDIA_URL, JQUERY_MINIFIED, ADMIN_MEDIA_PREFIX
+from fluo.settings import STATIC_URL, FLUO_STATIC_URL, JQUERY_STATIC_URL, JQUERY_MINIFIED
 
 register = template.Library()
 
 @register.simple_tag
-def css(script, media="all"):
-    return '<link rel="stylesheet" type="text/css" href="%(media_url)s%(script)s" media="%(media)s"/>' % {
-        'media_url': MEDIA_URL,
+def css(script, static="all"):
+    return '<link rel="stylesheet" type="text/css" href="%(static_url)s%(script)s" static="%(static)s"/>' % {
+        'static_url': STATIC_URL,
         'script': iri_to_uri(script),
-        'media': iri_to_uri(media),
+        'static': iri_to_uri(static),
     }
 
 @register.simple_tag
@@ -53,22 +53,22 @@ def css_ie7(script, media="all"):
 
 @register.simple_tag
 def js(script):
-    return '<script type="text/javascript" src="%(media)s%(script)s"></script>' % {
-        'media': MEDIA_URL,
+    return '<script type="text/javascript" src="%(static)s%(script)s"></script>' % {
+        'static': STATIC_URL,
         'script': iri_to_uri(script),
     }
 
 @register.simple_tag
 def jquery():
-    return '<script type="text/javascript" src="%(media)s%(jquery)s"></script>' % {
-        'media': JQUERY_MEDIA_URL,
+    return '<script type="text/javascript" src="%(static)s%(jquery)s"></script>' % {
+        'static': JQUERY_STATIC_URL,
         'jquery': { True: 'jquery.min.js', False: 'jquery.js'}[JQUERY_MINIFIED],
     }
 
 @register.simple_tag
 def jqueryui():
-    return '''<script type="text/javascript" src="%(media)s%(jqueryui)s"></script><script type="text/javascript" src="%(media)si18n/%(i18n)s"></script>''' % {
-        'media': JQUERY_MEDIA_URL,
+    return '''<script type="text/javascript" src="%(static)s%(jqueryui)s"></script><script type="text/javascript" src="%(static)si18n/%(i18n)s"></script>''' % {
+        'static': JQUERY_STATIC_URL,
         'jqueryui': {True: 'jquery.ui.min.js', False: 'jquery.ui.js'}[JQUERY_MINIFIED],
         'i18n': {True: 'jquery.ui.datepicker-%s.min.js', False: 'jquery.ui.datepicker-%s.js'}[JQUERY_MINIFIED] % get_language()[:2],
     }
@@ -76,66 +76,61 @@ def jqueryui():
 @register.simple_tag
 def jqueryui_default_theme():
     return '<link rel="stylesheet" type="text/css" href="%(media_url)stheme/jquery.ui.css" media="all"/>' % {
-        'media_url': JQUERY_MEDIA_URL,
+        'media_url': JQUERY_STATIC_URL,
     }
 
 @register.simple_tag
 def thickbox():
-    return """<link rel="stylesheet" type="text/css" href="%(media)sthickbox/css/thickbox.css" />
-        <script type="text/javascript">var tb_pathToImage = "%(media)sfluo/thickbox/images/loadingAnimation.gif";</script>
-        <script type="text/javascript" src="%(media)sfluo/thickbox/js/%(thickbox)s"></script>""" % {
-        'media': FLUO_MEDIA_URL,
+    return """<link rel="stylesheet" type="text/css" href="%(static)sthickbox/css/thickbox.css" />
+        <script type="text/javascript">var tb_pathToImage = "%(static)sfluo/thickbox/images/loadingAnimation.gif";</script>
+        <script type="text/javascript" src="%(static)sfluo/thickbox/js/%(thickbox)s"></script>""" % {
+        'static': FLUO_STATIC_URL,
         'thickbox': {True: 'thickbox.min.js', False: 'thickbox.js'}[JQUERY_MINIFIED],
     }
 
 @register.simple_tag
 def jquery_ajaxqueue():
-    return '<script type="text/javascript" src="%(media)sjquery-ajaxqueue/%(js)s"></script>' % {
-        'media': FLUO_MEDIA_URL,
+    return '<script type="text/javascript" src="%(static)sjquery-ajaxqueue/%(js)s"></script>' % {
+        'static': FLUO_STATIC_URL,
         'js': { True: 'jquery.ajaxqueue.min.js', False: 'jquery.ajaxqueue.js'}[JQUERY_MINIFIED],
     }
 
 @register.simple_tag
 def jquery_autocomplete():
-    return '<script type="text/javascript" src="%(media)sjquery-autocomplete/%(js)s"></script>' % {
-        'media': FLUO_MEDIA_URL,
+    return '<script type="text/javascript" src="%(static)sjquery-autocomplete/%(js)s"></script>' % {
+        'static': FLUO_STATIC_URL,
         'js': { True: 'jquery.autocomplete.min.js', False: 'jquery.autocomplete.js'}[JQUERY_MINIFIED],
     }
 
 @register.simple_tag
 def jquery_listreorder():
-    return '<script type="text/javascript" src="%(media)sjquery-listreorder/%(js)s"></script>' % {
-        'media': FLUO_MEDIA_URL,
+    return '<script type="text/javascript" src="%(static)sjquery-listreorder/%(js)s"></script>' % {
+        'static': FLUO_STATIC_URL,
         'js': { True: 'jquery.listreorder.min.js', False: 'jquery.listreorder.js'}[JQUERY_MINIFIED],
     }
 
 @register.simple_tag
 def jquery_tablednd():
-    return '<script type="text/javascript" src="%(media)sjquery-tablednd/%(js)s"></script>' % {
-        'media': FLUO_MEDIA_URL,
+    return '<script type="text/javascript" src="%(static)sjquery-tablednd/%(js)s"></script>' % {
+        'static': FLUO_STATIC_URL,
         'js': { True: 'jquery.tablednd.min.js', False: 'jquery.tablednd.js'}[JQUERY_MINIFIED],
     }
 
 @register.simple_tag
 def jquery_bgiframe():
-    return '<script type="text/javascript" src="%(media)sjquery-bgiframe/%(js)s"></script>' % {
-        'media': FLUO_MEDIA_URL,
+    return '<script type="text/javascript" src="%(static)sjquery-bgiframe/%(js)s"></script>' % {
+        'static': FLUO_STATIC_URL,
         'js': { True: 'jquery.bgiframe.min.js', False: 'jquery.bgiframe.js'}[JQUERY_MINIFIED],
     }
 
 @register.simple_tag
 def jquery_disable_text_select():
-    return '<script type="text/javascript" src="%(media)sjquery-disable-text-select/jquery.disable.text.select.pack.js"></script>' % {
-        'media': FLUO_MEDIA_URL,
+    return '<script type="text/javascript" src="%(static)sjquery-disable-text-select/jquery.disable.text.select.pack.js"></script>' % {
+        'static': FLUO_STATIC_URL,
     }
 
 @register.simple_tag
 def media_url():
-    """ Returns the string contained in the setting MEDIA_URL. """
-    return MEDIA_URL
-
-@register.simple_tag
-def admin_media_prefix():
-    """ Returns the string contained in the setting ADMIN_MEDIA_PREFIX. """
-    return ADMIN_MEDIA_PREFIX
+    """ Returns the string contained in the setting STATIC_URL. """
+    return STATIC_URL
 

@@ -35,16 +35,16 @@ from fluo.settings import NO_LOCALE_PATTERNS
 SUB = re.compile(ur'<a([^>]+)href="/(?!(%s|%s|%s))([^"]*)"([^>]*)>' % (
     "|".join(map(lambda l: l[0] + "/" , settings.LANGUAGES)),
     settings.MEDIA_URL[1:],
-    settings.ADMIN_MEDIA_PREFIX[1:]
+    settings.STATIC_URL[1:]
 ))
 SUB2 = re.compile(ur'<form([^>]+)action="/(?!(%s|%s|%s))([^"]*)"([^>]*)>' % (
     "|".join(map(lambda l: l[0] + "/" , settings.LANGUAGES)),
      settings.MEDIA_URL[1:],
-     settings.ADMIN_MEDIA_PREFIX[1:]
+     settings.STATIC_URL[1:]
 ))
 SUPPORTED = dict(settings.LANGUAGES)
 START_SUB = re.compile(r"^/(%s)/(.*)" % "|".join(map(lambda l: l[0], settings.LANGUAGES)))
-NO_LOCALE_SUB = re.compile(r"^(%s|%s)(.*)" % ("|".join(NO_LOCALE_PATTERNS), settings.ADMIN_MEDIA_PREFIX))
+NO_LOCALE_SUB = re.compile(r"^(%s|%s)(.*)" % ("|".join(NO_LOCALE_PATTERNS), settings.STATIC_URL))
 LANGUAGE_COOKIE_NAME = settings.LANGUAGE_COOKIE_NAME
 
 def has_lang_prefix(path):
@@ -113,7 +113,7 @@ class LocaleMiddleware(object):
         prefix = has_lang_prefix(request.path_info)
         if prefix:
             request.path = "/" + "/".join(request.path.split("/")[2:])
-            request.path_info = "/" + "/".join(request.path_info.split("/")[2:]) 
+            request.path_info = "/" + "/".join(request.path_info.split("/")[2:])
             t = prefix
             if t in SUPPORTED:
                 lang = t
