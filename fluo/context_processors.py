@@ -22,16 +22,24 @@
 
 from django.conf import settings
 
-def media(request):
-    # media_url idea is taken from
-    # http://www.djangosnippets.org/snippets/1754/
-    if request.is_secure():
-        media_url = settings.MEDIA_URL.replace('http://', 'https://')
-    else:
-        media_url = settings.MEDIA_URL
+# media_url & static_url idea is taken from
+# http://www.djangosnippets.org/snippets/1754/
+MEDIA_URL = {
+    True: settings.MEDIA_URL.replace('http://', 'https://'),
+    False: settings.MEDIA_URL,
+}
+STATIC_URL = {
+    True: settings.STATIC_URL.replace('http://', 'https://'),
+    False: settings.STATIC_URL,
+}
 
+def media(request):
     return {
-        'MEDIA_URL': media_url,
-        'ADMIN_MEDIA_PREFIX': settings.ADMIN_MEDIA_PREFIX,
+        'MEDIA_URL': MEDIA_URL[request.is_secure()],
+    }
+
+def static(request):
+    return {
+        'STATIC_URL': STATIC_URL[request.is_secure()],
     }
 
