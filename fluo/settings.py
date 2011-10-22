@@ -24,6 +24,7 @@ from django.conf import settings
 from django.utils.encoding import iri_to_uri
 
 DATABASES = getattr(settings, 'DATABASES')
+DEBUG = getattr(settings, 'DEBUG')
 
 MEDIA_URL = iri_to_uri(getattr(settings, 'MEDIA_URL'))
 MEDIA_ROOT = getattr(settings, 'MEDIA_ROOT')
