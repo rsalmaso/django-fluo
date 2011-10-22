@@ -35,6 +35,8 @@ STATIC_ROOT = getattr(settings, 'STATIC_ROOT')
 FLUO_STATIC_URL = getattr(settings, 'FLUO_STATIC_URL', STATIC_URL + 'fluo/')
 JQUERY_STATIC_URL = FLUO_STATIC_URL + 'jquery/'
 
+SERVE_MEDIA_FILES = getattr(settings, 'SERVE_MEDIA_FILES', True)
+
 JQUERY_MINIFIED = getattr(settings, 'JQUERY_MINIFIED', True)
 LANGUAGES = getattr(settings, 'LANGUAGES')
 LOGGING_FORMAT = getattr(settings, 'LOGGING_FORMAT', '%(asctime)s %(levelname)s %(message)s')
