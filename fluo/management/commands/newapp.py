@@ -1,30 +1,68 @@
+# -*- coding: utf-8 -*-
+
+# Copyright (C) 2007-2011, Raffaele Salmaso <raffaele@salmaso.org>
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+
+# This code is heavily based on django.contrib.admin
+# Copyright (c) Django Software Foundation and individual contributors.
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without modification,
+# are permitted provided that the following conditions are met:
+#
+#     1. Redistributions of source code must retain the above copyright notice,
+#        this list of conditions and the following disclaimer.
+#
+#     2. Redistributions in binary form must reproduce the above copyright
+#        notice, this list of conditions and the following disclaimer in the
+#        documentation and/or other materials provided with the distribution.
+#
+#     3. Neither the name of Django nor the names of its contributors may be used
+#        to endorse or promote products derived from this software without
+#        specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+# ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+# ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
 import os
-
-from django.core.management.base import CommandError, LabelCommand
+from django.core.management.base import CommandError
+from django.core.management.templates import TemplateCommand
 from django.utils.importlib import import_module
-from fluo.management.base import copy_helper
+import fluo
 
-class Command(LabelCommand):
-    help = "Creates a Django app directory structure for the given app name in the current directory."
-    args = "[appname]"
-    label = 'application name'
+class Command(TemplateCommand):
+    help = ("Creates a Django app directory structure for the given app "
+            "name in the current directory or optionally in the given "
+            "directory.")
 
-    requires_model_validation = False
-    # Can't import settings during this command, because they haven't
-    # necessarily been created.
-    can_import_settings = False
-
-    def handle_label(self, app_name, directory=None, **options):
-        if directory is None:
-            directory = os.getcwd()
-
-        # Determine the project_name by using the basename of directory,
-        # which should be the full path of the project directory (or the
-        # current directory if no directory was passed).
-        project_name = os.path.basename(directory)
-        if app_name == project_name:
-            raise CommandError("You cannot create an app with the same name"
-                               " (%r) as your project." % app_name)
+    def handle(self, app_name=None, target=None, **options):
+        if app_name is None:
+            raise CommandError("you must provide an app name")
 
         # Check that the app_name cannot be imported.
         try:
@@ -32,17 +70,11 @@ class Command(LabelCommand):
         except ImportError:
             pass
         else:
-            raise CommandError("%r conflicts with the name of an existing Python module and cannot be used as an app name. Please try another name." % app_name)
+            raise CommandError("%r conflicts with the name of an existing "
+                               "Python module and cannot be used as an app "
+                               "name. Please try another name." % app_name)
 
-        copy_helper(self.style, 'app', app_name, directory, project_name)
+        options['template'] = os.path.join(fluo.__path__[0], 'conf', 'app_template')
 
-class ProjectCommand(Command):
-    help = ("Creates a Django app directory structure for the given app name"
-            " in this project's directory.")
+        super(Command, self).handle('app', app_name, target, **options)
 
-    def __init__(self, project_directory):
-        super(ProjectCommand, self).__init__()
-        self.project_directory = project_directory
-
-    def handle_label(self, app_name, **options):
-        super(ProjectCommand, self).handle_label(app_name, self.project_directory, **options)
