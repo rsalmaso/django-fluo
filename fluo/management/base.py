@@ -63,7 +63,7 @@ def copy_helper(style, app_or_project, name, directory, other_name=''):
             path_new = os.path.join(top_dir, relative_dir, f.replace('%s_name' % app_or_project, name))
             fp_old = open(path_old, 'r')
             fp_new = open(path_new, 'w')
-            fp_new.write(fp_old.read().replace('{{ %s_name }}' % app_or_project, name).replace('{{ %s_name }}' % other, other_name))
+            fp_new.write(fp_old.read().replace('{{ %s_name }}' % app_or_project, name).replace('{{ %s_name }}' % other, other_name).replace('{{ %sName }}' % app_or_project.capitalize(), name.capitalize()))
             fp_old.close()
             fp_new.close()
             try:

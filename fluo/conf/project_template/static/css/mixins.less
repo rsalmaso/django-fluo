@@ -1,0 +1,280 @@
+
+.relative() {
+  position: relative;
+}
+.absolute() {
+  position: absolute;
+}
+.fixed() {
+  position: fixed;
+}
+
+.align-left() {
+  text-align: left;
+}
+.align-right() {
+  text-align: right;
+}
+.align-center() {
+  text-align: center;
+}
+.left() {
+  float: left;
+}
+.right() {
+  float: right;
+}
+
+/* Drop shadows */
+.box-shadow(@shadow: 0 1px 3px rgba(0,0,0,.25)) {
+  -webkit-box-shadow: @shadow;
+  -moz-box-shadow: @shadow;
+  /*-o-box-shadow: @shadow;*/
+  box-shadow: @shadow;
+}
+
+/* Transform for scale and rotate */
+/* translate, rotate, scale -- need to finalize */
+.scale(@value: 1.5) {
+  -webkit-transform: scale(@value);
+  -moz-transform: scale(@value);
+  -ms-transform: scale(@value);
+  -o-transform: scale(@value);
+  transform: scale(@value);
+}
+.rotate(@degrees: 5deg) {
+  -webkit-transform: rotate(@degrees);
+  -moz-transform: rotate(@degrees);
+  -ms-transform: rotate(@degrees);
+  -o-transform: rotate(@degrees);
+  transform: rotate(@degrees);
+}
+.translate(@x: 0, @y: 0) {
+  -webkit-transform: translate(@x, @y);
+  -moz-transform: translate(@x, @y);
+  -ms-transform: translate(@x, @y);
+  -o-transform: translate(@x, @y);
+  transform: translate(@x, @y);
+}
+.skewx(@value) {
+  -webkit-transform: skewx(@value);
+  -moz-transform: skewx(@value);
+  -ms-transform: skewx(@value);
+  -o-transform: skewx(@value);
+  transform: skewx(@value);
+}
+.skewy(@value) {
+  -webkit-transform: skewy(@value);
+  -moz-transform: skewy(@value);
+  -ms-transform: skewy(@value);
+  -o-transform: skewy(@value);
+  transform: skewy(@value);
+}
+
+.transition(@property, @duration, @function, @delay: 0) {
+  -webkit-transition: @property @duration @function @delay;
+  -moz-transition: @property @duration @function @delay;
+  -ms-transition: @property @duration @function @delay;
+  -o-transition: @property @duration @function @delay;
+  transition: @property @duration @function @delay;
+}
+
+/* Background clipping */
+/* Heads up: FF 3.6 and under need padding instead of padding-box */
+.background-clip(@clip) {
+  -webkit-background-clip: @clip;
+  -moz-background-clip: @clip;
+  -o-background-clip: @clip;
+  background-clip: @clip;
+}
+
+/* Border Radius */
+.border-radius(@radius: 5px) {
+  -webkit-border-radius: @radius;
+  -moz-border-radius: @radius;
+  -o-border-radius: @radius;
+  border-radius: @radius;
+}
+.border-radius-top-left(@value) {
+  -webkit-border-top-left-radius: @value;
+  -moz-border-radius-topleft: @value;
+  -o-border-top-left-radius: @value;
+  border-top-left-radius: @value;
+}
+.border-radius-top-right(@value) {
+  -webkit-border-top-right-radius: @value;
+  -moz-border-radius-topright: @value;
+  -o-border-top-right-radius: @value;
+  border-top-right-radius: @value;
+}
+.border-radius-bottom-left(@value) {
+  -webkit-border-bottom-left-radius: @value;
+  -moz-border-radius-bottomleft: @value;
+  -o-border-bottom-left-radius: @value;
+  border-bottom-left-radius: @value;
+}
+.border-radius-bottom-right(@value) {
+  -webkit-border-bottom-right-radius: @value;
+  -moz-border-radius-bottomright: @value;
+  -o-border-bottom-right-radius: @value;
+  border-bottom-right-radius: @value;
+}
+.border-radius-top(@value) {
+  .border-radius-top-left(@value);
+  .border-radius-top-right(@value);
+}
+.border-radius-bottom(@value) {
+  .border-radius-bottom-left(@value);
+  .border-radius-bottom-right(@value);
+}
+.border-radius-right(@value) {
+  .border-radius-top-right(@value);
+  .border-radius-bottom-right(@value);
+}
+.border-radius-left(@value) {
+  .border-radius-top-left(@value);
+  .border-radius-bottom-left(@value);
+}
+.rounded(@tl, @tr, @br, @bl) {
+  .border-radius-top-left(@tl);
+  .border-radius-top-right(@tr);
+  .border-radius-bottom-left(@bl);
+  .border-radius-bottom-right(@br);
+  -webkit-background-clip: padding-box;
+  -moz-background-clip: padding;
+  background-clip: padding-box;
+}
+
+/* Resize anything */
+.resizable(@direction: both) {
+  resize: @direction; // Options: horizontal, vertical, both
+  overflow: auto; // Safari fix
+}
+
+.position(@x, @y) {
+  top: @x;
+  left: @y;
+}
+
+/* Sizing shortcuts */
+.size(@width, @height) {
+  width: @width;
+  height: @height;
+}
+.square(@size) {
+  .size(@size, @size);
+}
+
+/* Clearfix for clearing floats like a boss h5bp.com/q */
+.clearfix() {
+  zoom: 1;
+  &:before,
+  &:after {
+    display: table;
+    *display: inline;
+    content: "";
+    zoom: 1;
+  }
+  &:after {
+    clear: both;
+  }
+}
+
+/* Webkit-style focus */
+.tab-focus() {
+  // Default
+  outline: thin dotted;
+  // Webkit
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+
+/* Center-align a block level element */
+.center-block() {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* IE7 inline-block */
+.ie7-inline-block() {
+  *display: inline; /* IE7 inline-block hack */
+  *zoom: 1;
+}
+
+/*
+ * IE7 likes to collapse whitespace on either side of the inline-block elements.
+ * Ems because we're attempting to match the width of a space character. Left
+ * version is for form buttons, which typically come after other elements, and
+ * right version is for icons, which come before. Applying both is ok, but it will
+ * mean that space between those elements will be .6em (~2 space characters) in IE7,
+ * instead of the 1 space in other browsers.
+ */
+.ie7-restore-left-whitespace() {
+  *margin-left: .3em;
+
+  &:first-child {
+    *margin-left: 0;
+  }
+}
+
+.ie7-restore-right-whitespace() {
+  *margin-right: .3em;
+
+  &:last-child {
+    *margin-left: 0;
+  }
+}
+
+/* Input placeholder text */
+.placeholder(@color: @placeholderText) {
+  :-moz-placeholder {
+    color: @color;
+  }
+  ::-webkit-input-placeholder {
+    color: @color;
+  }
+}
+
+/* Text overflow */
+/* Requires inline-block or block for proper styling */
+.text-overflow() {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Reset filters for IE */
+.reset-filter() {
+  filter: e(%("progid:DXImageTransform.Microsoft.gradient(enabled = false)"));
+}
+
+/* Opacity */
+.opacity(@opacity: 100) {
+  filter: e(%("alpha(opacity=%d)", @opacity));
+  -moz-opacity: @opacity / 100;
+  opacity: @opacity / 100;
+}
+
+.color(@color) {
+  color: @color;
+}
+
+.text-shadow(@color, @dim: 1px 1px 3px) {
+  text-shadow: @color @dim;
+}
+
+.font(@color, @size: 100%, @shadow: none) {
+  font-size: @size;
+  .color(@color);
+  text-shadow: @shadow 1px 1px 2px;
+}
+
+.linear-gradient(@from, @to, @direction: bottom) {
+  background-image: -webkit-linear-gradient(@direction, @from 0%, @to 100%);
+  background-image: -moz-linear-gradient(@direction, @from 0%, @to 100%);
+  background-image: -ms-linear-gradient(@direction, @from 0%, @to 100%);
+  background-image: -o-linear-gradient(@direction, @from 0%, @to 100%);
+  background-image: linear-gradient(@direction, @from 0%, @to 100%);
+}
+

@@ -1,21 +1,27 @@
 #!/usr/bin/env python
+import os, sys
 
+# PATH is the absolute path leading to parent directory
+PATH = os.path.split(os.path.dirname(os.path.realpath(__file__)))[0]
+LIB_DIR = os.path.join(PATH, 'lib')
+
+for path in os.listdir(LIB_DIR):
+    pkg = os.path.join(LIB_DIR, path)
+    if os.path.isdir(pkg) and pkg not in sys.path:
+        sys.path.insert(0, pkg)
+if PATH not in sys.path:
+    sys.path.insert(0, PATH)
+
+# remove current path
+PROJECT_PATH = os.path.split(os.path.realpath(__file__))[0]
 try:
-    from local_pythonpath import *
-except ImportError:
+    sys.path.remove(PROJECT_PATH)
+except ValueError:
     pass
 
-from django.core.management import execute_manager
-import imp
-try:
-    imp.find_module('settings') # Assumed to be in the same directory.
-except ImportError:
-    import sys
-    sys.stderr.write("Error: Can't find the file 'settings.py' in the directory containing %r. It appears you've customized things.\nYou'll have to run django-admin.py, passing it your settings module.\n" % __file__)
-    sys.exit(1)
-
-import settings
-
 if __name__ == "__main__":
-    execute_manager(settings)
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "{{ project_name }}.settings")
 
+    from django.core.management import execute_from_command_line
+
+    execute_from_command_line(sys.argv)

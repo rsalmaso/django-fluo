@@ -3,20 +3,50 @@
 # Django settings for {{ project_name }} project.
 
 import os
-#gettext_noop = lambda s: s
-#LANGUAGES = (
-    #('it', gettext_noop('Italian')),
-    #('en', gettext_noop('English')),
-#)
+import errno
 
 PROJECT_NAME = '{{ project_name }}'
-PROJECT_PATH, _ = os.path.split(os.path.realpath(__file__))
-SITE_PACKAGES = os.path.join(os.path.split(PROJECT_PATH)[0], 'site-packages')
+PROJECT_PATH = os.path.split(os.path.realpath(__file__))[0]
+BASE_PATH = os.path.split(PROJECT_PATH)[0]
 
-DEBUG = True
+def rel(*args):
+    return os.path.normpath(os.path.join(PROJECT_PATH, *args))
+def base_rel(*args):
+    return os.path.normpath(os.path.join(BASE_PATH, *args))
+def mkdir(dir):
+    try:
+        os.makedirs(dir)
+    except OSError, e:
+        if e.errno != errno.EEXIST:
+            raise e
+
+LIB_DIR = base_rel('lib')
+def lib_rel(*args):
+    return os.path.normpath(os.path.join(LIB_DIR, *args))
+LOG_DIR = base_rel('log')
+def log_rel(*args):
+    return os.path.normpath(os.path.join(LOG_DIR, *args))
+CONF_DIR = base_rel('conf')
+def conf_rel(*args):
+    return os.path.normpath(os.path.join(CONF_DIR, *args))
+TMP_DIR = base_rel('tmp')
+def tmp_rel(*args):
+    return os.path.normpath(os.path.join(TMP_DIR, *args))
+
+# make sure log and tmp dirs exist
+mkdir(LOG_DIR)
+mkdir(TMP_DIR)
+
+_ = lambda s: s
+#LANGUAGES = (
+    #('it', _('Italian')),
+    #('en', _('English')),
+#)
+
+DEBUG = False
 
 ADMINS = (
-    # ('Your Name', 'your_email@domain.com'),
+    # ('Your Name', 'your_email@example.com'),
 )
 
 MANAGERS = ADMINS
@@ -26,7 +56,7 @@ DATABASES = {
         # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
         'ENGINE': 'django.db.backends.sqlite3',
         # Or path to database file if using sqlite3.
-        'NAME': os.path.join(PROJECT_PATH, '{{ project_name }}.db'),
+        'NAME': rel('{{ project_name }}.db'),
         # Not used with sqlite3.
         'USER': '',
         # Not used with sqlite3.
@@ -47,7 +77,7 @@ DATABASES = {
 # timezone as the operating system.
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
-TIME_ZONE = 'America/Chicago'
+TIME_ZONE = 'Europe/London'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -58,33 +88,31 @@ SITE_ID = 1
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
 USE_I18N = True
+#LOCALE_PATHS = ()
 
 # If you set this to False, Django will not format dates, numbers and
 # calendars according to the current locale
 USE_L10N = True
 
-# Absolute path to the directory that holds media.
-# Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = ''.join([PROJECT_PATH, '/media/'])
+# Absolute filesystem path to the directory that will hold user-uploaded files.
+# Example: "/home/media/media.lawrence.com/media/"
+MEDIA_ROOT = rel('media')
+mkdir(MEDIA_ROOT)
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
-# trailing slash if there is a path component (optional in other cases).
-# Examples: "http://media.lawrence.com", "http://example.com/media/"
+# trailing slash.
+# Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
 MEDIA_URL = '/media/'
 
-# URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
-# trailing slash.
-# Examples: "http://foo.com/media/", "/media/".
-ADMIN_MEDIA_PREFIX = '/media/admin/'
+# Absolute path to the directory static files should be collected to.
+# Don't put anything in this directory yourself; store your static files
+# in apps' "static/" subdirectories and in STATICFILES_DIRS.
+# Example: "/home/media/media.lawrence.com/static/"
+STATIC_ROOT = rel('static')
+mkdir(STATIC_ROOT)
 
-# Absolute path to the directory that holds static files after they are
-# collected by
-# ./manage.py collectstatic
-STATIC_ROOT = ''.join([PROJECT_PATH, '/static/'])
-
-# URL that handles the media served from STATIC_ROOT. Make sure to use a
-# trailing slash if there is a path component (optional in other cases).
-# Examples: "http://media.lawrence.com", "http://example.com/media/"
+# URL prefix for static files.
+# Example: "http://media.lawrence.com/static/"
 STATIC_URL = '/static/'
 
 # Additional locations of static files
@@ -93,8 +121,8 @@ STATICFILES_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
 
-    #''.join([PROJECT_PATH, '/static/']),
-    #''.join([SITE_PACKAGES, 'django', 'django', 'contrib', 'admin', 'media']),
+    #lib_rel('django', 'contrib', 'admin', 'static'),
+    #lib_rel('fluo', 'static'),
 )
 
 # List of finder classes that know how to find static files in
@@ -102,7 +130,7 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    #'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -110,31 +138,40 @@ SECRET_KEY = ''
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
+    #'templates.loaders.eggs.Loader',
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+    #'django.template.loaders.eggs.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
+    # Uncomment the next line to enable cache
+    #'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     #'django.middleware.http.ConditionalGetMiddleware',
     #'django.middleware.gzip.GZipMiddleware',
-    # Uncomment the next line for simple clickjacking protection:
-    #'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # Comment the next line to disable simple clickjacking protection:
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # Uncomment the next line to enable cache
+    #'django.middleware.cache.FetchFromCacheMiddleware',
 )
 
 ROOT_URLCONF = '{{ project_name }}.urls'
+
+# Python dotted path to the WSGI application used by Django's runserver.
+WSGI_APPLICATION = '{{ project_name }}.wsgi.application'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
 
-    #''.join([PROJECT_PATH, '/templates/']),
+    #rel('templates'),
 )
 
 # List of processors used by RequestContext to populate the context.
@@ -144,12 +181,12 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.debug',
     'django.core.context_processors.i18n',
-    'django.core.context_processors.media',
-    'django.core.context_processors.static',
     'django.core.context_processors.request',
+    'django.core.context_processors.tz',
     #'django.core.context_processors.csrf',
     'django.contrib.messages.context_processors.messages',
     'fluo.context_processors.media',
+    'fluo.context_processors.static',
 )
 
 INSTALLED_APPS = (
@@ -162,10 +199,15 @@ INSTALLED_APPS = (
     # Comment the next line to disable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
+    #'django.contrib.admindocs',
+    # Comment the next line to disable the webdesign plugin:
+    'django.contrib.webdesign',
+    # Uncomment the next line to enable gunicorn:
+    #'gunicorn',
     # Comment the next line to disable south data migration:
     'south',
     'fluo',
+    #'templates',
     '{{ project_name }}',
 )
 
@@ -176,19 +218,106 @@ INSTALLED_APPS = (
 # more details on how to customize your logging configuration.
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': False,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'verbose': {
+            'format': '%(asctime)s - %(process)5d %(pathname)s::%(funcName)s[%(lineno)d]: %(levelname)s %(message)s',
+        },
+        'simple': {
+            'format': '[%(asctime)s] %(levelname)s %(message)s',
+        },
+    },
     'filters': {
         'require_debug_false': {
             '()': 'django.utils.log.CallbackFilter',
-            'callback': lambda r: not DEBUG
-        }
+            'callback': lambda r: not DEBUG,
+        },
+       #'special': {
+           #'()': '{{ project_name }}.logging.SpecialFilter',
+           #'foo': 'bar',
+       #},
+    },
+    'handlers': {
+        'null': {
+            'level':'DEBUG',
+            'class':'django.utils.log.NullHandler',
+        },
+        'console':{
+            'level':'DEBUG',
+            'class':'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+        'file':{
+            'level':'INFO',
+            'class':'logging.handlers.TimedRotatingFileHandler',
+            'formatter': 'verbose',
+            'filename': log_rel('{{ project_name }}-info.log'),
+            'when': 'D',
+            'interval': 7,
+            'backupCount': 4,
+            # rotate every 7 days, keep 4 old copies
+        },
+        'error_file':{
+            'level':'ERROR',
+            'class':'logging.handlers.TimedRotatingFileHandler',
+            'formatter': 'verbose',
+            'filename': log_rel('{{ project_name }}-error.log'),
+            'when': 'D',
+            'interval': 7,
+            'backupCount': 4,
+            # rotate every 7 days, keep 4 old copies
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'include_html': True,
+            #'filters': ['special']
+            #'filters': ['require_debug_false'],
+        },
+    },
+    'loggers': {
+        'django': { # django is the catch-all logger. No messages are posted directly to this logger.
+            'handlers':['null', 'error_file'],
+            'propagate': True,
+            'level':'INFO',
+        },
+        'django.request': { # Log messages related to the handling of requests. 5XX responses are raised as ERROR messages; 4XX responses are raised as WARNING messages.
+            'handlers': ['error_file', 'mail_admins'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        '{{ project_name }}': {
+            'handlers': ['console', 'file', 'error_file', 'mail_admins'],
+            'level': 'INFO',
+            #'filters': ['special']
+        },
+    },
+}
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': ('%(levelname)s %(asctime)s |'
+                       '%(pathname)s:%(lineno)d (in %(funcName)s) |'
+                       ' %(message)s ')
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
     },
     'handlers': {
         'mail_admins': {
             'level': 'ERROR',
-            'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
-        }
+        },
+        'logfile': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.WatchedFileHandler',
+            'filename': log_rel('{{ project_name }}.log'),
+            'formatter': 'verbose',
+        },
     },
     'loggers': {
         'django.request': {
@@ -196,11 +325,44 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
+        '{{ project_name }}': {
+            'handlers': ['logfile'],
+            'level': 'DEBUG'
+        }
     }
 }
 
+TEST_EXCLUDE = ('django',)
+TEST_RUNNER = 'fluo.test.suite.AdvancedTestSuiteRunner'
+
+### Cache
+#CACHES = {
+    ## dummy backend
+    #'default': {
+        #'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+        #'LOCATION': '',
+    #},
+    ## filesystem based
+    #'default': {
+        #'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        #'LOCATION': base_rel('tmp'),
+    #},
+    ## memory based
+    #'default': {
+        #'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        #'LOCATION': '',
+    #},
+#}
+#CACHE_MIDDLEWARE_KEY_PREFIX = ''
+#CACHE_MIDDLEWARE_SECONDS = 600
+#CACHE_MIDDLEWARE_ALIAS = 'default'
+
+#DEFAULT_FROM_EMAIL = 'webmaster@localhost'
+#EMAIL_SUBJECT_PREFIX = '[Django] '
+#SERVER_EMAIL = 'root@localhost'
+
 try:
-    from local_settings import *
+    from {{ project_name }}.local_settings import *
 except ImportError:
     pass
 TEMPLATE_DEBUG = DEBUG
