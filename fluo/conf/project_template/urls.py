@@ -16,40 +16,42 @@ from fluo import admin
 #handler500 = '{{ project_name }}.views.handler500'
 
 from fluo.views import TemplateView
-from fluo.urls import Urls, MediaUrls
 
-class {{ ProjectName }}Urls(Urls):
-    def get_urls(self):
-        urlpatterns = patterns('',
-            # Example:
-            #url(r'^{{ project_name }}/', include('{{ project_name }}.foo.urls')),
-            url(r'^robots.txt', TemplateView(
-                template_name='robots.txt',
-                mimetype='text/plain',
-            )),
-            url(r'^crossdomain.xml$', TemplateView(
-                template_name='crossdomain.xml',
-                mimetype='application/xml',
-            )),
+urlpatterns = patterns('',
+    url(r'^robots.txt', TemplateView(
+        template_name='robots.txt',
+        mimetype='text/plain',
+    ), name='{{ project_name }}-robots'),
+    url(r'^crossdomain.xml$', TemplateView(
+        template_name='crossdomain.xml',
+        mimetype='application/xml',
+    ), name='{{ project_name }}-crossdomain'),
 
-            # Comment to disable i18n
-            url(r'^i18n/', include('django.conf.urls.i18n')),
-            url(r'^jsi18n/$', 'django.views.i18n.javascript_catalog', name='jsi18n'),
+    # Comment to disable i18n
+    url(r'^i18n/$', 'django.views.i18n.set_language', name='i18n'),
+    url(r'^jsi18n/$', 'django.views.i18n.javascript_catalog', name='jsi18n'),
 
-            # Uncomment the admin/doc line below and add 'django.contrib.admindocs'
-            # to INSTALLED_APPS to enable admin documentation:
-            #url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+    # Uncomment the admin/doc line below and add 'django.contrib.admindocs'
+    # to INSTALLED_APPS to enable admin documentation:
+    #url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
-            # Comment the next line to disable the admin:
-            url(r'^admin/', include(admin.site.urls)),
-        ) + MediaUrls().urls
+    # Comment the next line to disable the admin:
+    url(r'^admin/', include(admin.site.urls)),
 
-        # Uncomment to enable i18n urls
-        #urlpatterns += i18n_urlpatterns(''
-            #url(r'^{{ project_name }}/', include('{{ project_name }}.foo.urls')),
-        #)
+    # Uncomment the next line to enable the admin tools:
+    #url(r'^admin_tools/', include('admin_tools.urls')),
 
-        return urlpatterns
+    url(r'^$', TemplateView(template_name='index.html'), name='{{ project_name }}-index'),
+)
 
-urlpatterns = {{ ProjectName }}Urls().urls
+if settings.DEBUG:
+    urlpatterns += patterns('',
+        (r'^%s/(?P<path>.*)$' % settings.MEDIA_URL[1:-1], 'django.views.static.serve', { 'document_root': settings.MEDIA_ROOT, }),
+        (r'^%s/(?P<path>.*)$' % settings.STATIC_URL[1:-1], 'django.views.static.serve', { 'document_root': settings.STATIC_ROOT, }),
+    )
+
+# Uncomment to enable i18n urls
+#urlpatterns += i18n_urlpatterns(''
+    #url(r'^{{ project_name }}/', include('{{ project_name }}.foo.urls')),
+#)
 

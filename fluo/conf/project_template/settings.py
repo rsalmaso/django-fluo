@@ -193,6 +193,14 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 INSTALLED_APPS = (
+    # Uncomment to enable admin-tools and fluent-dashboard
+    # Remember to configure admin tools
+    #'fluent_dashboard',
+    #'admin_tools',
+    #'admin_tools.theming',
+    #'admin_tools.menu',
+    #'admin_tools.dashboard',
+
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -333,6 +341,29 @@ LOGGING = {
 #DEFAULT_FROM_EMAIL = 'webmaster@localhost'
 #EMAIL_SUBJECT_PREFIX = '[Django] '
 #SERVER_EMAIL = 'root@localhost'
+
+# Admin tools customization
+
+#ADMIN_TOOLS_INDEX_DASHBOARD = '{{ project_name }}.admin.dashboard.CustomIndexDashboard'
+#ADMIN_TOOLS_APP_INDEX_DASHBOARD = '{{ project_name }}.admin.dashboard.CustomAppIndexDashboard'
+#ADMIN_TOOLS_MENU = '{{ project_name }}.admin.menu.CustomMenu'
+#ADMIN_TOOLS_THEMING_CSS = 'css/admin.css'
+
+#ADMIN_TOOLS_MENU = 'fluent_dashboard.menu.FluentMenu'
+
+#FLUENT_DASHBOARD_APP_GROUPS = (
+    #(_('Module'), {
+        #'models': (
+            #'appname.models.Model',
+        #),
+        #'module': 'AppIconList',
+        #'collapsible': True,
+    #}),
+#)
+
+#FLUENT_DASHBOARD_APP_ICONS = {
+    ## 'app_label/model_label': 'images/admin/image',
+#}
 
 try:
     from {{ project_name }}.local_settings import *
