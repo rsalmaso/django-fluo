@@ -65,7 +65,7 @@ DATABASES = {
         'HOST': '',
         # Set to empty string for default. Not used with sqlite3.
         'PORT': '',
-        # force to use InnoDB storage engine, only for mysql
+        # For MySQL force to use InnoDB storage engine
         #'OPTIONS': {"init_command": "SET storage_engine=INNODB"},
     }
 }
@@ -93,6 +93,9 @@ USE_I18N = True
 # If you set this to False, Django will not format dates, numbers and
 # calendars according to the current locale
 USE_L10N = True
+
+# If you set this to False, Django will not use timezone-aware datetimes.
+USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
@@ -134,7 +137,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = ''
+SECRET_KEY = '{{ secret_key }}'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -294,47 +297,6 @@ LOGGING = {
     },
 }
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format': ('%(levelname)s %(asctime)s |'
-                       '%(pathname)s:%(lineno)d (in %(funcName)s) |'
-                       ' %(message)s ')
-        },
-        'simple': {
-            'format': '%(levelname)s %(message)s'
-        },
-    },
-    'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',
-            'class': 'django.utils.log.AdminEmailHandler'
-        },
-        'logfile': {
-            'level': 'DEBUG',
-            'class': 'logging.handlers.WatchedFileHandler',
-            'filename': log_rel('{{ project_name }}.log'),
-            'formatter': 'verbose',
-        },
-    },
-    'loggers': {
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
-            'propagate': True,
-        },
-        '{{ project_name }}': {
-            'handlers': ['logfile'],
-            'level': 'DEBUG'
-        }
-    }
-}
-
-TEST_EXCLUDE = ('django',)
-TEST_RUNNER = 'fluo.test.suite.AdvancedTestSuiteRunner'
-
 ### Cache
 #CACHES = {
     ## dummy backend
@@ -346,6 +308,17 @@ TEST_RUNNER = 'fluo.test.suite.AdvancedTestSuiteRunner'
     #'default': {
         #'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
         #'LOCATION': base_rel('tmp'),
+    #},
+    #CACHES = {
+        #'default': {
+            #'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+            #'LOCATION': '127.0.0.1:11211',
+            #'LOCATION': 'unix:/tmp/memcached.sock',
+            #'LOCATION': [
+                #'172.19.26.240:11211',
+                #'172.19.26.242:11211',
+            #],
+        #},
     #},
     ## memory based
     #'default': {

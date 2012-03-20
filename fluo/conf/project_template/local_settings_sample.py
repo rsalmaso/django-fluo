@@ -28,7 +28,7 @@ DATABASES = {
         'HOST': '',
         # Set to empty string for default. Not used with sqlite3.
         'PORT': '',
-        # force to use InnoDB storage engine, only for mysql
+        # For MySQL force to use InnoDB storage engine
         #'OPTIONS': {"init_command": "SET storage_engine=INNODB"},
     }
 }
@@ -47,6 +47,17 @@ DATABASES = {
     #'default': {
         #'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
         #'LOCATION': base_rel('tmp'),
+    #},
+    #CACHES = {
+        #'default': {
+            #'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+            #'LOCATION': '127.0.0.1:11211',
+            #'LOCATION': 'unix:/tmp/memcached.sock',
+            #'LOCATION': [
+                #'172.19.26.240:11211',
+                #'172.19.26.242:11211',
+            #],
+        #},
     #},
     ## memory based
     #'default': {
@@ -81,9 +92,8 @@ DATABASES = {
 #EMAIL_USE_TLS = True
 
 # custom email backend
-#if DEBUG:
-    # Don't really send email, but print on console
-    #EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-#else:
-    #EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# Don't really send email, but print on console
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# Send email to
+#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
