@@ -27,7 +27,7 @@
 # - UUIDField
 
 import re
-import datetime
+from django.utils import timezone
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
@@ -77,7 +77,7 @@ class CreationDateTimeField(models.DateTimeField):
     def __init__(self, *args, **kwargs):
         kwargs.setdefault('editable', False)
         kwargs.setdefault('blank', True)
-        kwargs.setdefault('default', datetime.datetime.now)
+        kwargs.setdefault('default', timezone.now)
         super(CreationDateTimeField, self).__init__(*args, **kwargs)
 
     def get_internal_type(self):
@@ -91,7 +91,7 @@ class ModificationDateTimeField(CreationDateTimeField):
     """
 
     def pre_save(self, model, add):
-        value = datetime.datetime.now()
+        value = timezone.now()
         setattr(model, self.attname, value)
         return value
 
