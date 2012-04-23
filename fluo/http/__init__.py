@@ -21,6 +21,7 @@
 # THE SOFTWARE.
 
 from django.utils import simplejson
+from django.core.serializers.json import DjangoJSONEncoder
 from django.http import *
 from django.conf import settings
 
@@ -54,6 +55,6 @@ class JsonResponse(HttpResponse):
             content = {}
         if settings.DEBUG and indent is None:
             indent = 4
-        json = content=simplejson.dumps(content, indent=indent)
+        json = content=simplejson.dumps(content, indent=indent, cls=DjangoJSONEncoder)
         super(JsonResponse, self).__init__(content=json, mimetype=mimetype, status=status)
 
