@@ -48,7 +48,7 @@ __all__ = [
 ]
 
 class JsonResponse(HttpResponse):
-    def __init__(self, content=None, mimetype="text/javascript", status=200, indent=None):
+    def __init__(self, content=None, mimetype="application/json; charset=utf-8", status=200, indent=None):
         """
         return JsonResponse(content={'status': 200, 'message': '', 'data': [] })
         """
