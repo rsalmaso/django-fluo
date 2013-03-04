@@ -24,6 +24,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import get_language
+from django.utils.encoding import python_2_unicode_compatible
 from django.template.defaultfilters import slugify
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.generic import GenericForeignKey
@@ -172,6 +173,7 @@ class CategoryModelManager(models.Manager):
     def default(self):
         return self.get_query_set().get(default=True)
 
+@python_2_unicode_compatible
 class CategoryModel(StatusModel, OrderedModel):
     objects = CategoryModelManager()
 
@@ -195,7 +197,7 @@ class CategoryModel(StatusModel, OrderedModel):
         abstract = True
         ordering = ('name',)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def save(self, *args, **kwargs):
