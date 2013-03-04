@@ -21,7 +21,8 @@
 # THE SOFTWARE.
 
 from django.core.management.base import NoArgsCommand
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 class Command(NoArgsCommand):
     help = "Load a default admin user data: username=admin password=admin"
