@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import unicode_literals
 import os
-
-PROJECT_PATH, _ = os.path.split(os.path.realpath(__file__))
+from {{ project_name }}.settings.base import *
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -19,7 +19,7 @@ DATABASES = {
         # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
         'ENGINE': 'django.db.backends.sqlite3',
         # Or path to database file if using sqlite3.
-        'NAME': os.path.join(PROJECT_PATH, '{{ project_name }}.db'),
+        'NAME': rel('{{ project_name }}.db'),
         # Not used with sqlite3.
         'USER': '',
         # Not used with sqlite3.

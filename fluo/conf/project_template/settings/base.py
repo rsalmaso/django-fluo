@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-
 # Django settings for {{ project_name }} project.
 
+from __future__ import unicode_literals
 import os
 import errno
 
 PROJECT_NAME = '{{ project_name }}'
-PROJECT_PATH = os.path.split(os.path.realpath(__file__))[0]
+PROJECT_PATH = os.path.split(os.path.split(os.path.realpath(__file__))[0])[0]
 BASE_PATH = os.path.split(PROJECT_PATH)[0]
 
 def rel(*args):
@@ -51,6 +51,10 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+# Hosts/domain names that are valid for this site; required if DEBUG is False
+# See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
+ALLOWED_HOSTS = []
+
 DATABASES = {
     'default': {
         # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
@@ -81,7 +85,7 @@ TIME_ZONE = 'Europe/London'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en-en'
 
 SITE_ID = 1
 
@@ -193,14 +197,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 INSTALLED_APPS = (
-    # Uncomment to enable admin-tools and fluent-dashboard
-    # Remember to configure admin tools
-    #'fluent_dashboard',
-    #'admin_tools',
-    #'admin_tools.theming',
-    #'admin_tools.menu',
-    #'admin_tools.dashboard',
-
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -213,12 +209,11 @@ INSTALLED_APPS = (
     #'django.contrib.admindocs',
     # Comment the next line to disable the webdesign plugin:
     'django.contrib.webdesign',
-    # Uncomment the next line to enable gunicorn:
-    #'gunicorn',
     # Comment the next line to disable south data migration:
     'south',
     'fluo',
     #'templates',
+
     '{{ project_name }}',
 )
 
@@ -283,16 +278,19 @@ LOGGING = {
             'class': 'django.utils.log.AdminEmailHandler',
             'include_html': True,
             #'filters': ['special']
-            #'filters': ['require_debug_false'],
+            'filters': ['require_debug_false'],
         },
     },
     'loggers': {
-        'django': { # django is the catch-all logger. No messages are posted directly to this logger.
+        'django': {
+            # django is the catch-all logger. No messages are posted directly to this logger.
             'handlers':['null', 'error_file'],
             'propagate': True,
             'level':'INFO',
         },
-        'django.request': { # Log messages related to the handling of requests. 5XX responses are raised as ERROR messages; 4XX responses are raised as WARNING messages.
+        'django.request': {
+            # Log messages related to the handling of requests. 5XX responses are
+            # raised as ERROR messages; 4XX responses are raised as WARNING messages.
             'handlers': ['error_file', 'mail_admins'],
             'level': 'ERROR',
             'propagate': False,
@@ -341,33 +339,4 @@ LOGGING = {
 #DEFAULT_FROM_EMAIL = 'webmaster@localhost'
 #EMAIL_SUBJECT_PREFIX = '[Django] '
 #SERVER_EMAIL = 'root@localhost'
-
-# Admin tools customization
-
-#ADMIN_TOOLS_INDEX_DASHBOARD = '{{ project_name }}.admin.dashboard.CustomIndexDashboard'
-#ADMIN_TOOLS_APP_INDEX_DASHBOARD = '{{ project_name }}.admin.dashboard.CustomAppIndexDashboard'
-#ADMIN_TOOLS_MENU = '{{ project_name }}.admin.menu.CustomMenu'
-#ADMIN_TOOLS_THEMING_CSS = 'css/admin.css'
-
-#ADMIN_TOOLS_MENU = 'fluent_dashboard.menu.FluentMenu'
-
-#FLUENT_DASHBOARD_APP_GROUPS = (
-    #(_('Module'), {
-        #'models': (
-            #'appname.models.Model',
-        #),
-        #'module': 'AppIconList',
-        #'collapsible': True,
-    #}),
-#)
-
-#FLUENT_DASHBOARD_APP_ICONS = {
-    ## 'app_label/model_label': 'images/admin/image',
-#}
-
-try:
-    from {{ project_name }}.local_settings import *
-except ImportError:
-    pass
-TEMPLATE_DEBUG = DEBUG
 

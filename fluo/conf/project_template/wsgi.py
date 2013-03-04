@@ -16,6 +16,7 @@ framework.
 
 """
 
+from __future__ import unicode_literals
 import os, sys
 
 # PATH is the absolute path leading to parent directory
