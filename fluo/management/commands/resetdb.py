@@ -20,6 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+from __future__ import unicode_literals
 from django.core.management.base import NoArgsCommand
 from django.core.management.sql import sql_flush
 from django.core.management.color import no_style

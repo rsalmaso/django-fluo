@@ -25,6 +25,7 @@
 
 "this is the locale selecting middleware that will look at accept headers"
 
+from __future__ import unicode_literals
 import re
 from django.utils.cache import patch_vary_headers
 from django.utils import translation

@@ -20,6 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+from __future__ import unicode_literals
 from django.core.management.base import NoArgsCommand
 from django.contrib.auth import get_user_model
 User = get_user_model()

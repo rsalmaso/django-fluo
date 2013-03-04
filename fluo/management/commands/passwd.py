@@ -23,6 +23,7 @@
 # Original code taken from django-extensions
 # Copyright (c) 2007 Michael Trier
 
+from __future__ import unicode_literals
 import getpass
 from django.core.management.base import BaseCommand, CommandError
 from django.contrib.auth import get_user_model

@@ -23,6 +23,7 @@
 # taken and adapted from django-cms
 # Copyright (c) 2008, Batiste Bieler
 
+from __future__ import unicode_literals
 from django import template
 from django.utils.translation import get_language
 from django.conf import settings

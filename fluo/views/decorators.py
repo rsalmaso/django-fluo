@@ -20,6 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+from __future__ import unicode_literals
 from django.utils.cache import cache
 from django.http import HttpResponseForbidden, HttpResponseBadRequest
 from django.utils.decorators import wraps, method_decorator
