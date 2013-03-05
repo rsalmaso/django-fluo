@@ -28,7 +28,7 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.template.defaultfilters import slugify
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.generic import GenericForeignKey
-from fluo.models import fields
+from fluo.db.models import fields
 from fluo import settings
 
 __all__ = [

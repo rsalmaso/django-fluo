@@ -25,7 +25,7 @@ from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 from django.http import HttpResponseRedirect
 from fluo.shortcuts import reverse
-from fluo import models
+from fluo.db import models
 from fluo.admin import widgets
 
 # begin admin customization
