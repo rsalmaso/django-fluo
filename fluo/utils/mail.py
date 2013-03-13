@@ -43,5 +43,5 @@ class EmailMessage(mail.EmailMessage):
 class EmailMultiAlternatives(mail.EmailMessage):
     multipart_subtype = 'alternative'
     def attach_alternative(self, content, mimetype=None):
-        selt.attach(content=content, mimetype=mimetype)
+        self.attach(content=content, mimetype=mimetype)
 
