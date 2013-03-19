@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from __future__ import unicode_literals
+from __future__ import absolute_import, print_function, unicode_literals
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import get_language

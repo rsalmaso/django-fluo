@@ -49,7 +49,7 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from __future__ import unicode_literals
+from __future__ import absolute_import, print_function, unicode_literals
 import os
 from django.core.management.base import CommandError
 from django.core.management.templates import TemplateCommand

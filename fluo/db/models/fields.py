@@ -26,7 +26,7 @@
 # - AutoSlugField
 # - UUIDField
 
-from __future__ import unicode_literals
+from __future__ import absolute_import, print_function, unicode_literals
 import re
 from django.utils import timezone
 from django.db import models

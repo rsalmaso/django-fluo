@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Django settings for {{ project_name }} project.
 
-from __future__ import unicode_literals
+from __future__ import absolute_import, print_function, unicode_literals
 import os
 import errno
 

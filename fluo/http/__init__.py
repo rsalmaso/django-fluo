@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from __future__ import unicode_literals
+from __future__ import absolute_import, print_function, unicode_literals
 from django.utils import simplejson
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import *

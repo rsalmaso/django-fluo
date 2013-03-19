@@ -23,7 +23,7 @@
 # Copyright (C) 2007 Michael Trier
 # Autocomplete feature taken from django-extensions
 
-from __future__ import unicode_literals
+from __future__ import absolute_import, print_function, unicode_literals
 import operator
 try:
     from functools import update_wrapper
