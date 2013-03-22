@@ -32,7 +32,7 @@ class Command(NoArgsCommand):
     help = "Try to reset the database"
 
     def handle_noargs(self, **options):
-        print _(u"Resetting database %(database)s...") % {'database': settings.DATABASE_NAME}
+        print(_(u"Resetting database %(database)s...") % {'database': settings.DATABASE_NAME})
         queries = sql_flush(no_style(), only_django=False)
         cursor = connection.cursor()
 
@@ -40,5 +40,5 @@ class Command(NoArgsCommand):
             cursor.execute(query)
 
         transaction.commit_unless_managed()
-        print _(u"done")
+        print(_(u"done"))
 

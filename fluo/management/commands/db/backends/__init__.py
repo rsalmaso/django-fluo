@@ -53,9 +53,9 @@ class BaseDatabase(object):
         raise ImproperlyConfigured('do_createdb is not implemented.')
     def createdb(self):
         try:
-            print _(u"Creating database %(database)s...") % self.db_dict
+            print(_(u"Creating database %(database)s...") % self.db_dict)
             self.do_createdb()
-            print _(u"done")
+            print(_(u"done"))
         except Exception, e:
             raise CreateDBError(_(u'Cannot create db: %(exception)s') % {'exception': e})
 
@@ -63,9 +63,9 @@ class BaseDatabase(object):
         raise ImproperlyConfigured('do_dropdb is not implemented.')
     def dropdb(self):
         try:
-            print _(u"Dropping database %(database)s...") % self.db_dict
+            print(_(u"Dropping database %(database)s...") % self.db_dict)
             self.do_dropdb()
-            print _(u"done")
+            print(_(u"done"))
         except Exception, e:
             raise DropDBError(_(u'Cannot drop db: %(exception)s') % {'exception': e})
 

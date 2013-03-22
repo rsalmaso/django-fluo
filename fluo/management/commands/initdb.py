@@ -39,13 +39,13 @@ class Command(DatabaseCommand):
         try:
             connection.dropdb()
         except DropDBError, e:
-            print e
+            print(e)
             call_command('resetdb')
         else:
             try:
                 connection.createdb()
             except CreateDBError, e:
-                print e
+                print(e)
         connection.close()
 
         call_command('syncdb', interactive=False)

@@ -33,6 +33,6 @@ class Command(DatabaseCommand):
         try:
             connection.dropdb()
         except DropDBError, e:
-            print e
+            print(e)
         connection.close()
 

@@ -63,6 +63,6 @@ def get_connection(database):
     try:
         return module.Database(**options)
     except Exception, e:
-        print e
+        print(e)
         raise ConnectionError('Cannot connect to database %(name)s' % options)
 

@@ -33,6 +33,6 @@ class Command(DatabaseCommand):
         try:
             connection.createdb()
         except CreateDBError, e:
-            print e
+            print(e)
         connection.close()
 

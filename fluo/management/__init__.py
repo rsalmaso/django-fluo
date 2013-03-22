@@ -74,7 +74,7 @@ Type 'yes' to continue, or 'no' to cancel: """ % database['NAME'])
             confirm = 'yes'
 
         if confirm != 'yes':
-            print "Reset cancelled."
+            print("Reset cancelled.")
             return
 
         self.db_handle(database, args, options)
@@ -104,7 +104,7 @@ def create_permissions(app, created_models, verbosity, **kwargs):
             p, created = Permission.objects.get_or_create(codename=codename, content_type__pk=ctype.id,
                 defaults={'name': name, 'content_type': ctype})
             if created and verbosity >= 2:
-                print "Adding permission '%s'" % p
+                print("Adding permission '%s'" % p)
 
 signals.post_syncdb.connect(create_permissions, dispatch_uid = "fluo.management.create_permissions")
 
