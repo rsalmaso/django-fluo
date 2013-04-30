@@ -21,7 +21,7 @@
 # THE SOFTWARE.
 
 from __future__ import absolute_import, print_function, unicode_literals
-from django.utils import simplejson
+import json
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import *
 from django.conf import settings
@@ -56,6 +56,6 @@ class JsonResponse(HttpResponse):
             content = {}
         if settings.DEBUG and indent is None:
             indent = 4
-        json = content=simplejson.dumps(content, indent=indent, cls=DjangoJSONEncoder)
-        super(JsonResponse, self).__init__(content=json, mimetype=mimetype, status=status)
+        data = content=json.dumps(content, indent=indent, cls=DjangoJSONEncoder)
+        super(JsonResponse, self).__init__(content=data, mimetype=mimetype, status=status)
 
