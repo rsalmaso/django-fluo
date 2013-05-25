@@ -58,4 +58,5 @@ class JsonResponse(HttpResponse):
             indent = 4
         data = content=json.dumps(content, indent=indent, cls=DjangoJSONEncoder)
         super(JsonResponse, self).__init__(content=data, mimetype=mimetype, status=status)
+        self['Content-Length'] = len(data)
 
