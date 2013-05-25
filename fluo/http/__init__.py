@@ -48,7 +48,7 @@ __all__ = [
 ]
 
 class JsonResponse(HttpResponse):
-    def __init__(self, content=None, mimetype="application/json; charset=utf-8", status=200, indent=None):
+    def __init__(self, content=None, content_type="application/json; charset=utf-8", status=200, indent=None):
         """
         return JsonResponse(content={'status': 200, 'message': '', 'data': [] })
         """
@@ -57,6 +57,6 @@ class JsonResponse(HttpResponse):
         if settings.DEBUG and indent is None:
             indent = 4
         data = content=json.dumps(content, indent=indent, cls=DjangoJSONEncoder)
-        super(JsonResponse, self).__init__(content=data, mimetype=mimetype, status=status)
+        super(JsonResponse, self).__init__(content=data, content_type=content_type, status=status)
         self['Content-Length'] = len(data)
 
