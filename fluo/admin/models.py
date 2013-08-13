@@ -174,7 +174,7 @@ class OrderedModelAdmin(ModelAdmin):
     def queryset(self, request):
         return super(OrderedModelAdmin, self).queryset(request).order_by('ordering')
     def get_urls(self):
-        from django.conf.urls.defaults import patterns, url
+        from django.conf.urls import patterns, url
 
         info = self.model._meta.app_label, self.model._meta.module_name
 

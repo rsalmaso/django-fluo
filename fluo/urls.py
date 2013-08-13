@@ -22,7 +22,7 @@
 
 from __future__ import absolute_import, print_function, unicode_literals
 import re
-from django.conf.urls.defaults import url, include, patterns
+from django.conf.urls import url, include, patterns
 from fluo import settings
 
 __all__ = [
