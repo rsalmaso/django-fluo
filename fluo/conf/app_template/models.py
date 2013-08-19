@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import absolute_import, print_function, unicode_literals
+from __future__ import absolute_import, division, print_function, unicode_literals
 #import logging
 #from django.utils.translation import ugettext_lazy as _
 #from django.utils.encoding import python_2_unicode_compatible
