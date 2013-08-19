@@ -28,6 +28,7 @@
 
 from __future__ import absolute_import, print_function, unicode_literals
 import re
+from django.core import exceptions, validators
 from django.utils import timezone
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -98,6 +99,23 @@ class ModificationDateTimeField(CreationDateTimeField):
 
     def get_internal_type(self):
         return "DateTimeField"
+
+class URIField(models.CharField):
+    description = _("URL")
+
+    def __init__(self, verbose_name=None, name=None, **kwargs):
+        kwargs['max_length'] = kwargs.get('max_length', 8196)
+        models.CharField.__init__(self, verbose_name, name, **kwargs)
+        self.validators.append(validators.URLValidator())
+
+    def formfield(self, **kwargs):
+        # As with CharField, this will cause URL validation to be performed
+        # twice.
+        defaults = {
+            'form_class': forms.URLField,
+        }
+        defaults.update(kwargs)
+        return super(URIField, self).formfield(**defaults)
 
 class AutoSlugField(models.SlugField):
     """
