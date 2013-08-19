@@ -22,9 +22,9 @@
 
 from __future__ import absolute_import, print_function, unicode_literals
 import json
-from django.core.serializers.json import DjangoJSONEncoder
 from django.http import *
 from django.conf import settings
+from fluo.utils.json import JSONEncoder
 
 __all__ = [
     'JsonResponse',
@@ -56,7 +56,7 @@ class JsonResponse(HttpResponse):
             content = {}
         if settings.DEBUG and indent is None:
             indent = 4
-        data = content=json.dumps(content, indent=indent, cls=DjangoJSONEncoder)
+        data = content=json.dumps(content, indent=indent, cls=JSONEncoder)
         super(JsonResponse, self).__init__(content=data, content_type=content_type, status=status)
         self['Content-Length'] = len(data)
 
