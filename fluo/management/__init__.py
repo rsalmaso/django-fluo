@@ -24,7 +24,7 @@
 Creates permissions for all installed apps that need permissions.
 """
 
-from __future__ import absolute_import, print_function, unicode_literals
+from __future__ import absolute_import, division, print_function, unicode_literals
 from optparse import make_option
 from django.db import DEFAULT_DB_ALIAS, connections
 from django.db.models import get_models, signals

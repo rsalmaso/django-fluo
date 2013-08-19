@@ -23,7 +23,7 @@
 # Copyright (C) 2007 Michael Trier
 # ForeignKeySearchInput taken from django-extensions
 
-from __future__ import absolute_import, print_function, unicode_literals
+from __future__ import absolute_import, division, print_function, unicode_literals
 import datetime
 import re
 from itertools import chain
