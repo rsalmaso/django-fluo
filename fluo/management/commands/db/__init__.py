@@ -40,7 +40,7 @@ def get_connection(database):
     }
     try:
         module = import_module('fluo.management.commands.db.backends.%s' % engine)
-    except ImportError, e:
+    except ImportError as e:
         try:
             module = import_module('.db_commands', engine)
         except ImportError, e_user:
@@ -62,7 +62,7 @@ def get_connection(database):
                 raise # If there's some other error, this must be an error in Django itself.
     try:
         return module.Database(**options)
-    except Exception, e:
+    except Exception as e:
         print(e)
         raise ConnectionError('Cannot connect to database %(name)s' % options)
 

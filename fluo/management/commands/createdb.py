@@ -32,7 +32,7 @@ class Command(DatabaseCommand):
 
         try:
             connection.createdb()
-        except CreateDBError, e:
+        except CreateDBError as e:
             print(e)
         connection.close()
 

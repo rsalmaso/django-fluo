@@ -4,6 +4,7 @@ be executed through ``django-admin.py`` or ``manage.py``).
 
 """
 
+from __future__ import absolute_import, division, print_function, unicode_literals
 import os
 import sys
 from optparse import make_option, OptionParser
@@ -39,7 +40,7 @@ def copy_helper(style, app_or_project, name, directory, other_name=''):
     top_dir = os.path.join(directory, name)
     try:
         os.mkdir(top_dir)
-    except OSError, e:
+    except OSError as e:
         raise CommandError(e)
 
     # Determine where the app or project templates are. Use

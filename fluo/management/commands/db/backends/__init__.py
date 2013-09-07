@@ -56,7 +56,7 @@ class BaseDatabase(object):
             print(_(u"Creating database %(database)s...") % self.db_dict)
             self.do_createdb()
             print(_(u"done"))
-        except Exception, e:
+        except Exception as e:
             raise CreateDBError(_(u'Cannot create db: %(exception)s') % {'exception': e})
 
     def do_dropdb(self):
@@ -66,6 +66,6 @@ class BaseDatabase(object):
             print(_(u"Dropping database %(database)s...") % self.db_dict)
             self.do_dropdb()
             print(_(u"done"))
-        except Exception, e:
+        except Exception as e:
             raise DropDBError(_(u'Cannot drop db: %(exception)s') % {'exception': e})
 
