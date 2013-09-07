@@ -38,7 +38,6 @@ METHODS = ('head', 'get', 'post', 'put', 'delete', 'trace', 'options', 'connect'
 
 class View(object):
     #template_name = None
-    mimetype = None
     content_type = None
     urlprefix = ''
     renderer = None
@@ -46,7 +45,6 @@ class View(object):
 
     def __init__(self, **kwargs):
         #self.template_name = kwargs.pop('template_name', kwargs.pop('template', self.template_name))
-        self.mimetype = kwargs.pop('mimetype', self.mimetype)
         self.content_type = kwargs.pop('content_type', self.content_type)
         self.urlprefix = kwargs.pop('urlprefix', self.urlprefix)
         self.renderer = kwargs.pop('renderer', self.renderer)
@@ -81,10 +79,9 @@ class View(object):
         #raise NotImplemented
 
 class TemplateViewMixin(object):
-    mimetype = None
     content_type = None
 
-    def render(self, request, template_name=None, context=None, mimetype=None, content_type=None):
+    def render(self, request, template_name=None, context=None, content_type=None):
         dictionary = {}
         dictionary.update(self.extra_context)
         dictionary.update(context)
@@ -94,13 +91,12 @@ class TemplateViewMixin(object):
                 dictionary=dictionary,
                 context_instance=RequestContext(request)
             ),
-            mimetype=mimetype or self.mimetype,
             content_type=content_type or self.content_type,
         )
 
 class JsonViewMixin(object):
-    def render(self, request, context=None, mimetype="text/javascript", status=200, indent=None):
-        return JsonResponse(context=context, mimetype=mimetype, status=status, indent=indent)
+    def render(self, request, context=None, content_type="text/javascript", status=200, indent=None):
+        return JsonResponse(context=context, content_type=content_type, status=status, indent=indent)
 
 class TemplateView(TemplateViewMixin, View):
     template_name = None
