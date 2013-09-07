@@ -24,7 +24,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from django import forms
 from django.utils.translation import ugettext
 from django.core.exceptions import ValidationError
-from django.utils.encoding import smart_unicode
+from django.utils.encoding import smart_text
 from fluo.forms.widgets import GroupedSelect
 
 __all__ = (
@@ -65,7 +65,7 @@ class GroupedChoiceField(forms.ChoiceField):
         value = super(GroupedChoiceField, self).clean(value)
         if value in (None, ''):
             value = u''
-        value = smart_unicode(value)
+        value = smart_text(value)
         if value == u'':
             return value
         valid_values = []

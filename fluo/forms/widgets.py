@@ -29,7 +29,7 @@ import re
 from itertools import chain
 from django.conf import settings
 from django import forms
-from django.utils.encoding import smart_unicode, force_unicode
+from django.utils.encoding import smart_text, force_text
 from django.utils.html import escape, conditional_escape
 from django.forms.util import flatatt
 from django.utils.safestring import mark_safe
@@ -60,14 +60,14 @@ class GroupedSelect(forms.Select):
             value = ''
         final_attrs = self.build_attrs(attrs, name=name)
         output = [u'<select%s>' % flatatt(final_attrs)]
-        str_value = smart_unicode(value)
+        str_value = smart_text(value)
         for group_label, group in self.choices:
             if group_label: # should belong to an optgroup
-                group_label = smart_unicode(group_label)
+                group_label = smart_text(group_label)
                 output.append(u'<optgroup label="%s">' % escape(group_label))
             for k, v in group:
-                option_value = smart_unicode(k)
-                option_label = smart_unicode(v)
+                option_value = smart_text(k)
+                option_label = smart_text(v)
                 selected_html = (option_value == str_value) and u' selected="selected"' or ''
                 output.append(u'<option value="%s"%s>%s</option>' % (escape(option_value), selected_html, escape(option_label)))
             if group_label:
