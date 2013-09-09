@@ -337,5 +337,5 @@ if 'south' in settings.INSTALLED_APPS:
             },
         ),
     ]
-    add_introspection_rules(rules, ["^fluo\.models\.fields",])
+    add_introspection_rules(rules, ["^fluo\.db\.models\.fields",])
 
