@@ -21,13 +21,20 @@
 # THE SOFTWARE.
 
 from __future__ import absolute_import, division, print_function, unicode_literals
+import re
 from django.db import models
+from django.core import validators
+from django.core.mail import send_mail
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import get_language
 from django.utils.encoding import python_2_unicode_compatible
+from django.utils import timezone
+from django.utils.http import urlquote
 from django.template.defaultfilters import slugify
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.generic import GenericForeignKey
+#from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, SiteProfileNotAvailable, UserManager, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager, BaseUserManager
 from fluo.db.models import fields
 from fluo import settings
 
@@ -38,6 +45,7 @@ __all__ = [
     'I18NProxy', 'I18NModel', 'TranslationModel',
     'CategoryModelManager', 'CategoryModel', 'CategoryTranslationModel',
     'GenericModel',
+    'AbstractUser', 'BaseUserManager',
 ]
 
 class StatusModel(models.Model):
@@ -237,3 +245,90 @@ class GenericModel(models.Model):
     class Meta:
         abstract = True
 
+@python_2_unicode_compatible
+class AbstractUser(AbstractBaseUser, PermissionsMixin):
+    """
+    An abstract base class implementing a fully featured User model with
+    admin-compliant permissions.
+
+    Username, password and email are required. Other fields are optional.
+    """
+
+    objects = UserManager()
+
+    username = models.CharField(
+        max_length=255,
+        unique=True,
+        validators=[
+            validators.RegexValidator(
+                re.compile('^[\w.@+-]+$'),
+                _('Enter a valid username.'),
+                'invalid',
+            ),
+        ],
+        verbose_name=_('username'),
+        help_text=_('Required. 255 characters or fewer. Letters, numbers and @/./+/-/_ characters'),
+    )
+    first_name = models.CharField(
+        max_length=255,
+        blank=True,
+        verbose_name=_('first name'),
+    )
+    last_name = models.CharField(
+        max_length=255,
+        blank=True,
+        verbose_name=_('last name'),
+    )
+    email = models.EmailField(
+        max_length=255,
+        blank=True,
+        verbose_name=_('email address'),
+    )
+    is_staff = models.BooleanField(
+        default=False,
+        verbose_name=_('staff status'),
+        help_text=_('Designates whether the user can log into this admin site.'),
+    )
+    is_active = models.BooleanField(
+        default=True,
+        verbose_name=_('active'),
+        help_text=_('Designates whether this user should be treated as active. Unselect this instead of deleting accounts.'),
+    )
+    date_joined = models.DateTimeField(
+        default=timezone.now,
+        verbose_name=_('date joined'),
+    )
+
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email']
+
+    class Meta:
+        abstract = True
+        verbose_name = _('user')
+        verbose_name_plural = _('users')
+
+    def get_absolute_url(self):
+        return "/users/%s/" % urlquote(self.username)
+
+    def get_full_name(self):
+        """
+        Returns the first_name plus the last_name, with a space in between.
+        """
+        full_name = '%s %s' % (self.first_name, self.last_name)
+        return full_name.strip()
+
+    def get_short_name(self):
+        "Returns the short name for the user."
+        return self.first_name
+
+    def email_user(self, subject, message, from_email=None):
+        """
+        Sends an email to this User.
+        """
+        send_mail(subject, message, from_email, [self.email])
+
+    def get_display_name(self):
+        if self.first_name and self.last_name:
+            full_name = '%s %s' % (self.first_name, self.last_name)
+            return full_name.strip()
+        return self.username
