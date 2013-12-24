@@ -245,7 +245,6 @@ class GenericModel(models.Model):
     class Meta:
         abstract = True
 
-@python_2_unicode_compatible
 class AbstractUser(AbstractBaseUser, PermissionsMixin):
     """
     An abstract base class implementing a fully featured User model with
