@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-VERSION = (0, 2, 0, 'alpha', 0)
+VERSION = (0, 2, 0, 'alpha', 1)
 
 def get_version(*args, **kwargs):
     from fluo.utils.version import get_version
