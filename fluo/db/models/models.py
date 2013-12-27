@@ -45,7 +45,7 @@ __all__ = [
     'I18NProxy', 'I18NModel', 'TranslationModel',
     'CategoryModelManager', 'CategoryModel', 'CategoryTranslationModel',
     'GenericModel',
-    'AbstractUser', 'BaseUserManager',
+    'AbstractUser', 'BaseUserManager', 'UserManager',
 ]
 
 class StatusModel(models.Model):
