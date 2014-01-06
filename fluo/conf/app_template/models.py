@@ -2,11 +2,12 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 #import logging
+#from django.conf import settings
 #from django.utils.translation import ugettext_lazy as _
 #from django.utils.encoding import python_2_unicode_compatible
 #from fluo.db import models
 
-#log = logging.getLogger(__name__)
+#log = logging.getLogger('{{ app_name }}')
 
 #@python_2_unicode_compatible
 #class Model(models.Model):

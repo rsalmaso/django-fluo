@@ -4,6 +4,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 #import logging
 #from django.utils.translation import ugettext_lazy as _
 #from fluo import forms
+#from .models import X
 
-#log = logging.getLogger(__name__)
+#log = logging.getLogger('{{ app_name }}')
 
