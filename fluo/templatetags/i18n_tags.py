@@ -25,8 +25,6 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 from django import template
-from django.utils.translation import get_language
-from django.conf import settings
 from fluo.middleware.locale import get_language_from_request
 
 register = template.Library()

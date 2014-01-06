@@ -33,7 +33,6 @@ from django.utils.http import urlquote
 from django.template.defaultfilters import slugify
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.generic import GenericForeignKey
-#from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, SiteProfileNotAvailable, UserManager, BaseUserManager
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager, BaseUserManager
 from fluo import settings
 from . import fields

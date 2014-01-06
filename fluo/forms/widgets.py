@@ -26,11 +26,10 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 import datetime
 import re
-from itertools import chain
 from django.conf import settings
 from django import forms
-from django.utils.encoding import smart_text, force_text
-from django.utils.html import escape, conditional_escape
+from django.utils.encoding import smart_text
+from django.utils.html import escape
 from django.forms.util import flatatt
 from django.utils.safestring import mark_safe
 from django.utils.dates import MONTHS

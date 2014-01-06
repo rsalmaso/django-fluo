@@ -23,7 +23,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 from django.views.debug import technical_500_response, technical_404_response
 import sys
-from django.conf import settings
 from django.http import Http404
 
 class UserBasedExceptionMiddleware(object):
