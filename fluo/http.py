@@ -24,7 +24,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import json
 from django.http import *
 from django.conf import settings
-from fluo.utils.json import JSONEncoder
+from .utils.json import JSONEncoder
 
 __all__ = [
     'JsonResponse',

@@ -25,7 +25,7 @@ from django import forms
 from django.utils.translation import ugettext
 from django.core.exceptions import ValidationError
 from django.utils.encoding import smart_text
-from fluo.forms.widgets import GroupedSelect
+from .widgets import GroupedSelect
 
 __all__ = (
     'OrderField',

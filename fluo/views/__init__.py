@@ -21,7 +21,7 @@
 # THE SOFTWARE.
 
 from __future__ import absolute_import, division, print_function, unicode_literals
-from fluo.views.base import View, TemplateView, RedirectView
+from .base import View, TemplateView, RedirectView
 
 __all__ = [
     'View',

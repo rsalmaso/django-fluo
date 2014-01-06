@@ -24,7 +24,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import re
 from django.conf.urls import handler400, handler403, handler404, handler500, include, patterns, url
 from django.core.urlresolvers import reverse, reverse_lazy, resolve
-from fluo import settings
+from . import settings
 
 __all__ = [
     'handler400', 'handler403', 'handler404', 'handler500',

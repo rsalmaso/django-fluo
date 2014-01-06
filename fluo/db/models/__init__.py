@@ -24,6 +24,6 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from django.db.models import *
 from django.contrib.contenttypes.models import ContentTypeManager, ContentType
 from django.contrib.contenttypes.generic import GenericForeignKey, GenericRelation
-from fluo.db.models.fields import *
-from fluo.db.models.models import *
+from .fields import *
+from .models import *
 

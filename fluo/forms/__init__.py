@@ -24,6 +24,6 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from django.forms import *
 from django.contrib.contenttypes.generic import BaseGenericInlineFormSet, generic_inlineformset_factory
 from django.forms.extras.widgets import SelectDateWidget
-from fluo.forms.fields import *
-from fluo.forms.widgets import *
+from .fields import *
+from .widgets import *
 
