@@ -21,45 +21,43 @@
 # THE SOFTWARE.
 
 from __future__ import absolute_import, division, print_function, unicode_literals
+import logging
+from django.core.exceptions import ImproperlyConfigured
 from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseRedirect, HttpResponsePermanentRedirect, HttpResponseGone
-from django.template import Template, Context, RequestContext
-from django.template import loader
-from fluo.http import JsonResponse
+from django.template.response import TemplateResponse
+from django.utils.translation import ugettext as _
+from django.utils import six
 
-__all__ = [
-    'View',
-    'TemplateView',
-    'TemplateViewMixin',
-    'JsonViewMixin',
-    'RedirectView',
-]
 
-METHODS = ('head', 'get', 'post', 'put', 'delete', 'trace', 'options', 'connect',)
+log = logging.getLogger('fluo')
+
 
 class View(object):
-    #template_name = None
+    METHODS = ('head', 'get', 'post', 'put', 'delete', 'trace', 'options', 'connect', 'trace', 'patch',)
     content_type = None
-    urlprefix = ''
-    renderer = None
-    extra_context = {}
 
     def __init__(self, **kwargs):
-        #self.template_name = kwargs.pop('template_name', kwargs.pop('template', self.template_name))
-        self.content_type = kwargs.pop('content_type', self.content_type)
-        self.urlprefix = kwargs.pop('urlprefix', self.urlprefix)
-        self.renderer = kwargs.pop('renderer', self.renderer)
-        self.extra_context = kwargs.pop('extra_context', self.extra_context)
-        try:
-            self.render = self.renderer(self)
-        except TypeError:
-            pass
+        for key, value in six.iteritems(kwargs):
+            if key in self.METHODS:
+                raise TypeError(
+                    "You tried to pass in the %s method name as a keyword argument to %s(). Don't do that." % (key, self.__class__.__name__),
+                )
+            if not hasattr(self, key):
+                raise TypeError(
+                    "%s() received an invalid keyword %r. only accepts arguments that are already attributes of the class." % (self.__class__.__name__, key),
+                )
+            else:
+                setattr(self, key, value)
+
+        if hasattr(self, 'get') and not hasattr(self, 'head'):
+            self.head = self.get
 
         self.allowed_methods = []
         self.methods = {}
-        for item in METHODS:
+        for item in View.METHODS:
             method = getattr(self, item, None)
             if method is not None:
-                self.allowed_methods.append(item)
+                self.allowed_methods.append(item.upper())
                 self.methods[item] = method
 
     def __call__(self, request, *args, **kwargs):
@@ -70,101 +68,104 @@ class View(object):
         return method(request, *args, **kwargs)
 
     def http_method_not_allowed(self, request, *args, **kwargs):
+        log.warning('Method Not Allowed (%s): %s', request.method, request.path, extra = {
+            'status_code': 405,
+            'request': self.request,
+        })
         return HttpResponseNotAllowed(self.allowed_methods)
 
     def options(self, request, *args, **kwargs):
-        return HttpResponse(self.allowed)
+        """
+        Handles responding to requests for the OPTIONS HTTP verb
+        """
+        response = HttpResponse()
+        response['Allow'] = ', '.join(self.allowed_methods)
+        response['Content-Length'] = 0
+        return response
 
-    #def render(self, *args, **kwargs):
-        #raise NotImplemented
 
-class TemplateViewMixin(object):
-    content_type = None
-
-    def render(self, request, template_name=None, context=None, content_type=None):
-        dictionary = {}
-        dictionary.update(self.extra_context)
-        dictionary.update(context)
-        return HttpResponse(
-            loader.render_to_string(
-                template_name=template_name or self.template_name,
-                dictionary=dictionary,
-                context_instance=RequestContext(request)
-            ),
-            content_type=content_type or self.content_type,
-        )
-
-class JsonViewMixin(object):
-    def render(self, request, context=None, content_type="text/javascript", status=200, indent=None):
-        return JsonResponse(context=context, content_type=content_type, status=status, indent=indent)
-
-class TemplateView(TemplateViewMixin, View):
-    template_name = None
-    def __init__(self, **kwargs):
-        self.template_name = kwargs.pop('template_name', kwargs.pop('template', self.template_name))
-        super(TemplateView, self).__init__(**kwargs)
+class TemplateView(View):
     """
     A view that renders a template.
     """
+    template_name = None
+
     def get_context_data(self, **kwargs):
         return {
             'params': kwargs,
         }
 
+    def get_template_names(self):
+        if self.template_name is not None:
+            return [ self.template_name ]
+        msg = _("%s must either define 'template_name' or override 'get_template_names()'")
+        raise ImproperlyConfigured(msg % self.__class__.__name__)
+
+    def render(self, request, template_name, context=None, content_type=None, status=None, current_app=None):
+        return TemplateResponse(
+            request=request,
+            template=template_name,
+            context=context,
+            content_type=content_type,
+            status=status,
+            current_app=current_app,
+        )
+
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
         return self.render(
             request=request,
-            template_name=self.template_name,
+            template_name=self.get_template_names(),
             context=context,
         )
+
 
 class RedirectView(View):
     permanent = True
     url = None
-    query_string = False
+    query_string = True
 
-    def __init__(self, **kwargs):
-        self.permanent = kwargs.pop('permanent', self.permanent)
-        self.url = kwargs.pop('url', self.url)
-        self.query_string = kwargs.pop('query_string', self.query_string)
-        super(RedirectView, self).__init__(**kwargs)
-
-    def get_redirect_url(self, **kwargs):
+    def get_redirect_url(self, request, **kwargs):
         """
         Return the URL redirect to. Keyword arguments from the
         URL pattern match generating the redirect request
         are provided as kwargs to this method.
         """
         if self.url:
-            args = self.request.META["QUERY_STRING"]
+            url = self.url % kwargs
+            args = request.META.get('QUERY_STRING', '')
             if args and self.query_string:
-                url = "%s?%s" % (self.url, args)
-            else:
-                url = self.url
-            return url % kwargs
+                url = "%s?%s" % (url, args)
+            return url
         else:
             return None
 
     def get(self, request, *args, **kwargs):
-        url = self.get_redirect_url(**kwargs)
+        url = self.get_redirect_url(request, **kwargs)
         if url:
             if self.permanent:
                 return HttpResponsePermanentRedirect(url)
             else:
                 return HttpResponseRedirect(url)
         else:
+            log.warning('Gone: %s', self.request.path, extra={
+                'status_code': 410,
+                'request': self.request,
+            })
             return HttpResponseGone()
 
     def head(self, request, *args, **kwargs):
         return self.get(request, *args, **kwargs)
 
+    def options(self, request, *args, **kwargs):
+        return self.get(request, *args, **kwargs)
+
     def post(self, request, *args, **kwargs):
         return self.get(request, *args, **kwargs)
 
-    def delete(self, request, *args, **kwargs):
+    def put(self, request, *args, **kwargs):
         return self.get(request, *args, **kwargs)
 
-    def put(self, request, *args, **kwargs):
+    def delete(self, request, *args, **kwargs):
         return self.get(request, *args, **kwargs)
 
