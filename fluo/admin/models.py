@@ -30,6 +30,7 @@ try:
     assert update_wrapper
 except ImportError:
     from django.utils.functional import update_wrapper
+from django.conf import settings
 from django.db.models.query import QuerySet
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.utils.six.moves import reduce
@@ -76,9 +77,17 @@ class ModelAdmin(admin.ModelAdmin):
          representation. By default __unicode__() method of target
          object is used.
     """
+    class Media:
+        js = (
+            'admin/js/jquery.min.js',
+        )
+        css = {
+            'all': ('fluo/jquery-autocomplete/jquery.autocomplete.css',),
+        }
 
     related_search_fields = {}
     related_string_functions = {}
+    autocomplete_limit = getattr(settings, 'FOREIGNKEY_AUTOCOMPLETE_LIMIT', None)
 
     def get_urls(self):
         from django.conf.urls import patterns, url
@@ -108,10 +117,12 @@ class ModelAdmin(admin.ModelAdmin):
         model_name = request.GET.get('model_name', None)
         search_fields = request.GET.get('search_fields', None)
         object_pk = request.GET.get('object_pk', None)
+
         try:
             to_string_function = self.related_string_functions[model_name]
         except KeyError:
             to_string_function = lambda x: x.__unicode__()
+
         if search_fields and app_label and model_name and (query or object_pk):
             def construct_search(field_name):
                 # use different lookup methods depending on the notation
@@ -130,9 +141,13 @@ class ModelAdmin(admin.ModelAdmin):
                 for bit in query.split():
                     or_queries = [models.Q(**{construct_search(smart_str(field_name)): smart_str(bit)}) for field_name in search_fields.split(',')]
                     other_qs = QuerySet(model)
-                    other_qs.dup_select_related(queryset)
+                    other_qs.query.select_related = queryset.query.select_related
                     other_qs = other_qs.filter(reduce(operator.or_, or_queries))
                     queryset = queryset & other_qs
+
+                if self.autocomplete_limit:
+                    queryset = queryset[:self.autocomplete_limit]
+
                 data = ''.join([u'%s|%s\n' % (
                     to_string_function(f), f.pk) for f in queryset])
             elif object_pk:
