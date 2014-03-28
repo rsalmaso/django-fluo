@@ -26,10 +26,11 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 import datetime
 import re
+from itertools import chain
 from django.conf import settings
 from django import forms
-from django.utils.encoding import smart_text
-from django.utils.html import escape
+from django.utils.encoding import smart_text, force_text
+from django.utils.html import escape, conditional_escape
 from django.forms.util import flatatt
 from django.utils.safestring import mark_safe
 from django.utils.dates import MONTHS
@@ -48,6 +49,7 @@ __all__ = (
     'GroupedSelect',
     'SelectYearWidget', 'SelectMonthYearWidget',
     'ForeignKeySearchInput',
+    'DurationWidget',
 )
 
 RE_DATE = re.compile(r'(\d{4})-(\d\d?)-(\d\d?)$')
@@ -268,3 +270,35 @@ class ForeignKeySearchInput(ForeignKeyRawIdWidget):
         output.reverse()
         return mark_safe(u''.join(output))
 
+class DurationWidget(forms.MultiWidget):
+    """Input accurate timing. IntegerFields for hours, minutes, seconds and milliseconds."""
+
+    def __init__(self, milliseconds=False, attrs=None):
+        attrs = attrs if attrs is not None else {
+            'size': 2,
+            'maxlength': 2,
+            'style': 'width:auto;'
+        }
+        self.show_milliseconds = milliseconds
+        self.NUM_FIELDS = 4 if milliseconds else 3
+        widgets = [
+            forms.TextInput(attrs=attrs)
+        ] * self.NUM_FIELDS
+        super(DurationWidget, self).__init__(widgets, attrs)
+
+    def format_output(self, widgets):
+        widgets.insert(1, ' : ')
+        widgets.insert(3, ' : ')
+        if self.show_milliseconds:
+            widgets.insert(5, ' . ')
+        return mark_safe(''.join(widgets))
+
+    def decompress(self, value):
+        if value:
+            return [
+                '%02d' % (value / 3600),
+                '%02d' % (value % 3600 / 60),
+                '%02d' % (value % 3600 % 60),
+                '%03d' % (value % 1 * 1000),
+            ][:self.NUM_FIELDS]
+        return [None] * self.NUM_FIELDS
