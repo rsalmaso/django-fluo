@@ -27,8 +27,9 @@
 # - UUIDField
 
 from __future__ import absolute_import, division, print_function, unicode_literals
+from datetime import timedelta
 import re
-from django.core import validators
+from django.core import exceptions, validators
 from django.utils import timezone
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -45,6 +46,7 @@ __all__ = (
     'OrderField',
     'AutoSlugField',
     'UUIDField',
+    'DurationField',
 )
 
 STATUS_CHOICES = (
@@ -294,10 +296,39 @@ class OrderField(models.IntegerField):
         defaults.update(kwargs)
         return super(OrderField, self).formfield(**defaults)
 
+class DurationField(models.DecimalField):
+    description = _('Duration field')
+
+    def __init__(self, milliseconds=True, verbose_name=None, name=None, default=0, *args, **kwargs):
+        self.milliseconds = milliseconds
+        kwargs.setdefault('decimal_places', 3)
+        kwargs.setdefault('max_digits', 12)
+        super(DurationField, self).__init__(
+            verbose_name=verbose_name,
+            name=name,
+            **kwargs
+        )
+
+    def formfield(self, **kwargs):
+        defaults = {
+            'form_class': forms.DurationField,
+            'milliseconds': self.milliseconds,
+        }
+        defaults.update(kwargs)
+        # skip DecimalField.formfield
+        # which injects decimal_places and max_digits
+        return models.Field.formfield(self, **defaults)
+
 from django.conf import settings
 if 'south' in settings.INSTALLED_APPS:
     from south.modelsinspector import add_introspection_rules
     rules = [
+        (
+            (DurationField,),
+            [],
+            {
+            },
+        ),
         (
             (StatusField,),
             [],
@@ -338,4 +369,3 @@ if 'south' in settings.INSTALLED_APPS:
         ),
     ]
     add_introspection_rules(rules, ["^fluo\.db\.models\.fields",])
-

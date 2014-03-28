@@ -79,7 +79,7 @@ class GroupedChoiceField(forms.ChoiceField):
         return value
 
 class DurationField(forms.MultiValueField):
-    """Input accurate timing."""
+    """Input accurate timing. Interface with models.DurationField."""
 
     LABELS  = [_('Hours'), _('Minutes'), _('Seconds'), _('Milliseconds')]
     SECONDS = [ 60*60, 60, 1, 0.001]
