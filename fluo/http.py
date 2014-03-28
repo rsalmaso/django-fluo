@@ -23,7 +23,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 import json
 from django.http import *
-from django.conf import settings
 from .utils.json import JSONEncoder
 
 __all__ = [
