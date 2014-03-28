@@ -21,16 +21,19 @@
 # THE SOFTWARE.
 
 from __future__ import absolute_import, division, print_function, unicode_literals
+from operator import add, mul
 from django import forms
 from django.utils.translation import ugettext
+from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError
 from django.utils.encoding import smart_text
-from .widgets import GroupedSelect
+from fluo.forms.widgets import GroupedSelect, DurationWidget
 
 __all__ = (
     'OrderField',
     'TextField',
     'GroupedChoiceField',
+    'DurationField',
 )
 
 try:
@@ -75,3 +78,21 @@ class GroupedChoiceField(forms.ChoiceField):
             raise ValidationError(ugettext(u'Select a valid choice. That choice is not one of the available choices.'))
         return value
 
+class DurationField(forms.MultiValueField):
+    """Input accurate timing."""
+
+    LABELS  = [_('Hours'), _('Minutes'), _('Seconds'), _('Milliseconds')]
+    SECONDS = [ 60*60, 60, 1, 0.001]
+
+    def __init__(self, milliseconds=True, *args, **kwargs):
+        if not milliseconds:
+            self.LABELS = self.LABELS[:3]
+            self.SECONDS = self.SECONDS[:3]
+        self.widget = DurationWidget(milliseconds=milliseconds)
+        fields = [ forms.CharField(label=label) for label in self.LABELS ]
+        super(DurationField, self).__init__(fields, *args, **kwargs)
+
+    def compress(self, value):
+        if value:
+            return str(reduce(add, map(lambda x: mul(*x), zip(map(float, value), self.SECONDS))))
+        return None
