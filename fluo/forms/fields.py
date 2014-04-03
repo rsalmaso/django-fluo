@@ -20,13 +20,18 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+# JSONField taken and adapted from https://github.com/bradjasper/django-jsonfield.git
+# Copyright (c) 2012 Brad Jasper
+
 from __future__ import absolute_import, division, print_function, unicode_literals
 from operator import add, mul
 from django import forms
 from django.utils.translation import ugettext
 from django.utils.translation import ugettext_lazy as _
+from django.utils import six
 from django.core.exceptions import ValidationError
 from django.utils.encoding import smart_text
+from fluo.utils import json
 from fluo.forms.widgets import GroupedSelect, DurationWidget
 
 __all__ = (
@@ -34,6 +39,7 @@ __all__ = (
     'TextField',
     'GroupedChoiceField',
     'DurationField',
+    'JSONField',
 )
 
 try:
@@ -96,3 +102,29 @@ class DurationField(forms.MultiValueField):
         if value:
             return str(reduce(add, map(lambda x: mul(*x), zip(map(float, value), self.SECONDS))))
         return None
+
+class JSONField(forms.CharField):
+    empty_values = ()
+
+    def __init__(self, load_kwargs=None, *args, **kwargs):
+        self.load_kwargs = kwargs.pop('load_kwargs', {})
+        kwargs.setdefault('widget', forms.Textarea)
+        super(JSONField, self).__init__(*args, **kwargs)
+
+    def to_python(self, value):
+        if isinstance(value, six.string_types):
+            try:
+                return json.loads(value, **self.load_kwargs)
+            except ValueError:
+                raise ValidationError(_("Enter valid JSON"))
+        return value
+
+    def clean(self, value):
+        if not value and not self.required:
+            return None
+
+        # Trap cleaning errors & bubble them up as JSON errors
+        try:
+            return super(JSONField, self).clean(value)
+        except TypeError:
+            raise ValidationError(_("Enter valid JSON"))

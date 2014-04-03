@@ -20,17 +20,23 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-# Original code for taken from django-extensions
-# - CreationDateTimeField
-# - ModificationDateTimeField
-# - AutoSlugField
-# - UUIDField
+# Original code for taken and adapted from
+# - django-extensions
+#   - CreationDateTimeField
+#   - ModificationDateTimeField
+#   - AutoSlugField
+#   - UUIDField
+
+# JSONField taken and adapted from https://github.com/bradjasper/django-jsonfield.git
+# Copyright (c) 2012 Brad Jasper
 
 from __future__ import absolute_import, division, print_function, unicode_literals
+import copy
 from datetime import timedelta
 import re
 from django.core import exceptions, validators
 from django.utils import timezone
+from django.utils import six
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
@@ -39,6 +45,8 @@ try:
 except ImportError:
     from fluo.utils import uuid
 from fluo import forms
+from fluo.utils import json
+from .subclassing import SubfieldBase
 
 __all__ = (
     'StatusField', 'STATUS_CHOICES',
@@ -47,6 +55,7 @@ __all__ = (
     'AutoSlugField',
     'UUIDField',
     'DurationField',
+    'JSONField',
 )
 
 STATUS_CHOICES = (
@@ -319,6 +328,98 @@ class DurationField(models.DecimalField):
         # which injects decimal_places and max_digits
         return models.Field.formfield(self, **defaults)
 
+class JSONField(six.with_metaclass(SubfieldBase, models.TextField)):
+    description = _("JSON object")
+    form_class = forms.JSONField
+    empty_values = ()
+
+    def __init__(self, *args, **kwargs):
+        self.dump_kwargs = kwargs.pop('dump_kwargs', {
+            'separators': (',', ':')
+        })
+        self.load_kwargs = kwargs.pop('load_kwargs', {})
+        super(JSONField, self).__init__(*args, **kwargs)
+
+    def pre_init(self, value, obj):
+        """Convert a string value to JSON only if it needs to be deserialized.
+
+        SubfieldBase meteaclass has been modified to call this method instead of
+        to_python so that we can check the obj state and determine if it needs to be
+        deserialized"""
+
+        if obj._state.adding:
+            # Make sure the primary key actually exists on the object before
+            # checking if it's empty. This is a special case for South datamigrations
+            # see: https://github.com/bradjasper/django-jsonfield/issues/52
+            if not hasattr(obj, "pk") or obj.pk is not None:
+                if isinstance(value, six.string_types):
+                    try:
+                        return json.loads(value, **self.load_kwargs)
+                    except ValueError:
+                        raise exceptions.ValidationError(_("Enter valid JSON"))
+
+        return value
+
+    def get_db_prep_value(self, value, connection, prepared=False):
+        """ Convert JSON object to a string """
+        if self.null and value is None:
+            return None
+        return json.dumps(value, **self.dump_kwargs)
+
+    def value_to_string(self, obj):
+        value = self._get_val_from_obj(obj)
+        return self.get_db_prep_value(value, None)
+
+    def value_from_object(self, obj):
+        value = super(JSONField, self).value_from_object(obj)
+        if self.null and value is None:
+            return None
+        return self.dumps_for_display(value)
+
+    def dumps_for_display(self, value):
+        kwargs = { "indent": 2 }
+        kwargs.update(self.dump_kwargs)
+        dump = json.dumps(value, **kwargs)
+        return dump
+
+    def formfield(self, **kwargs):
+        defaults = {
+            'widget': forms.Textarea,
+            'form_class': self.form_class,
+            'load_kwargs': self.load_kwargs,
+        }
+        defaults.update(kwargs)
+        field = super(JSONField, self).formfield(**defaults)
+
+        if not field.help_text:
+            field.help_text = _("Enter valid JSON")
+
+        return field
+
+    def get_default(self):
+        """
+        Returns the default value for this field.
+
+        The default implementation on models.Field calls force_unicode
+        on the default, which means you can't set arbitrary Python
+        objects as the default. To fix this, we just return the value
+        without calling force_unicode on it. Note that if you set a
+        callable as a default, the field will still call it. It will
+        *not* try to pickle and encode it.
+        """
+        if self.has_default():
+            if callable(self.default):
+                return self.default()
+            return copy.deepcopy(self.default)
+        # If the field doesn't have a default, then we punt to models.Field.
+        return super(JSONField, self).get_default()
+
+    def db_type(self, connection):
+        if connection.vendor == 'postgresql' and connection.pg_version >= 90300:
+            return 'json'
+        else:
+            return super(JSONField, self).db_type(connection)
+
 from django.conf import settings
 if 'south' in settings.INSTALLED_APPS:
     from south.modelsinspector import add_introspection_rules
@@ -363,6 +464,12 @@ if 'south' in settings.INSTALLED_APPS:
         ),
         (
             (OrderField,),
+            [],
+            {
+            },
+        ),
+        (
+            (JSONField,),
             [],
             {
             },
