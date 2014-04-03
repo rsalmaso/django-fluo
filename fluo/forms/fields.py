@@ -32,7 +32,7 @@ from django.utils import six
 from django.core.exceptions import ValidationError
 from django.utils.encoding import smart_text
 from fluo.utils import json
-from fluo.forms.widgets import GroupedSelect, DurationWidget
+from .widgets import GroupedSelect, DurationWidget
 
 __all__ = (
     'OrderField',
