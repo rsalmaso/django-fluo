@@ -32,7 +32,6 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 import copy
-from datetime import timedelta
 import re
 from django.core import exceptions, validators
 from django.utils import timezone
