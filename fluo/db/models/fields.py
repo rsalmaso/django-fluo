@@ -31,6 +31,7 @@
 # Copyright (c) 2012 Brad Jasper
 
 from __future__ import absolute_import, division, print_function, unicode_literals
+import base64
 import copy
 import re
 import uuid
@@ -52,6 +53,7 @@ __all__ = (
     'UUIDField',
     'DurationField',
     'JSONField',
+    'Base64Field',
 )
 
 STATUS_CHOICES = (
@@ -416,6 +418,21 @@ class JSONField(six.with_metaclass(SubfieldBase, models.TextField)):
         else:
             return super(JSONField, self).db_type(connection)
 
+class Base64Field(models.TextField):
+    """ Stolen from http://djangosnippets.org/snippets/1669/ """
+    def contribute_to_class(self, cls, name):
+        if self.db_column is None:
+            self.db_column = name
+        self.field_name = name + '_base64'
+        super(Base64Field, self).contribute_to_class(cls, self.field_name)
+        setattr(cls, name, property(self.get_data, self.set_data))
+
+    def get_data(self, obj):
+        return base64.decodestring(getattr(obj, self.field_name))
+
+    def set_data(self, obj, data):
+        setattr(obj, self.field_name, base64.encodestring(data))
+
 from django.conf import settings
 if 'south' in settings.INSTALLED_APPS:
     from south.modelsinspector import add_introspection_rules
@@ -469,6 +486,11 @@ if 'south' in settings.INSTALLED_APPS:
             [],
             {
             },
+        ),
+        (
+            (Base64Field),
+            [],
+            {},
         ),
     ]
     add_introspection_rules(rules, ["^fluo\.db\.models\.fields",])
