@@ -11,7 +11,13 @@
 # All configuration values have a default value; values that are commented out
 # serve to show the default value.
 
-import sys
+import os, sys
+# PATH is the absolute path leading to parent directory
+PATH = os.path.split(os.path.dirname(os.path.realpath(__file__)))[0]
+if PATH not in sys.path:
+    sys.path.insert(0, PATH)
+import fluo
+
 
 # If your extensions are in another directory, add it here.
 #sys.path.append('some/directory')
@@ -41,7 +47,7 @@ copyright = '2007-2010,  Raffaele Salmaso'
 # other places throughout the built documents.
 #
 # The short X.Y version.
-version = '0.1-hg'
+version = '%s-hg' % fluo.get_version()
 # The full version, including alpha/beta/rc tags.
 release = version
 
