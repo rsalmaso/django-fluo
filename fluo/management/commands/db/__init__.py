@@ -43,7 +43,7 @@ def get_connection(database):
     except ImportError as e:
         try:
             module = import_module('.db_commands', engine)
-        except ImportError, e_user:
+        except ImportError as e_user:
             # The database backend wasn't found. Display a helpful error message
             # listing all possible (built-in) database backends.
             backend_dir = os.path.join(__path__[0], 'backends')
