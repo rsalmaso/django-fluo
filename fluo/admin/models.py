@@ -54,7 +54,6 @@ __all__ = [
 # set this field for all models
 admin.ModelAdmin.save_on_top = True
 admin.options.FORMFIELD_FOR_DBFIELD_DEFAULTS.update({
-    models.ImageField:   {'widget': widgets.AdminImageFileWidget},
     models.OrderField:   {'required': False},
 })
 # end admin customization
