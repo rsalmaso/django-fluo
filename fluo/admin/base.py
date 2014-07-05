@@ -21,10 +21,40 @@
 # THE SOFTWARE.
 
 from __future__ import absolute_import, division, print_function, unicode_literals
-from django.contrib.admin.options import HORIZONTAL, VERTICAL
-from django.contrib.admin.options import StackedInline, TabularInline
-from django.contrib.admin.sites import AdminSite, site
-from django.contrib.admin import autodiscover
-from django.contrib.contenttypes.generic import GenericInlineModelAdmin, GenericStackedInline, GenericTabularInline
-from .base import CopyObject
-from .models import ModelAdmin, OrderedModelAdmin, TreeOrderedModelAdmin, CategoryModelAdmin
+import copy
+from django.utils.translation import ugettext_lazy as _
+
+
+class CopyObject(object):
+    short_description = _("Duplicate as new")
+
+    def __init__(self, *args, **kwargs):
+        super(CopyObject, self).__init__(*args, **kwargs)
+        self.__name__ = self.__class__.__name__
+
+    def __call__(self, modeladmin, request, queryset):
+        for original in queryset:
+            instance = copy.copy(original)
+            instance.id = None
+            self.update(request, instance, original)
+            instance.save()
+            self.update_m2m(request, instance, original)
+            instance.save()
+
+            translations = getattr(original, "translations", None)
+            if translations:
+                for translation in translations.all():
+                    tr = copy.copy(translation)
+                    tr.id = None
+                    tr.parent = instance
+                    self.update_translation(request, tr, translation)
+                    tr.save()
+
+    def update(self, request, instance, original):
+        pass
+
+    def update_m2m(self, request, instance, original):
+        pass
+
+    def update_translation(self, request, instance, original):
+        pass
