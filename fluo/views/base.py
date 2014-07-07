@@ -125,6 +125,12 @@ class RedirectView(View):
     url = None
     query_string = True
 
+    def __init__(self, **kwargs):
+        self.permanent = kwargs.pop('permanent', self.permanent)
+        self.url = kwargs.pop('url', self.url)
+        self.query_string = kwargs.pop('query_string', self.query_string)
+        super(RedirectView, self).__init__(**kwargs)
+
     def get_redirect_url(self, request, **kwargs):
         """
         Return the URL redirect to. Keyword arguments from the
@@ -168,4 +174,3 @@ class RedirectView(View):
 
     def delete(self, request, *args, **kwargs):
         return self.get(request, *args, **kwargs)
-
