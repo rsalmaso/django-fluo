@@ -21,21 +21,19 @@
 # THE SOFTWARE.
 
 from __future__ import absolute_import, division, print_function, unicode_literals
-import os
-from fluo.management.commands.db.backends import BaseDatabase
+from .. import backend
 
-__all__ = ['Database']
+__all__ = ['Backend']
 
-class Database(BaseDatabase):
+class Backend(backend.Backend):
     def connect(self):
         pass
+
     def close(self):
         pass
-    def do_createdb(self):
-        pass
-    def do_dropdb(self):
-        try:
-            os.unlink(self.name)
-        except OSError:
-            pass
 
+    def createdb(self):
+        pass
+
+    def dropdb(self):
+        pass

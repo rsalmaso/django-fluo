@@ -21,25 +21,9 @@
 # THE SOFTWARE.
 
 from __future__ import absolute_import, division, print_function, unicode_literals
-import _mysql
-from django.utils.translation import ugettext as _
-from fluo.management.commands.db.backends import BaseDatabase
+from .postgresql import Postgresql
 
-__all__ = ['Database']
+__all__ = ['Backend']
 
-class Database(BaseDatabase):
-    def connect(self):
-        self.connection = _mysql.connect(
-            host=self.host,
-            user=self.user,
-            passwd=self.password,
-        )
-    def close(self):
-        if self.connection:
-            self.connection.close()
-        self.connection = None
-    def do_createdb(self):
-        self.connection.query('CREATE DATABASE %s CHARACTER SET utf8 COLLATE utf8_general_ci' % self.name)
-    def do_dropdb(self):
-        self.connection.query("DROP DATABASE IF EXISTS %s" % self.name)
-
+class Backend(Postgresql):
+    pass

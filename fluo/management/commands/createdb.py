@@ -21,18 +21,28 @@
 # THE SOFTWARE.
 
 from __future__ import absolute_import, division, print_function, unicode_literals
-from fluo.management import DatabaseCommand
-from fluo.management.commands.db import get_connection, CreateDBError
+from optparse import make_option
+from ..database import DatabaseCommand
 
 class Command(DatabaseCommand):
-    help = "Try to (re)create the database!"
+    option_list = DatabaseCommand.option_list + (
+        make_option(
+            '--force',
+            action='store_true',
+            dest='force',
+            default=False,
+            help='Drop database if exists before (re)create it.',
+        ),
+    )
+    help = "Try to (re)create the database in an empty state!"
+    message = """You have requested to create "%(name)s" database."""
+    error_message = """Database %(name)s couldn't be created. Possible reasons:
+  * The database isn't running or isn't configured correctly.
+  * The database alread exists.
+The full error: %(error)s"""
+    should_ask = False
 
-    def db_handle(self, database, args, options):
-        connection = get_connection(database)
-
-        try:
-            connection.createdb()
-        except CreateDBError as e:
-            print(e)
-        connection.close()
-
+    def execute_sql(self, backend, **options):
+        if options.get('force'):
+            backend.dropdb()
+        backend.createdb()

@@ -21,17 +21,26 @@
 # THE SOFTWARE.
 
 from __future__ import absolute_import, division, print_function, unicode_literals
-from ..database import DatabaseCommand
+import _mysql
+from .. import backend
 
-class Command(DatabaseCommand):
-    help = "Drop the database!"
-    message = """You have requested to drop "%(name)s" database.
-This will IRREVERSIBLY DELETE all data currently in the "%(name)s" database.
-Are you sure you want to do this?"""
-    error_message = """Database %(name)s couldn't be dropped. Possible reasons:
-  * The database isn't running or isn't configured correctly.
-  * The database is in use by another user.
-The full error: %(error)s"""
+__all__ = ['Backend']
 
-    def execute_sql(self, backend, **options):
-        backend.dropdb()
+class Backend(backend.Backend):
+    def connect(self):
+        self.connection = _mysql.connect(
+            host=self.host,
+            user=self.user,
+            passwd=self.password,
+        )
+
+    def close(self):
+        if self.connection:
+            self.connection.close()
+        self.connection = None
+
+    def createdb(self):
+        self.connection.query('CREATE DATABASE %s CHARACTER SET utf8 COLLATE utf8_general_ci' % self.name)
+
+    def dropdb(self):
+        self.connection.query("DROP DATABASE IF EXISTS %s" % self.name)

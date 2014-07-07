@@ -21,12 +21,10 @@
 # THE SOFTWARE.
 
 from __future__ import absolute_import, division, print_function, unicode_literals
-from django.core.exceptions import ImproperlyConfigured
-from fluo.management.commands.db.backends import BaseDatabase
+from .. import backend
 
-__all__ = ['Database']
+__all__ = ['Backend']
 
-class Database(BaseDatabase):
+class Backend(backend.Backend):
     def __init__(self, **options):
         raise NotImplementedError()
-

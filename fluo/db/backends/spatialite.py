@@ -21,17 +21,9 @@
 # THE SOFTWARE.
 
 from __future__ import absolute_import, division, print_function, unicode_literals
-from ..database import DatabaseCommand
+from . import sqlite3
 
-class Command(DatabaseCommand):
-    help = "Drop the database!"
-    message = """You have requested to drop "%(name)s" database.
-This will IRREVERSIBLY DELETE all data currently in the "%(name)s" database.
-Are you sure you want to do this?"""
-    error_message = """Database %(name)s couldn't be dropped. Possible reasons:
-  * The database isn't running or isn't configured correctly.
-  * The database is in use by another user.
-The full error: %(error)s"""
+__all__ = ['Backend']
 
-    def execute_sql(self, backend, **options):
-        backend.dropdb()
+class Backend(sqlite3.Backend):
+    pass

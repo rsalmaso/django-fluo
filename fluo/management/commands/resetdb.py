@@ -41,4 +41,3 @@ class Command(NoArgsCommand):
 
         transaction.commit_unless_managed()
         print(_(u"done"))
-

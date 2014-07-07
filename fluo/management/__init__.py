@@ -26,10 +26,10 @@ Creates permissions for all installed apps that need permissions.
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 from optparse import make_option
-from django.db import DEFAULT_DB_ALIAS, connections
+from django.db import DEFAULT_DB_ALIAS
 from django.db.models import get_models, signals
-from django.contrib.auth import models as auth_app
 from django.core.management.base import BaseCommand
+from django.utils import six
 from fluo import settings
 
 __all__ = ['DatabaseCommand']
@@ -63,7 +63,7 @@ class DatabaseCommand(BaseCommand):
         database = settings.DATABASES[options.get('database', DEFAULT_DB_ALIAS)]
 
         if options.get('interactive'):
-            confirm = raw_input("""
+            confirm = six.moves.input("""
 You have requested a database reset.
 This will IRREVERSIBLY DESTROY
 ALL data in the database "%s".
@@ -107,4 +107,3 @@ def create_permissions(app, created_models, verbosity, **kwargs):
                 print("Adding permission '%s'" % p)
 
 signals.post_syncdb.connect(create_permissions, dispatch_uid = "fluo.management.create_permissions")
-

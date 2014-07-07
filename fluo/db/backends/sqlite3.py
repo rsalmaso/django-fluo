@@ -21,10 +21,23 @@
 # THE SOFTWARE.
 
 from __future__ import absolute_import, division, print_function, unicode_literals
-from fluo.management.commands.db.backends.postgresql import Postgresql
+import os
+from .. import backend
 
-__all__ = ['Database']
+__all__ = ['Backend']
 
-class Database(Postgresql):
-    module = 'psycopg2'
+class Backend(backend.Backend):
+    def connect(self):
+        pass
 
+    def close(self):
+        pass
+
+    def createdb(self):
+        pass
+
+    def dropdb(self):
+        try:
+            os.unlink(self.name)
+        except OSError:
+            pass

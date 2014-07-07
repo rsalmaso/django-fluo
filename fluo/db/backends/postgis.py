@@ -21,17 +21,9 @@
 # THE SOFTWARE.
 
 from __future__ import absolute_import, division, print_function, unicode_literals
-from fluo.management.commands.db.backends import BaseDatabase
+from .postgresql import Postgresql
 
-__all__ = ['Database']
+__all__ = ['Backend']
 
-class Database(BaseDatabase):
-    def connect(self):
-        pass
-    def close(self):
-        pass
-    def do_createdb(self):
-        pass
-    def do_dropdb(self):
-        pass
-
+class Backend(Postgresql):
+    pass

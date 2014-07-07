@@ -21,20 +21,18 @@
 # THE SOFTWARE.
 
 from __future__ import absolute_import, division, print_function, unicode_literals
-from django.utils.importlib import import_module
-from django.utils.translation import ugettext as _
-from fluo.management.commands.db.backends import BaseDatabase
+import psycopg2
+from .. import backend
 
-__all__ = ['Database']
+__all__ = ['Postgresql']
 
-class Postgresql(BaseDatabase):
+class Postgresql(backend.Backend):
     def connect(self):
-        module = import_module(self.module)
         if self.name == '':
-            raise AssertionError("You must specify a value for DATABASES NAME in local_settings.py.")
+            raise AssertionError("You must specify a value for database NAME in settings file.")
         if self.user == '':
-            raise AssertionError("You must specify a value for DATABASES USER in local_settings.py.")
-        conn_string = [ "dbname=template1" ]
+            raise AssertionError("You must specify a value for database USER in settings file.")
+        conn_string = [ "dbname=postgres" ]
         if self.user:
             conn_string.append("user=%s" % self.user)
         if self.password:
@@ -44,8 +42,11 @@ class Postgresql(BaseDatabase):
         if self.port:
             conn_string.append("port=%s" % self.port)
 
-        self.connection = module.connect(' '.join(conn_string))
-        self.connection.set_isolation_level(0)
+        self.connection = psycopg2.connect(' '.join(conn_string))
+        try:
+            self.connection.autocommit = True
+        except Exception:
+            self.connection.set_isolation_level(0)
         self.connection.set_client_encoding('UTF8')
         self.cursor = self.connection.cursor()
 
@@ -57,11 +58,8 @@ class Postgresql(BaseDatabase):
         self.connection = None
         self.cursor = None
 
-    def do_createdb(self):
+    def createdb(self):
         self.cursor.execute("CREATE DATABASE %s OWNER %s ENCODING 'UTF8'" % (self.name, self.user,))
-    def do_dropdb(self):
-        self.cursor.execute("DROP DATABASE IF EXISTS %s" % self.name)
 
-class Database(Postgresql):
-    module = 'psycopg'
-
+    def dropdb(self):
+        self.cursor.execute("DROP DATABASE IF EXISTS %s" % (self.name,))

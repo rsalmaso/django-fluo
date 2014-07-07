@@ -22,35 +22,44 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 from optparse import make_option
+import django
 from django.core.management import call_command
-from django.conf import settings
-from django.db import DEFAULT_DB_ALIAS, connections
-from fluo.management import DatabaseCommand
-from fluo.management.commands.db import get_connection, CreateDBError, DropDBError
-INSTALLED_APPS = settings.INSTALLED_APPS
+from ..database import DatabaseCommand
 
 class Command(DatabaseCommand):
+    option_list = DatabaseCommand.option_list + (
+        make_option(
+            '--noadmin',
+            action='store_false',
+            dest='noadmin',
+            default=True,
+            help='Tells Django to NOT create a default admin user.',
+        ),
+    )
     help = "(Re)create and initialize database with common data"
+    message = """You have requested to create "%(name)s" database.
+This will IRREVERSIBLY DELETE all data currently in the "%(name)s" database if already exists,
+and then will create a new database.
+Are you sure you want to do this?"""
+    error_message = """Database %(name)s couldn't be dropped. Possible reasons:
+  * The database isn't running or isn't configured correctly.
+  * The database is in use by another user.
+The full error: %(error)s"""
 
-    def db_handle(self, database, args, options):
-        interactive = options.get('interactive', True)
-        connection = get_connection(database)
+    def execute_sql(self, backend, **options):
+        backend.dropdb()
+        backend.createdb()
 
-        try:
-            connection.dropdb()
-        except DropDBError as e:
-            print(e)
-            call_command('resetdb')
-        else:
-            try:
-                connection.createdb()
-            except CreateDBError as e:
-                print(e)
-        connection.close()
-
-        call_command('syncdb', interactive=False)
-        if 'south' in INSTALLED_APPS:
+    def migrate(self):
+        if django.VERSION[:2] >= (1, 7):
             call_command('migrate')
+        else:
+            from django.conf import settings
+            call_command('syncdb', interactive=False)
+            if 'south' in settings.INSTALLED_APPS:
+                call_command('migrate')
 
-        call_command('load_admin_data')
-
+    def post_execute(self, **options):
+        self.migrate()
+        if options.get('noadmin'):
+            call_command('load_admin_data')
