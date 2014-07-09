@@ -488,7 +488,7 @@ if 'south' in settings.INSTALLED_APPS:
             },
         ),
         (
-            (Base64Field),
+            (Base64Field,),
             [],
             {},
         ),
