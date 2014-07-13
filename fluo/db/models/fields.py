@@ -339,23 +339,32 @@ class JSONField(six.with_metaclass(SubfieldBase, models.TextField)):
         super(JSONField, self).__init__(*args, **kwargs)
 
     def pre_init(self, value, obj):
-        """Convert a string value to JSON only if it needs to be deserialized.
+        """
+        Convert a string value to JSON only if it needs to be deserialized.
 
-        SubfieldBase meteaclass has been modified to call this method instead of
+        SubfieldBase metaclass has been modified to call this method instead of
         to_python so that we can check the obj state and determine if it needs to be
-        deserialized"""
+        deserialized
+        """
 
         if obj._state.adding:
             # Make sure the primary key actually exists on the object before
             # checking if it's empty. This is a special case for South datamigrations
             # see: https://github.com/bradjasper/django-jsonfield/issues/52
-            if not hasattr(obj, "pk") or obj.pk is not None:
+            if hasattr(obj, "pk") and obj.pk is not None:
                 if isinstance(value, six.string_types):
                     try:
                         return json.loads(value, **self.load_kwargs)
                     except ValueError:
                         raise exceptions.ValidationError(_("Enter valid JSON"))
 
+        return value
+
+    def to_python(self, value):
+        """
+        The SubfieldBase metaclass calls pre_init instead of to_python,
+        however to_python is still necessary for Django's deserializer
+        """
         return value
 
     def get_db_prep_value(self, value, connection, prepared=False):
@@ -377,17 +386,14 @@ class JSONField(six.with_metaclass(SubfieldBase, models.TextField)):
     def dumps_for_display(self, value):
         kwargs = { "indent": 2 }
         kwargs.update(self.dump_kwargs)
-        dump = json.dumps(value, **kwargs)
-        return dump
+        return json.dumps(value, **kwargs)
 
     def formfield(self, **kwargs):
-        defaults = {
-            'widget': forms.Textarea,
-            'form_class': self.form_class,
-            'load_kwargs': self.load_kwargs,
-        }
-        defaults.update(kwargs)
-        field = super(JSONField, self).formfield(**defaults)
+        if "form_class" not in kwargs:
+            kwargs["form_class"] = self.form_class
+        field = super(JSONField, self).formfield(**kwargs)
+        if isinstance(field, forms.JSONField):
+            field.load_kwargs = self.load_kwargs
 
         if not field.help_text:
             field.help_text = _("Enter valid JSON")

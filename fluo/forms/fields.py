@@ -104,13 +104,6 @@ class DurationField(forms.MultiValueField):
         return None
 
 class JSONField(forms.CharField):
-    empty_values = ()
-
-    def __init__(self, load_kwargs=None, *args, **kwargs):
-        self.load_kwargs = kwargs.pop('load_kwargs', {})
-        kwargs.setdefault('widget', forms.Textarea)
-        super(JSONField, self).__init__(*args, **kwargs)
-
     def to_python(self, value):
         if isinstance(value, six.string_types):
             try:
