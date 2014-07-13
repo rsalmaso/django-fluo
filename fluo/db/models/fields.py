@@ -418,11 +418,16 @@ class JSONField(six.with_metaclass(SubfieldBase, models.TextField)):
         # If the field doesn't have a default, then we punt to models.Field.
         return super(JSONField, self).get_default()
 
-    def db_type(self, connection):
-        if connection.vendor == 'postgresql' and connection.pg_version >= 90300:
-            return 'json'
-        else:
-            return super(JSONField, self).db_type(connection)
+    # json field type doesn't play nice with django because it doesn't implement
+    # the equality operator, so when it use the DISTINCT clause (ie in admin
+    # when list_filter is set) it raises a ProgrammingError
+    # jsonb (from 9.4) will not have this problem, as it will implement the equality operator
+    # so for now use the default TextField value
+    #def db_type(self, connection):
+        #if connection.vendor == 'postgresql' and connection.pg_version >= 90400:
+            #return 'jsonb'
+        #else:
+            #return super(JSONField, self).db_type(connection)
 
 class Base64Field(models.TextField):
     """ Stolen from http://djangosnippets.org/snippets/1669/ """
