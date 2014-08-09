@@ -89,6 +89,7 @@ class TemplateView(View):
     A view that renders a template.
     """
     template_name = None
+    content_type = None
 
     def get_context_data(self, **kwargs):
         return {
@@ -106,7 +107,7 @@ class TemplateView(View):
             request=request,
             template=template_name,
             context=context,
-            content_type=content_type,
+            content_type=self.content_type if content_type is None else content_type,
             status=status,
             current_app=current_app,
         )
