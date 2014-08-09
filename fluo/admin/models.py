@@ -185,8 +185,8 @@ class ModelAdmin(admin.ModelAdmin):
 
 class OrderedModelAdmin(ModelAdmin):
     ordering = ('ordering',)
-    def queryset(self, request):
-        return super(OrderedModelAdmin, self).queryset(request).order_by('ordering')
+    def get_queryset(self, request):
+        return super(OrderedModelAdmin, self).get_queryset(request).order_by('ordering')
     def get_urls(self):
         from django.conf.urls import patterns, url
 
@@ -227,8 +227,8 @@ class OrderedModelAdmin(ModelAdmin):
     move_actions.allow_tags = True
 
 class TreeOrderedModelAdmin(OrderedModelAdmin):
-    def queryset(self, request):
-        return super(TreeOrderedModelAdmin, self).queryset(request).filter(parent__isnull=True)
+    def get_queryset(self, request):
+        return super(TreeOrderedModelAdmin, self).get_queryset(request).filter(parent__isnull=True)
 
 class CategoryModelAdmin(OrderedModelAdmin):
     search_fields = ('status', 'name',)
