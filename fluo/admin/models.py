@@ -96,7 +96,7 @@ class ModelAdmin(admin.ModelAdmin):
                 return self.admin_site.admin_view(view)(*args, **kwargs)
             return update_wrapper(wrapper, view)
 
-        info = self.model._meta.app_label, self.model._meta.module_name
+        info = self.model._meta.app_label, self.model._meta.model_name
 
         urlpatterns = patterns('', url(
             r'foreignkey_autocomplete/$',
@@ -190,7 +190,7 @@ class OrderedModelAdmin(ModelAdmin):
     def get_urls(self):
         from django.conf.urls import patterns, url
 
-        info = self.model._meta.app_label, self.model._meta.module_name
+        info = self.model._meta.app_label, self.model._meta.model_name
 
         return patterns('',
             url(r'^(?P<id>\d+)/up/$', self.admin_site.admin_view(self.up), name='%s_%s_up' % info),
@@ -213,7 +213,7 @@ class OrderedModelAdmin(ModelAdmin):
             redirect_to = '../../'
         return HttpResponseRedirect(redirect_to)
     def move_actions(self, node):
-        info = self.admin_site.name, self.model._meta.app_label, self.model._meta.module_name
+        info = self.admin_site.name, self.model._meta.app_label, self.model._meta.model_name
         args = [node.id]
         data = []
         if not node.is_first(): # up node
