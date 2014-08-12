@@ -41,8 +41,8 @@ from django.utils import six
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
-from fluo import forms
-from fluo.utils import json
+from ... import forms
+from ...utils import json
 from .subclassing import SubfieldBase
 
 __all__ = (

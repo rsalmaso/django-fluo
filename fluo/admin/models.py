@@ -38,10 +38,10 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import smart_str
 from django.utils.text import get_text_list
 from django.contrib import admin
-from fluo.shortcuts import reverse
-from fluo.db import models
-from fluo.admin import widgets
-from fluo.forms import ForeignKeySearchInput
+from ..db import models
+from ..forms import ForeignKeySearchInput
+from ..shortcuts import reverse
+from . import widgets
 
 __all__ = [
     'ModelAdmin',

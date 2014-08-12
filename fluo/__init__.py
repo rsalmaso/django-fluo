@@ -20,8 +20,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+from __future__ import absolute_import, division, print_function, unicode_literals
+
 VERSION = (0, 2, 0, 'alpha', 6)
 
 def get_version(*args, **kwargs):
-    from fluo.utils.version import get_version
+    from .utils.version import get_version
     return get_version(*args, **kwargs)

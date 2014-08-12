@@ -30,7 +30,7 @@ from django.db import DEFAULT_DB_ALIAS
 from django.db.models import get_models, signals
 from django.core.management.base import BaseCommand
 from django.utils import six
-from fluo import settings
+from .. import settings
 
 __all__ = ['DatabaseCommand']
 

@@ -25,7 +25,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 def get_version(version=None):
     "Returns a PEP 386-compliant version number from VERSION."
     if version is None:
-        from fluo import VERSION as version
+        from .. import VERSION as version
     else:
         assert len(version) == 5
         assert version[3] in ('alpha', 'beta', 'rc', 'final')

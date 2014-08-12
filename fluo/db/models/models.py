@@ -34,7 +34,7 @@ from django.template.defaultfilters import slugify
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.generic import GenericForeignKey
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager, BaseUserManager
-from fluo import settings
+from ... import settings
 from . import fields
 
 __all__ = [
