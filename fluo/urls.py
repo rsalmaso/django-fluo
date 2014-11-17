@@ -21,17 +21,17 @@
 # THE SOFTWARE.
 
 from __future__ import absolute_import, division, print_function, unicode_literals
-import re
 from django.conf.urls import handler400, handler403, handler404, handler500, include, patterns, url
 from django.core.urlresolvers import reverse, reverse_lazy, resolve
-from . import settings
+
 
 __all__ = [
     'handler400', 'handler403', 'handler404', 'handler500',
     'url', 'include', 'patterns',
     'reverse', 'reverse_lazy', 'resolve',
-    'Urls', 'MediaUrls',
+    'Urls',
 ]
+
 
 class Urls(object):
     def get_urls(self):
@@ -40,15 +40,3 @@ class Urls(object):
     def urls(self):
         return self.get_urls()
     urls = property(urls)
-
-class MediaUrls(Urls):
-    def get_urls(self):
-        if settings.DEBUG or settings.SERVE_MEDIA_FILES:
-            urlpatterns = patterns('',
-                url(r'^%s(?P<path>.*)$' % re.escape(settings.MEDIA_URL.lstrip('/')), 'django.views.static.serve', { 'document_root': settings.MEDIA_ROOT, }),
-                url(r'^%s(?P<path>.*)$' % re.escape(settings.STATIC_URL.lstrip('/')), 'django.views.static.serve', { 'document_root': settings.STATIC_ROOT, }),
-            )
-        else:
-            urlpatterns = []
-        return urlpatterns
-
