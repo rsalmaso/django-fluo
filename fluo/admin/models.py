@@ -41,7 +41,6 @@ from django.contrib import admin
 from ..db import models
 from ..forms import ForeignKeySearchInput
 from ..shortcuts import reverse
-from . import widgets
 
 __all__ = [
     'ModelAdmin',
