@@ -22,7 +22,10 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 from django.conf.urls import handler400, handler403, handler404, handler500, include, patterns, url
-from django.core.urlresolvers import reverse, reverse_lazy, resolve
+from django.core.urlresolvers import resolve
+from django.core.urlresolvers import reverse as django_reverse
+from django.utils import six
+from django.utils.functional import lazy
 
 
 __all__ = [
@@ -40,3 +43,16 @@ class Urls(object):
     def urls(self):
         return self.get_urls()
     urls = property(urls)
+
+
+def reverse(viewname, args=None, kwargs=None, request=None, format=None, **extra):
+    if format is not None:
+        kwargs = kwargs or {}
+        kwargs['format'] = format
+    _url = django_reverse(viewname, args=args, kwargs=kwargs, **extra)
+    if request:
+        _url = request.build_absolute_uri(url)
+    return _url
+
+
+reverse_lazy = lazy(reverse, six.text_type)
