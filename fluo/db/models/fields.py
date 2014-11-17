@@ -434,7 +434,10 @@ class Base64Field(models.TextField):
     def contribute_to_class(self, cls, name):
         if self.db_column is None:
             self.db_column = name
-        self.field_name = name + '_base64'
+        # check for south, which call contribute_to_class two times, the second
+        # one with already modified name
+        # TODO: check with django migrations
+        self.field_name = name if name.endswith('_base64') else name + '_base64'
         super(Base64Field, self).contribute_to_class(cls, self.field_name)
         setattr(cls, name, property(self.get_data, self.set_data))
 
