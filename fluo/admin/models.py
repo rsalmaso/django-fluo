@@ -214,7 +214,6 @@ class OrderedModelAdmin(ModelAdmin):
         return HttpResponseRedirect(redirect_to)
     def move_actions(self, node):
         info = self.admin_site.name, self.model._meta.app_label, self.model._meta.model_name
-        args = [node.id]
         data = []
         if not node.is_first(): # up node
             data.append(u'<a href="%s" class="nodes-up">%s</a>' % (reverse('%sadmin_%s_%s_up' % info, node.id), _('up')))
