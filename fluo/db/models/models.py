@@ -192,7 +192,7 @@ class CategoryModel(StatusModel, OrderedModel):
         unique=True,
         editable=False,
         verbose_name=_('slug'),
-        help_text=('A "slug" is a unique URL-friendly title for the object automatically generated from the "name" field.'),
+        help_text=_('A "slug" is a unique URL-friendly title for the object automatically generated from the "name" field.'),
     )
     default = models.BooleanField(
         default=False,
