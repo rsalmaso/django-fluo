@@ -50,12 +50,13 @@ __all__ = [
 ]
 
 # begin admin customization
-# set this field for all models
+# set this field for all models
 admin.ModelAdmin.save_on_top = True
 admin.options.FORMFIELD_FOR_DBFIELD_DEFAULTS.update({
-    models.OrderField:   {'required': False},
+    models.OrderField: {'required': False},
 })
 # end admin customization
+
 
 class ModelAdmin(admin.ModelAdmin):
     """Admin class for models using the autocomplete feature.
@@ -137,7 +138,11 @@ class ModelAdmin(admin.ModelAdmin):
             data = ''
             if query:
                 for bit in query.split():
-                    or_queries = [models.Q(**{construct_search(smart_str(field_name)): smart_str(bit)}) for field_name in search_fields.split(',')]
+                    or_queries = [
+                        models.Q(**{construct_search(smart_str(field_name)): smart_str(bit)})
+                        for field_name
+                        in search_fields.split(',')
+                    ]
                     other_qs = QuerySet(model)
                     other_qs.query.select_related = queryset.query.select_related
                     other_qs = other_qs.filter(reduce(operator.or_, or_queries))
@@ -182,10 +187,13 @@ class ModelAdmin(admin.ModelAdmin):
             kwargs['help_text'] = help_text
         return super(ModelAdmin, self).formfield_for_dbfield(db_field, **kwargs)
 
+
 class OrderedModelAdmin(ModelAdmin):
     ordering = ('ordering',)
+
     def get_queryset(self, request):
         return super(OrderedModelAdmin, self).get_queryset(request).order_by('ordering')
+
     def get_urls(self):
         from django.conf.urls import patterns, url
 
@@ -195,6 +203,7 @@ class OrderedModelAdmin(ModelAdmin):
             url(r'^(?P<id>\d+)/up/$', self.admin_site.admin_view(self.up), name='%s_%s_up' % info),
             url(r'^(?P<id>\d+)/down/$', self.admin_site.admin_view(self.down), name='%s_%s_down' % info),
         ) + super(OrderedModelAdmin, self).get_urls()
+
     def up(self, request, id):
         node = self.model._default_manager.get(pk=id)
         node.up()
@@ -203,6 +212,7 @@ class OrderedModelAdmin(ModelAdmin):
         except:
             redirect_to = '../../'
         return HttpResponseRedirect(redirect_to)
+
     def down(self, request, id):
         node = self.model._default_manager.get(pk=id)
         node.down()
@@ -211,29 +221,35 @@ class OrderedModelAdmin(ModelAdmin):
         except:
             redirect_to = '../../'
         return HttpResponseRedirect(redirect_to)
+
     def move_actions(self, node):
         info = self.admin_site.name, self.model._meta.app_label, self.model._meta.model_name
         data = []
         if not node.is_first(): # up node
-            data.append(u'<a href="%s" class="nodes-up">%s</a>' % (reverse('%sadmin_%s_%s_up' % info, node.id), _('up')))
+            data.append(u'<a href="%s" class="nodes-up">%s</a>' % (
+                reverse('%sadmin_%s_%s_up' % info, node.id), _('up'),
+            ))
         if not node.is_last() and not node.is_first():
             data.append(u'<span style="font-weight:normal"> | </span>')
         if not node.is_last(): # down node
-            data.append(u'<a href="%s" class="nodes-down">%s</a>' % (reverse('%sadmin_%s_%s_down' % info, node.id), _('down')))
+            data.append(u'<a href="%s" class="nodes-down">%s</a>' % (
+                reverse('%sadmin_%s_%s_down' % info, node.id), _('down'),
+            ))
         return u''.join(data)
     move_actions.short_description = _('move')
     move_actions.allow_tags = True
+
 
 class TreeOrderedModelAdmin(OrderedModelAdmin):
     def get_queryset(self, request):
         return super(TreeOrderedModelAdmin, self).get_queryset(request).filter(parent__isnull=True)
 
+
 class CategoryModelAdmin(OrderedModelAdmin):
     search_fields = ('status', 'name',)
     ordering = ('ordering', 'name',)
     fieldsets = (
-        (_('visualization admin'), {'fields': ('ordering',), 'classes': ('collapse',),}),
-        (_('general admin'), {'fields': ('status', 'default'),}),
-        (None, {"fields": ("name",),}),
+        (_('visualization admin'), {'fields': ('ordering',), 'classes': ('collapse',)}),
+        (_('general admin'), {'fields': ('status', 'default')}),
+        (None, {"fields": ("name",)}),
     )
-

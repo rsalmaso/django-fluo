@@ -34,6 +34,7 @@ Add SubfieldBase as the __metaclass__ for your Field subclass, implement
 to_python() and the other necessary methods and everything will work seamlessly.
 """
 
+
 class Creator(object):
     """
     A placeholder class that provides a way to set the attribute on the model.
@@ -71,6 +72,7 @@ def make_contrib(superclass, func=None):
         setattr(cls, self.name, Creator(self))
 
     return contribute_to_class
+
 
 class SubfieldBase(type):
     """

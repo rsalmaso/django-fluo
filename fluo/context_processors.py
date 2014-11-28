@@ -34,13 +34,14 @@ STATIC_URL = {
     False: settings.STATIC_URL,
 }
 
+
 def media(request):
     return {
         'MEDIA_URL': MEDIA_URL[request.is_secure()],
     }
 
+
 def static(request):
     return {
         'STATIC_URL': STATIC_URL[request.is_secure()],
     }
-

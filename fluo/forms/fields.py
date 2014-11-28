@@ -42,6 +42,7 @@ __all__ = (
     'JSONField',
 )
 
+
 try:
     # new from django-admin-ui branch
     from django.forms import OrderField
@@ -49,14 +50,16 @@ except ImportError:
     class OrderField(forms.IntegerField):
         pass
 
+
 class TextField(forms.CharField):
     widget = forms.Textarea
+
 
 # taken and adapted from http://djangosnippets.org/snippets/200/
 class GroupedChoiceField(forms.ChoiceField):
     widget = GroupedSelect
 
-    def __init__(self, choices=(), required=True, widget=None, label=None, initial=None, help_text=None, *args, **kwargs):
+    def __init__(self, choices=(), required=True, widget=None, label=None, initial=None, help_text=None, *args, **kwargs): # NOQA
         super(GroupedChoiceField, self).__init__(
             #choices=choices,
             required=required,
@@ -84,24 +87,26 @@ class GroupedChoiceField(forms.ChoiceField):
             raise ValidationError(ugettext(u'Select a valid choice. That choice is not one of the available choices.'))
         return value
 
+
 class DurationField(forms.MultiValueField):
     """Input accurate timing. Interface with models.DurationField."""
 
-    LABELS  = [_('Hours'), _('Minutes'), _('Seconds'), _('Milliseconds')]
-    SECONDS = [ 60*60, 60, 1, 0.001]
+    LABELS = [_('Hours'), _('Minutes'), _('Seconds'), _('Milliseconds')]
+    SECONDS = [60 * 60, 60, 1, 0.001]
 
     def __init__(self, milliseconds=True, *args, **kwargs):
         if not milliseconds:
             self.LABELS = self.LABELS[:3]
             self.SECONDS = self.SECONDS[:3]
         self.widget = DurationWidget(milliseconds=milliseconds)
-        fields = [ forms.CharField(label=label) for label in self.LABELS ]
+        fields = [forms.CharField(label=label) for label in self.LABELS]
         super(DurationField, self).__init__(fields, *args, **kwargs)
 
     def compress(self, value):
         if value:
             return str(reduce(add, map(lambda x: mul(*x), zip(map(float, value), self.SECONDS))))
         return None
+
 
 class JSONField(forms.CharField):
     def to_python(self, value):

@@ -61,6 +61,7 @@ STATUS_CHOICES = (
     ('inactive', _('Inactive')),
 )
 
+
 class StatusField(models.CharField):
     def __init__(self,
                  choices=STATUS_CHOICES,
@@ -80,6 +81,7 @@ class StatusField(models.CharField):
             help_text=help_text
         )
 
+
 class CreationDateTimeField(models.DateTimeField):
     """
     By default, sets editable=False, blank=True, default=datetime.now
@@ -93,6 +95,7 @@ class CreationDateTimeField(models.DateTimeField):
 
     def get_internal_type(self):
         return "DateTimeField"
+
 
 class ModificationDateTimeField(CreationDateTimeField):
     """
@@ -108,6 +111,7 @@ class ModificationDateTimeField(CreationDateTimeField):
 
     def get_internal_type(self):
         return "DateTimeField"
+
 
 class URIField(models.CharField):
     description = _("URL")
@@ -125,6 +129,7 @@ class URIField(models.CharField):
         }
         defaults.update(kwargs)
         return super(URIField, self).formfield(**defaults)
+
 
 class AutoSlugField(models.SlugField):
     """
@@ -148,14 +153,14 @@ class AutoSlugField(models.SlugField):
     """
     def __init__(self, *args, **kwargs):
         kwargs.setdefault('blank', True)
-        #kwargs.setdefault('editable', False)
+        # kwargs.setdefault('editable', False)
 
         populate_from = kwargs.pop('populate_from', None)
         if populate_from is None:
             raise ValueError("missing 'populate_from' argument")
         else:
             self._populate_from = populate_from
-        self.separator = kwargs.pop('separator',  u'-')
+        self.separator = kwargs.pop('separator', u'-')
         self.overwrite = kwargs.pop('overwrite', False)
         super(AutoSlugField, self).__init__(*args, **kwargs)
 
@@ -224,8 +229,8 @@ class AutoSlugField(models.SlugField):
             slug = original_slug
             end = '%s%s' % (self.separator, next)
             end_len = len(end)
-            if slug_len and len(slug)+end_len > slug_len:
-                slug = slug[:slug_len-end_len]
+            if slug_len and len(slug) + end_len > slug_len:
+                slug = slug[:slug_len - end_len]
                 slug = self._slug_strip(slug)
             slug = '%s%s' % (slug, end)
             kwargs[self.attname] = slug
@@ -240,8 +245,10 @@ class AutoSlugField(models.SlugField):
     def get_internal_type(self):
         return "SlugField"
 
+
 class UUIDVersionError(Exception):
     pass
+
 
 class UUIDField(models.CharField):
     """
@@ -251,16 +258,16 @@ class UUIDField(models.CharField):
     For more information see: http://docs.python.org/lib/module-uuid.html
     """
 
-    def __init__(self, verbose_name=None, name=None, auto=True, version=1, node=None, clock_seq=None, namespace=None, **kwargs):
+    def __init__(self, verbose_name=None, name=None, auto=True, version=1, node=None, clock_seq=None, namespace=None, **kwargs): # NOQA
         kwargs['max_length'] = 36
         if auto:
             kwargs['blank'] = True
             kwargs.setdefault('editable', False)
         self.auto = auto
         self.version = version
-        if version==1:
+        if version == 1:
             self.node, self.clock_seq = node, clock_seq
-        elif version==3 or version==5:
+        elif version == 3 or version == 5:
             self.namespace, self.name = namespace, name
         super(UUIDField, self).__init__(self, verbose_name, name, **kwargs)
 
@@ -268,15 +275,15 @@ class UUIDField(models.CharField):
         return models.CharField.__name__
 
     def create_uuid(self):
-        if not self.version or self.version==4:
+        if not self.version or self.version == 4:
             return uuid.uuid4()
-        elif self.version==1:
+        elif self.version == 1:
             return uuid.uuid1(self.node, self.clock_seq)
-        elif self.version==2:
+        elif self.version == 2:
             raise UUIDVersionError("UUID version 2 is not supported.")
-        elif self.version==3:
+        elif self.version == 3:
             return uuid.uuid3(self.namespace, self.name)
-        elif self.version==5:
+        elif self.version == 5:
             return uuid.uuid5(self.namespace, self.name)
         else:
             raise UUIDVersionError("UUID version %s is not valid." % self.version)
@@ -293,6 +300,7 @@ class UUIDField(models.CharField):
                 setattr(model_instance, self.attname, value)
         return value
 
+
 class OrderField(models.IntegerField):
     def __init__(self, *args, **kwargs):
         kwargs['default'] = 0
@@ -302,6 +310,7 @@ class OrderField(models.IntegerField):
         defaults = {'form_class': forms.OrderField}
         defaults.update(kwargs)
         return super(OrderField, self).formfield(**defaults)
+
 
 class DurationField(models.DecimalField):
     description = _('Duration field')
@@ -325,6 +334,7 @@ class DurationField(models.DecimalField):
         # skip DecimalField.formfield
         # which injects decimal_places and max_digits
         return models.Field.formfield(self, **defaults)
+
 
 class JSONField(six.with_metaclass(SubfieldBase, models.TextField)):
     description = _("JSON object")
@@ -384,7 +394,7 @@ class JSONField(six.with_metaclass(SubfieldBase, models.TextField)):
         return self.dumps_for_display(value)
 
     def dumps_for_display(self, value):
-        kwargs = { "indent": 2 }
+        kwargs = {"indent": 2}
         kwargs.update(self.dump_kwargs)
         return json.dumps(value, **kwargs)
 
@@ -423,11 +433,12 @@ class JSONField(six.with_metaclass(SubfieldBase, models.TextField)):
     # when list_filter is set) it raises a ProgrammingError
     # jsonb (from 9.4) will not have this problem, as it will implement the equality operator
     # so for now use the default TextField value
-    #def db_type(self, connection):
-        #if connection.vendor == 'postgresql' and connection.pg_version >= 90400:
-            #return 'jsonb'
-        #else:
-            #return super(JSONField, self).db_type(connection)
+    # def db_type(self, connection):
+        # if connection.vendor == 'postgresql' and connection.pg_version >= 90400:
+            # return 'jsonb'
+        # else:
+            # return super(JSONField, self).db_type(connection)
+
 
 class Base64Field(models.TextField):
     """ Stolen from http://djangosnippets.org/snippets/1669/ """
@@ -447,6 +458,7 @@ class Base64Field(models.TextField):
     def set_data(self, obj, data):
         setattr(obj, self.field_name, base64.encodestring(data))
 
+
 def _add_south_support():
     from django.conf import settings
     if 'south' in settings.INSTALLED_APPS:
@@ -465,5 +477,5 @@ def _add_south_support():
             ((JSONField,), [], {}),
             ((Base64Field,), [], {}),
         ]
-        add_introspection_rules(rules, ["^fluo\.db\.models\.fields",])
+        add_introspection_rules(rules, ["^fluo\.db\.models\.fields"])
 _add_south_support()

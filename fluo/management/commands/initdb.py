@@ -26,6 +26,7 @@ import django
 from django.core.management import call_command
 from ..database import DatabaseCommand
 
+
 class Command(DatabaseCommand):
     option_list = DatabaseCommand.option_list + (
         make_option(

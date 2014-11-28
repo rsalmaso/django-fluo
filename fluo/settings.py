@@ -55,4 +55,3 @@ try:
     NO_LOCALE_PATTERNS += getattr(settings, 'NO_LOCALE_PATTERNS',)
 except:
     pass
-

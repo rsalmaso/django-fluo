@@ -46,6 +46,7 @@ def update_south_migration(model_):
     class Ns(object):
         pass
     Ns.model = model_
+
     def class_rebuilder(migration):
         migration_name = getattr(settings, 'INITIAL_CUSTOM_USER_MIGRATION', '0001_initial.py')
         if Ns.model != 'auth.User':

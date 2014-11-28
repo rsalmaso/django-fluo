@@ -27,6 +27,7 @@ from django.contrib.sites.models import Site
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
+
 class Command(BaseCommand):
     help = "Set some data useful for local development."
     option_list = BaseCommand.option_list + (

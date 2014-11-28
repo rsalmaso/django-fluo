@@ -25,6 +25,7 @@ from .. import backend
 
 __all__ = ['Backend']
 
+
 class Backend(backend.Backend):
     def connect(self):
         pass

@@ -28,8 +28,10 @@ PROJECT_NAME = 'fluo'
 PROJECT_PATH = os.path.split(os.path.realpath(__file__))[0]
 BASE_PATH = os.path.split(PROJECT_PATH)[0]
 
+
 def rel(*args):
     return os.path.normpath(os.path.join(PROJECT_PATH, *args))
+
 
 TIME_ZONE = 'Europe/London'
 LANGUAGE_CODE = 'en-us'
@@ -50,9 +52,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     # Comment the next line to disable the admin:
     'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
-    #'django.contrib.admindocs',
     # Comment the next line to disable south data migration:
     'fluo',
 )
-

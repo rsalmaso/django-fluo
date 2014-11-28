@@ -26,7 +26,9 @@ from django.utils.translation import get_language
 from django.utils.encoding import iri_to_uri
 from fluo.settings import STATIC_URL, FLUO_STATIC_URL, JQUERY_STATIC_URL, JQUERY_MINIFIED
 
+
 register = template.Library()
+
 
 @register.simple_tag
 def css(script, static="all"):
@@ -36,21 +38,26 @@ def css(script, static="all"):
         'static': iri_to_uri(static),
     }
 
+
 @register.simple_tag
 def css_print(script):
     return css(script, media="print")
+
 
 @register.simple_tag
 def css_ie(script, media="all"):
     return """<!--[if IE]>%s<![endif]-->""" % css(script, media)
 
+
 @register.simple_tag
 def css_ie6(script, media="all"):
     return """<!--[if IE 6]>%s<![endif]-->""" % css(script, media)
 
+
 @register.simple_tag
 def css_ie7(script, media="all"):
     return """<!--[if IE 7]>%s<![endif]-->""" % css(script, media)
+
 
 @register.simple_tag
 def js(script):
@@ -59,20 +66,26 @@ def js(script):
         'script': iri_to_uri(script),
     }
 
+
 @register.simple_tag
 def jquery():
     return '<script type="text/javascript" src="%(static)s%(jquery)s"></script>' % {
         'static': JQUERY_STATIC_URL,
-        'jquery': { True: 'jquery.min.js', False: 'jquery.js'}[JQUERY_MINIFIED],
+        'jquery': {True: 'jquery.min.js', False: 'jquery.js'}[JQUERY_MINIFIED],
     }
+
 
 @register.simple_tag
 def jqueryui():
-    return '''<script type="text/javascript" src="%(static)s%(jqueryui)s"></script><script type="text/javascript" src="%(static)si18n/%(i18n)s"></script>''' % {
+    return '''<script type="text/javascript" src="%(static)s%(jqueryui)s"></script><script type="text/javascript" src="%(static)si18n/%(i18n)s"></script>''' % { # NOQA
         'static': JQUERY_STATIC_URL,
         'jqueryui': {True: 'jquery.ui.min.js', False: 'jquery.ui.js'}[JQUERY_MINIFIED],
-        'i18n': {True: 'jquery.ui.datepicker-%s.min.js', False: 'jquery.ui.datepicker-%s.js'}[JQUERY_MINIFIED] % get_language()[:2],
+        'i18n': {
+            True: 'jquery.ui.datepicker-%s.min.js',
+            False: 'jquery.ui.datepicker-%s.js',
+        }[JQUERY_MINIFIED] % get_language()[:2],
     }
+
 
 @register.simple_tag
 def jqueryui_default_theme():
@@ -80,58 +93,65 @@ def jqueryui_default_theme():
         'media_url': JQUERY_STATIC_URL,
     }
 
+
 @register.simple_tag
 def thickbox():
     return """<link rel="stylesheet" type="text/css" href="%(static)sthickbox/css/thickbox.css" />
-        <script type="text/javascript">var tb_pathToImage = "%(static)sfluo/thickbox/images/loadingAnimation.gif";</script>
-        <script type="text/javascript" src="%(static)sfluo/thickbox/js/%(thickbox)s"></script>""" % {
+<script type="text/javascript">var tb_pathToImage = "%(static)sfluo/thickbox/images/loadingAnimation.gif";</script>
+<script type="text/javascript" src="%(static)sfluo/thickbox/js/%(thickbox)s"></script>""" % {
         'static': FLUO_STATIC_URL,
         'thickbox': {True: 'thickbox.min.js', False: 'thickbox.js'}[JQUERY_MINIFIED],
     }
+
 
 @register.simple_tag
 def jquery_ajaxqueue():
     return '<script type="text/javascript" src="%(static)sjquery-ajaxqueue/%(js)s"></script>' % {
         'static': FLUO_STATIC_URL,
-        'js': { True: 'jquery.ajaxqueue.min.js', False: 'jquery.ajaxqueue.js'}[JQUERY_MINIFIED],
+        'js': {True: 'jquery.ajaxqueue.min.js', False: 'jquery.ajaxqueue.js'}[JQUERY_MINIFIED],
     }
+
 
 @register.simple_tag
 def jquery_autocomplete():
     return '<script type="text/javascript" src="%(static)sjquery-autocomplete/%(js)s"></script>' % {
         'static': FLUO_STATIC_URL,
-        'js': { True: 'jquery.autocomplete.min.js', False: 'jquery.autocomplete.js'}[JQUERY_MINIFIED],
+        'js': {True: 'jquery.autocomplete.min.js', False: 'jquery.autocomplete.js'}[JQUERY_MINIFIED],
     }
+
 
 @register.simple_tag
 def jquery_listreorder():
     return '<script type="text/javascript" src="%(static)sjquery-listreorder/%(js)s"></script>' % {
         'static': FLUO_STATIC_URL,
-        'js': { True: 'jquery.listreorder.min.js', False: 'jquery.listreorder.js'}[JQUERY_MINIFIED],
+        'js': {True: 'jquery.listreorder.min.js', False: 'jquery.listreorder.js'}[JQUERY_MINIFIED],
     }
+
 
 @register.simple_tag
 def jquery_tablednd():
     return '<script type="text/javascript" src="%(static)sjquery-tablednd/%(js)s"></script>' % {
         'static': FLUO_STATIC_URL,
-        'js': { True: 'jquery.tablednd.min.js', False: 'jquery.tablednd.js'}[JQUERY_MINIFIED],
+        'js': {True: 'jquery.tablednd.min.js', False: 'jquery.tablednd.js'}[JQUERY_MINIFIED],
     }
+
 
 @register.simple_tag
 def jquery_bgiframe():
     return '<script type="text/javascript" src="%(static)sjquery-bgiframe/%(js)s"></script>' % {
         'static': FLUO_STATIC_URL,
-        'js': { True: 'jquery.bgiframe.min.js', False: 'jquery.bgiframe.js'}[JQUERY_MINIFIED],
+        'js': {True: 'jquery.bgiframe.min.js', False: 'jquery.bgiframe.js'}[JQUERY_MINIFIED],
     }
+
 
 @register.simple_tag
 def jquery_disable_text_select():
-    return '<script type="text/javascript" src="%(static)sjquery-disable-text-select/jquery.disable.text.select.pack.js"></script>' % {
+    return '<script type="text/javascript" src="%(static)sjquery-disable-text-select/jquery.disable.text.select.pack.js"></script>' % { # NOQA
         'static': FLUO_STATIC_URL,
     }
+
 
 @register.simple_tag
 def media_url():
     """ Returns the string contained in the setting STATIC_URL. """
     return STATIC_URL
-

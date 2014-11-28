@@ -26,16 +26,24 @@ from django.utils.importlib import import_module
 from django.utils.translation import ugettext as _
 from django.core.exceptions import ImproperlyConfigured
 
-__all__ = ['get_backend', 'ImproperlyConfigured', 'Backend', 'ConnectionError', 'CreateDBError', 'DropDBError',]
+__all__ = [
+    'get_backend', 'Backend',
+    'ImproperlyConfigured',
+    'ConnectionError', 'CreateDBError', 'DropDBError',
+]
+
 
 class ConnectionError(Exception):
     pass
 
+
 class CreateDBError(Exception):
     pass
 
+
 class DropDBError(Exception):
     pass
+
 
 class Backend(object):
     def __init__(self, options):
@@ -48,22 +56,35 @@ class Backend(object):
         self.options = options
 
     def do_createdb(self):
-        raise ImproperlyConfigured('%s.%s.do_createdb is not implemented.' % (self.__class__.__module__, self.__class__.__name__))
+        raise ImproperlyConfigured('%s.%s.do_createdb is not implemented.' % (
+            self.__class__.__module__, self.__class__.__name__,
+        ))
 
     def do_dropdb(self):
-        raise ImproperlyConfigured('%s.%s.do_dropdb is not implemented.' % (self.__class__.__module__, self.__class__.__name__))
+        raise ImproperlyConfigured('%s.%s.do_dropdb is not implemented.' % (
+            self.__class__.__module__, self.__class__.__name__,
+        ))
 
     def connect(self):
-        raise ImproperlyConfigured('%s.%s.connect is not implemented.' % (self.__class__.__module__, self.__class__.__name__))
+        raise ImproperlyConfigured('%s.%s.connect is not implemented.' % (
+            self.__class__.__module__, self.__class__.__name__,
+        ))
 
     def close(self):
-        raise ImproperlyConfigured('%s.%s.close is not implemented.' % (self.__class__.__module__, self.__class__.__name__))
+        raise ImproperlyConfigured('%s.%s.close is not implemented.' % (
+            self.__class__.__module__, self.__class__.__name__,
+        ))
 
     def createdb(self):
-        raise ImproperlyConfigured('%s.%s.createdb is not implemented.' % (self.__class__.__module__, self.__class__.__name__))
+        raise ImproperlyConfigured('%s.%s.createdb is not implemented.' % (
+            self.__class__.__module__, self.__class__.__name__,
+        ))
 
     def dropdb(self):
-        raise ImproperlyConfigured('%s.%s.dropdb is not implemented.' % (self.__class__.__module__, self.__class__.__name__))
+        raise ImproperlyConfigured('%s.%s.dropdb is not implemented.' % (
+            self.__class__.__module__, self.__class__.__name__,
+        ))
+
 
 class BackendWrapper(object):
     def __init__(self, database):
@@ -110,16 +131,18 @@ class BackendWrapper(object):
             except ImportError as e_user:
                 # The database backend wasn't found. Display a helpful error message
                 # listing all possible (built-in) database backends.
-                backend_dir = os.path.join(__path__[0], 'backends')
+                backend_dir = os.path.join(__path__[0], 'backends') # NOQA
                 try:
-                    available_backends = [f for f in os.listdir(backend_dir)
-                            if os.path.isdir(os.path.join(backend_dir, f))
-                            and not f.startswith('.')]
+                    available_backends = [
+                        f
+                        for f in os.listdir(backend_dir)
+                        if os.path.isdir(os.path.join(backend_dir, f)) and not f.startswith('.')
+                    ]
                 except EnvironmentError:
                     available_backends = []
                 available_backends.sort()
                 if engine not in available_backends:
-                    error_msg = "%r isn't an available database backend. Available options are: %s\nError was: %s" %  (
+                    error_msg = "%r isn't an available database backend. Available options are: %s\nError was: %s" % (
                         engine,
                         ", ".join(map(repr, available_backends)),
                         e_user,
@@ -132,6 +155,7 @@ class BackendWrapper(object):
         except Exception as e:
             print(e)
             raise Backend.ConnectionError('Cannot connect to database %(name)s' % options)
+
 
 def get_backend(database):
     return BackendWrapper(database)

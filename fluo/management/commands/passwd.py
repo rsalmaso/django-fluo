@@ -29,6 +29,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
+
 class Command(BaseCommand):
     help = "Change a user password."
     requires_model_validation = False

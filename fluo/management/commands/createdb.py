@@ -24,6 +24,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from optparse import make_option
 from ..database import DatabaseCommand
 
+
 class Command(DatabaseCommand):
     option_list = DatabaseCommand.option_list + (
         make_option(

@@ -23,7 +23,9 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 from .postgresql import Postgresql
 
+
 __all__ = ['Backend']
+
 
 class Backend(Postgresql):
     pass

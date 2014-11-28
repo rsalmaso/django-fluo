@@ -27,7 +27,9 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from django import template
 from fluo.middleware.locale import get_language_from_request
 
+
 register = template.Library()
+
 
 @register.inclusion_tag('fluo/tags/languages.html', takes_context=True)
 def languages_as_li(context, template='fluo/tags/languages_as_li.html'):
@@ -36,8 +38,8 @@ def languages_as_li(context, template='fluo/tags/languages_as_li.html'):
     context['template'] = template
     return context
 
+
 @register.inclusion_tag('fluo/tags/content.html', takes_context=True)
 def page_language_url(context, lang):
     request = context['request']
-    return { 'content': ur'/%s%s' % (lang, request.get_full_path()) }
-
+    return {'content': ur'/%s%s' % (lang, request.get_full_path())}

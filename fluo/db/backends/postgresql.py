@@ -24,7 +24,9 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import psycopg2
 from .. import backend
 
+
 __all__ = ['Postgresql']
+
 
 class Postgresql(backend.Backend):
     def connect(self):
@@ -32,7 +34,7 @@ class Postgresql(backend.Backend):
             raise AssertionError("You must specify a value for database NAME in settings file.")
         if self.user == '':
             raise AssertionError("You must specify a value for database USER in settings file.")
-        conn_string = [ "dbname=postgres" ]
+        conn_string = ["dbname=postgres"]
         if self.user:
             conn_string.append("user=%s" % self.user)
         if self.password:

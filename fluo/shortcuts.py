@@ -33,6 +33,7 @@ __all__ = [
     'reverse',
 ]
 
+
 def render_to_string(template_name, request=None, **kwargs):
     if request:
         context_instance = RequestContext(request)
@@ -43,6 +44,7 @@ def render_to_string(template_name, request=None, **kwargs):
         dictionary=kwargs,
         context_instance=context_instance,
     )
+
 
 def render_to_response(template_name, request=None, mimetype=None, content_type=None, **kwargs):
     if request:
@@ -59,6 +61,7 @@ def render_to_response(template_name, request=None, mimetype=None, content_type=
         content_type=content_type,
     )
 
+
 def render_from_string(template_string, request=None, **kwargs):
     t = Template(template_string)
     if request:
@@ -67,6 +70,6 @@ def render_from_string(template_string, request=None, **kwargs):
         context_instance = Context(kwargs)
     return t.render(context_instance)
 
+
 def reverse(viewname, *args, **kwargs):
     return django_reverse(viewname, args=args, kwargs=kwargs)
-

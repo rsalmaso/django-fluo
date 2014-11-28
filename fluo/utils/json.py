@@ -31,17 +31,20 @@ __all__ = [
     'load', 'loads',
 ]
 
+
 class JSONEncoder(DjangoJSONEncoder):
     def default(self, o):
         if isinstance(o, datetime.timedelta):
             return str(o)
         return super(JSONEncoder, self).default(o)
 
+
 decoder = json.decoder
 encoder = json.encoder
 scanner = json.scanner
 
-def dump(obj, fp, skipkeys=False, ensure_ascii=True, check_circular=True, allow_nan=True, cls=None, indent=None, separators=None, encoding='utf-8', default=None, **kw):
+
+def dump(obj, fp, skipkeys=False, ensure_ascii=True, check_circular=True, allow_nan=True, cls=None, indent=None, separators=None, encoding='utf-8', default=None, **kw): # NOQA
     """Serialize ``obj`` as a JSON formatted stream to ``fp`` (a
     ``.write()``-supporting file-like object).
 
@@ -99,7 +102,8 @@ def dump(obj, fp, skipkeys=False, ensure_ascii=True, check_circular=True, allow_
         **kw
     )
 
-def dumps(obj, skipkeys=False, ensure_ascii=True, check_circular=True, allow_nan=True, cls=None, indent=None, separators=None, encoding='utf-8', default=None, **kw):
+
+def dumps(obj, skipkeys=False, ensure_ascii=True, check_circular=True, allow_nan=True, cls=None, indent=None, separators=None, encoding='utf-8', default=None, **kw): # NOQA
     """Serialize ``obj`` to a JSON formatted ``str``.
 
     If ``skipkeys`` is false then ``dict`` keys that are not basic types
@@ -153,7 +157,8 @@ def dumps(obj, skipkeys=False, ensure_ascii=True, check_circular=True, allow_nan
         **kw
     )
 
-def load(fp, encoding=None, cls=None, object_hook=None, parse_float=None, parse_int=None, parse_constant=None, object_pairs_hook=None, **kw):
+
+def load(fp, encoding=None, cls=None, object_hook=None, parse_float=None, parse_int=None, parse_constant=None, object_pairs_hook=None, **kw): # NOQA
     return json.load(
         fp=fp,
         encoding=encoding,
@@ -167,7 +172,8 @@ def load(fp, encoding=None, cls=None, object_hook=None, parse_float=None, parse_
     )
 load.__doc__ = json.load.__doc__
 
-def loads(s, encoding=None, cls=None, object_hook=None, parse_float=None, parse_int=None, parse_constant=None, object_pairs_hook=None, **kw):
+
+def loads(s, encoding=None, cls=None, object_hook=None, parse_float=None, parse_int=None, parse_constant=None, object_pairs_hook=None, **kw): # NOQA
     return json.loads(
         s=s,
         encoding=encoding,
@@ -180,4 +186,3 @@ def loads(s, encoding=None, cls=None, object_hook=None, parse_float=None, parse_
         **kw
     )
 loads.__doc__ = json.loads.__doc__
-

@@ -24,6 +24,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import os
 from django.core.management.commands.startapp import Command as TemplateCommand
 
+
 class Command(TemplateCommand):
     """
     Override default startapp command with fluo app_tempate
@@ -40,4 +41,3 @@ class Command(TemplateCommand):
             options['template'] = os.path.join(path, 'conf', 'app_template')
 
         super(Command, self).handle(app_name, target, **options)
-

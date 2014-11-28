@@ -23,6 +23,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 from ..database import DatabaseCommand
 
+
 class Command(DatabaseCommand):
     help = "Drop the database!"
     message = """You have requested to drop "%(name)s" database.

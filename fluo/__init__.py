@@ -22,7 +22,9 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+
 VERSION = (0, 2, 0, 'alpha', 7)
+
 
 def get_version(*args, **kwargs):
     from .utils.version import get_version

@@ -25,6 +25,7 @@ from django.core.management.base import NoArgsCommand
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
+
 class Command(NoArgsCommand):
     help = "Load a default admin user data: username=admin password=admin"
 
@@ -44,4 +45,3 @@ class Command(NoArgsCommand):
             )
         admin.set_password('admin')
         admin.save()
-

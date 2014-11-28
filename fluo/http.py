@@ -22,8 +22,9 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 import json
-from django.http import *
+from django.http import * # NOQA
 from .utils.json import JSONEncoder
+
 
 __all__ = [
     'JsonResponse',
@@ -46,6 +47,7 @@ __all__ = [
     'BadHeaderError',
 ]
 
+
 class JsonResponse(HttpResponse):
     def __init__(self, content=None, content_type="application/json; charset=utf-8", status=200, indent=2):
         """
@@ -56,4 +58,3 @@ class JsonResponse(HttpResponse):
         data = json.dumps(content, indent=indent, cls=JSONEncoder)
         super(JsonResponse, self).__init__(content=data, content_type=content_type, status=status)
         self['Content-Length'] = len(data)
-

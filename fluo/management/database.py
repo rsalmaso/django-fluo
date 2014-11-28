@@ -30,6 +30,7 @@ from django.utils.six.moves import input
 from django.utils import six
 from fluo.db.backend import get_backend
 
+
 class DatabaseCommand(NoArgsCommand):
     option_list = NoArgsCommand.option_list + (
         make_option(

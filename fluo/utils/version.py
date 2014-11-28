@@ -22,6 +22,7 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+
 def get_version(version=None):
     "Returns a PEP 386-compliant version number from VERSION."
     if version is None:
@@ -45,4 +46,3 @@ def get_version(version=None):
         sub = mapping[version[3]] + str(version[4])
 
     return str(main + sub)
-

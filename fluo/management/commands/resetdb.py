@@ -28,6 +28,7 @@ from django.db import connection, transaction
 from django.utils.translation import ugettext as _
 from django.conf import settings
 
+
 class Command(NoArgsCommand):
     help = "Try to reset the database"
 

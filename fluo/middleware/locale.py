@@ -35,19 +35,20 @@ from django.http import HttpResponseRedirect
 from fluo.settings import NO_LOCALE_PATTERNS
 
 SUB = re.compile(ur'<a([^>]+)href="/(?!(%s|%s|%s))([^"]*)"([^>]*)>' % (
-    "|".join(map(lambda l: l[0] + "/" , settings.LANGUAGES)),
+    "|".join(map(lambda l: l[0] + "/", settings.LANGUAGES)),
     settings.MEDIA_URL[1:],
-    settings.STATIC_URL[1:]
+    settings.STATIC_URL[1:],
 ))
 SUB2 = re.compile(ur'<form([^>]+)action="/(?!(%s|%s|%s))([^"]*)"([^>]*)>' % (
-    "|".join(map(lambda l: l[0] + "/" , settings.LANGUAGES)),
+    "|".join(map(lambda l: l[0] + "/", settings.LANGUAGES)),
      settings.MEDIA_URL[1:],
-     settings.STATIC_URL[1:]
+     settings.STATIC_URL[1:],
 ))
 SUPPORTED = dict(settings.LANGUAGES)
 START_SUB = re.compile(r"^/(%s)/(.*)" % "|".join(map(lambda l: l[0], settings.LANGUAGES)))
 NO_LOCALE_SUB = re.compile(r"^(%s|%s)(.*)" % ("|".join(NO_LOCALE_PATTERNS), settings.STATIC_URL))
 LANGUAGE_COOKIE_NAME = settings.LANGUAGE_COOKIE_NAME
+
 
 def has_lang_prefix(path):
     check = START_SUB.match(path)
@@ -56,12 +57,14 @@ def has_lang_prefix(path):
     else:
         return False
 
+
 def skip_translation(path):
     check = NO_LOCALE_SUB.match(path)
     if check is not None:
         return check.group(1)
     else:
         return False
+
 
 def get_default_language(language_code=None):
     """
@@ -85,29 +88,31 @@ def get_default_language(language_code=None):
     # otherwise split the language code if possible, so iso3
     language_code = language_code.split("-")[0]
 
-    if not language_code in languages:
+    if language_code not in languages:
         raise ImproperlyConfigured("No match in LANGUAGES for LANGUAGE_CODE %s" % settings.LANGUAGE_CODE)
 
     return language_code
+
 
 def get_language_from_request(request):
     language = request.REQUEST.get('language', None)
 
     if language:
-        if not language in dict(settings.LANGUAGES).keys():
+        if language not in dict(settings.LANGUAGES).keys():
             language = None
 
     if language is None:
         language = getattr(request, 'LANGUAGE_CODE', None)
 
     if language:
-        if not language in dict(settings.LANGUAGES).keys():
+        if language not in dict(settings.LANGUAGES).keys():
             language = None
 
     if language is None:
         language = get_default_language()
 
     return language
+
 
 class LocaleMiddleware(object):
     def get_language_from_request(self, request):
@@ -160,10 +165,16 @@ class LocaleMiddleware(object):
         patch_vary_headers(response, ("Accept-Language",))
         translation.deactivate()
 
-        if not skip_translation(path) and response.status_code == 200 and response._headers['content-type'][1].split(';')[0] == "text/html":
-            response.content = SUB.sub(ur'<a\1href="/%s/\3"\4>' % request.LANGUAGE_CODE, response.content.decode('utf-8'))
-            response.content = SUB2.sub(ur'<form\1action="/%s/\3"\4>' % request.LANGUAGE_CODE, response.content.decode('utf-8'))
-        if (response.status_code == 301 or response.status_code == 302 ):
+        if not skip_translation(path) and response.status_code == 200 and response._headers['content-type'][1].split(';')[0] == "text/html": # NOQA
+            response.content = SUB.sub(
+                ur'<a\1href="/%s/\3"\4>' % request.LANGUAGE_CODE,
+                response.content.decode('utf-8'),
+            )
+            response.content = SUB2.sub(
+                ur'<form\1action="/%s/\3"\4>' % request.LANGUAGE_CODE,
+                response.content.decode('utf-8'),
+            )
+        if response.status_code == 301 or response.status_code == 302:
             if 'Content-Language' not in response:
                 response['Content-Language'] = translation.get_language()
             location = response._headers['location']
@@ -171,4 +182,3 @@ class LocaleMiddleware(object):
             if not prefix and location[1].startswith("/") and not skip_translation(location[1]):
                 response._headers['location'] = (location[0], "/%s%s" % (request.LANGUAGE_CODE, location[1]))
         return response
-

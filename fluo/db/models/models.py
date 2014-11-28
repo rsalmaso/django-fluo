@@ -47,11 +47,13 @@ __all__ = [
     'AbstractUser', 'BaseUserManager', 'UserManager',
 ]
 
+
 class StatusModel(models.Model):
     status = fields.StatusField()
 
     class Meta:
         abstract = True
+
 
 class OrderedModel(models.Model):
     ordering = fields.OrderField(
@@ -73,20 +75,26 @@ class OrderedModel(models.Model):
         if ordering:
             self._set_default_ordering()
             super(OrderedModel, self).save(*args, **kwargs)
+
     def brothers_and_me(self):
         return self._default_manager.all()
+
     def brothers(self):
         return self.brothers_and_me().exclude(pk=self.id)
+
     def is_first(self):
         return self.brothers_and_me().order_by('ordering')[0:1][0] == self
+
     def is_last(self):
         return self.brothers_and_me().order_by('-ordering')[0:1][0] == self
+
     def _switch_node(self, other):
         self.ordering, other.ordering = other.ordering, self.ordering
         self.save()
         other.save()
+
     def up(self):
-        brothers = self.brothers().order_by('-ordering').filter(ordering__lt=self.ordering+1)[0:1]
+        brothers = self.brothers().order_by('-ordering').filter(ordering__lt=self.ordering + 1)[0:1]
         if not brothers.count():
             return False
         if brothers[0].ordering == self.ordering:
@@ -94,8 +102,9 @@ class OrderedModel(models.Model):
             self.save()
         self._switch_node(brothers[0])
         return True
+
     def down(self):
-        brothers = self.brothers().order_by('ordering').filter(ordering__gt=self.ordering-1)[0:1]
+        brothers = self.brothers().order_by('ordering').filter(ordering__gt=self.ordering - 1)[0:1]
         if not brothers.count():
             return False
         brother = brothers[0]
@@ -104,6 +113,7 @@ class OrderedModel(models.Model):
             brother.save()
         self._switch_node(brother)
         return True
+
     def _set_default_ordering(self):
         max = 0
         brothers = self.brothers()
@@ -112,6 +122,7 @@ class OrderedModel(models.Model):
                 if brother.ordering >= max:
                     max = brother.ordering
         self.ordering = max + 1
+
 
 class TreeOrderedModel(OrderedModel):
     parent = models.ForeignKey(
@@ -132,6 +143,7 @@ class TreeOrderedModel(OrderedModel):
         else:
             return self._default_manager.filter(parent__isnull=True)
 
+
 class TimestampModel(models.Model):
     created_at = fields.CreationDateTimeField(
         verbose_name=_('created'),
@@ -143,15 +155,18 @@ class TimestampModel(models.Model):
     class Meta:
         abstract = True
 
+
 class I18NProxy(object):
     def __init__(self, tr, original):
         self._tr = tr
         self._original = original
+
     def __getattr__(self, name):
         attr = getattr(self._tr, name, None)
         if not attr or (attr and (attr == '' or attr == u'')):
             attr = getattr(self._original, name)
         return attr
+
 
 class I18NModel(models.Model):
     def translate(self, language=None):
@@ -163,6 +178,7 @@ class I18NModel(models.Model):
 
     class Meta:
         abstract = True
+
 
 class TranslationModel(models.Model):
     language = models.CharField(
@@ -176,9 +192,11 @@ class TranslationModel(models.Model):
         abstract = True
         ordering = ('language',)
 
+
 class CategoryModelManager(models.Manager):
     def default(self):
         return self.get_query_set().get(default=True)
+
 
 @python_2_unicode_compatible
 class CategoryModel(StatusModel, OrderedModel):
@@ -220,6 +238,7 @@ class CategoryModel(StatusModel, OrderedModel):
             self.default = True
             super(CategoryModel, self).save(*args, **kwargs)
 
+
 class CategoryTranslationModel(TranslationModel):
     name = models.CharField(
         max_length=255,
@@ -227,6 +246,7 @@ class CategoryTranslationModel(TranslationModel):
 
     class Meta:
         abstract = True
+
 
 class GenericModel(models.Model):
     content_type = models.ForeignKey(
@@ -243,6 +263,7 @@ class GenericModel(models.Model):
 
     class Meta:
         abstract = True
+
 
 class AbstractUser(AbstractBaseUser, PermissionsMixin):
     """

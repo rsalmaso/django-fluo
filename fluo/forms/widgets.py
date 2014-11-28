@@ -42,6 +42,7 @@ from django.contrib.admin.widgets import AdminSplitDateTime as DateTimeWidget
 from django.contrib.admin.widgets import ForeignKeyRawIdWidget
 from django.contrib.admin.sites import site
 
+
 __all__ = (
     'SelectDateWidget',
     'DateWidget', 'TimeWidget', 'DateTimeWidget',
@@ -51,7 +52,9 @@ __all__ = (
     'DurationWidget',
 )
 
+
 RE_DATE = re.compile(r'(\d{4})-(\d\d?)-(\d\d?)$')
+
 
 # taken and adapted from http://djangosnippets.org/snippets/200/
 class GroupedSelect(forms.Select):
@@ -69,11 +72,14 @@ class GroupedSelect(forms.Select):
                 option_value = smart_text(k)
                 option_label = smart_text(v)
                 selected_html = (option_value == str_value) and u' selected="selected"' or ''
-                output.append(u'<option value="%s"%s>%s</option>' % (escape(option_value), selected_html, escape(option_label)))
+                output.append(u'<option value="%s"%s>%s</option>' % (
+                    escape(option_value), selected_html, escape(option_label)
+                ))
             if group_label:
                 output.append(u'</optgroup>')
         output.append(u'</select>')
         return mark_safe(u'\n'.join(output))
+
 
 class SelectYearWidget(forms.Widget):
     none_value = (0, '---')
@@ -87,7 +93,7 @@ class SelectYearWidget(forms.Widget):
             self.years = years
         else:
             this_year = datetime.date.today().year
-            self.years = range(this_year, this_year+10)
+            self.years = range(this_year, this_year + 10)
 
     def render(self, name, value, attrs=None):
         try:
@@ -128,6 +134,7 @@ class SelectYearWidget(forms.Widget):
             return '%s-%s-%s' % (y, 1, 1)
         return data.get(name, None)
 
+
 class SelectMonthYearWidget(forms.Widget):
     none_value = (0, '---')
     month_field = '%s_month'
@@ -141,7 +148,7 @@ class SelectMonthYearWidget(forms.Widget):
             self.years = years
         else:
             this_year = datetime.date.today().year
-            self.years = range(this_year, this_year+10)
+            self.years = range(this_year, this_year + 10)
 
     def render(self, name, value, attrs=None):
         try:
@@ -194,6 +201,7 @@ class SelectMonthYearWidget(forms.Widget):
             return '%s-%s-%s' % (y, m, 1)
         return data.get(name, None)
 
+
 class ForeignKeySearchInput(ForeignKeyRawIdWidget):
     """
     A Widget for displaying ForeignKeys in an autocomplete search input
@@ -211,7 +219,7 @@ class ForeignKeySearchInput(ForeignKeyRawIdWidget):
             'fluo/jquery-autocomplete/jquery.autocomplete.min.js',
         ]
         return forms.Media(
-            css={ 'all': ('fluo/jquery-autocomplete/jquery.autocomplete.css',) },
+            css={'all': ('fluo/jquery-autocomplete/jquery.autocomplete.css')},
             js=js_files,
         )
 
@@ -229,7 +237,7 @@ class ForeignKeySearchInput(ForeignKeyRawIdWidget):
     def render(self, name, value, attrs=None):
         if attrs is None:
             attrs = {}
-        #output = [super(ForeignKeySearchInput, self).render(name, value, attrs)]
+        # output = [super(ForeignKeySearchInput, self).render(name, value, attrs)]
         opts = self.rel.to._meta
         app_label = opts.app_label
         model_name = opts.object_name.lower()
@@ -239,7 +247,7 @@ class ForeignKeySearchInput(ForeignKeyRawIdWidget):
             url = '?' + '&amp;'.join(['%s=%s' % (k, v) for k, v in params.items()])
         else:
             url = ''
-        if not 'class' in attrs:
+        if 'class' not in attrs:
             attrs['class'] = 'vForeignKeyRawIdAdminField'
         # Call the TextInput render method directly to have more control
         output = [forms.TextInput.render(self, name, value, attrs)]
@@ -268,6 +276,7 @@ class ForeignKeySearchInput(ForeignKeyRawIdWidget):
         ), context))
         output.reverse()
         return mark_safe(u''.join(output))
+
 
 class DurationWidget(forms.MultiWidget):
     """Input accurate timing. IntegerFields for hours, minutes, seconds and milliseconds."""

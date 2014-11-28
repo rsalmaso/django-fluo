@@ -25,6 +25,7 @@ from django import forms
 from django.utils.translation import ugettext as _
 from django.utils.safestring import mark_safe
 
+
 class AdminImageFileWidget(forms.FileInput):
     def __init__(self, attrs=None):
         super(AdminImageFileWidget, self).__init__(attrs)
@@ -41,7 +42,7 @@ class AdminImageFileWidget(forms.FileInput):
         %(text)s <a target="_blank" href="%(url)s">%(value)s</a>
         <br />
         %(change)s ''' % {
-                'text':_('Currently:'),
+                'text': _('Currently:'),
                 'url': value.url,
                 'value': value,
                 'change': _('Change:'),
@@ -51,4 +52,3 @@ class AdminImageFileWidget(forms.FileInput):
         if value and hasattr(value, "url"):
             output.append('</div>')
         return mark_safe(u''.join(output))
-
