@@ -89,7 +89,7 @@ class ModelAdmin(admin.ModelAdmin):
     autocomplete_limit = getattr(settings, 'FOREIGNKEY_AUTOCOMPLETE_LIMIT', None)
 
     def get_urls(self):
-        from django.conf.urls import patterns, url
+        from django.conf.urls import url
 
         def wrap(view):
             def wrapper(*args, **kwargs):
@@ -98,13 +98,9 @@ class ModelAdmin(admin.ModelAdmin):
 
         info = self.model._meta.app_label, self.model._meta.model_name
 
-        urlpatterns = patterns('', url(
-            r'foreignkey_autocomplete/$',
-            wrap(self.foreignkey_autocomplete),
-            name='%s_%s_autocomplete' % info,
-        ))
-        urlpatterns += super(ModelAdmin, self).get_urls()
-        return urlpatterns
+        return [
+            url(r'foreignkey_autocomplete/$', wrap(self.foreignkey_autocomplete), name='%s_%s_autocomplete' % info),
+        ] + super(ModelAdmin, self).get_urls()
 
     def foreignkey_autocomplete(self, request):
         """
@@ -195,14 +191,14 @@ class OrderedModelAdmin(ModelAdmin):
         return super(OrderedModelAdmin, self).get_queryset(request).order_by('ordering')
 
     def get_urls(self):
-        from django.conf.urls import patterns, url
+        from django.conf.urls import url
 
         info = self.model._meta.app_label, self.model._meta.model_name
 
-        return patterns('',
+        return [
             url(r'^(?P<id>\d+)/up/$', self.admin_site.admin_view(self.up), name='%s_%s_up' % info),
             url(r'^(?P<id>\d+)/down/$', self.admin_site.admin_view(self.down), name='%s_%s_down' % info),
-        ) + super(OrderedModelAdmin, self).get_urls()
+        ] + super(OrderedModelAdmin, self).get_urls()
 
     def up(self, request, id):
         node = self.model._default_manager.get(pk=id)
