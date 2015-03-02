@@ -219,7 +219,7 @@ class ForeignKeySearchInput(ForeignKeyRawIdWidget):
             'fluo/jquery-autocomplete/jquery.autocomplete.min.js',
         ]
         return forms.Media(
-            css={'all': ('fluo/jquery-autocomplete/jquery.autocomplete.css')},
+            css={'all': ('fluo/jquery-autocomplete/jquery.autocomplete.css',)},
             js=js_files,
         )
 
