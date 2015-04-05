@@ -48,7 +48,7 @@ __all__ = (
     'CreationDateTimeField', 'ModificationDateTimeField',
     'OrderField',
     'AutoSlugField',
-    'DurationField',
+    'TimeDeltaField',
     'JSONField',
     'Base64Field',
 )
@@ -254,14 +254,14 @@ class OrderField(models.IntegerField):
         return super(OrderField, self).formfield(**defaults)
 
 
-class DurationField(models.DecimalField):
-    description = _('Duration field')
+class TimeDeltaField(models.DecimalField):
+    description = _('TimeDelta field')
 
     def __init__(self, milliseconds=True, verbose_name=None, name=None, default=0, *args, **kwargs):
         self.milliseconds = milliseconds
         kwargs.setdefault('decimal_places', 3)
         kwargs.setdefault('max_digits', 12)
-        super(DurationField, self).__init__(
+        super(TimeDeltaField, self).__init__(
             verbose_name=verbose_name,
             name=name,
             **kwargs
@@ -269,7 +269,7 @@ class DurationField(models.DecimalField):
 
     def formfield(self, **kwargs):
         defaults = {
-            'form_class': forms.DurationField,
+            'form_class': forms.TimeDeltaField,
             'milliseconds': self.milliseconds,
         }
         defaults.update(kwargs)
@@ -406,7 +406,7 @@ def _add_south_support():
     if 'south' in settings.INSTALLED_APPS:
         from south.modelsinspector import add_introspection_rules
         rules = [
-            ((DurationField,), [], {},),
+            ((TimeDeltaField,), [], {},),
             ((StatusField,), [], {
                 "max_length": ["max_length", {"default": 10}],
                 "default": ["default", {"default": "active"}],

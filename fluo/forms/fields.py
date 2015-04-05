@@ -32,13 +32,13 @@ from django.utils import six
 from django.core.exceptions import ValidationError
 from django.utils.encoding import smart_text
 from fluo.utils import json
-from .widgets import GroupedSelect, DurationWidget
+from .widgets import GroupedSelect, TimeDeltaWidget
 
 __all__ = (
     'OrderField',
     'TextField',
     'GroupedChoiceField',
-    'DurationField',
+    'TimeDeltaField',
     'JSONField',
 )
 
@@ -88,8 +88,8 @@ class GroupedChoiceField(forms.ChoiceField):
         return value
 
 
-class DurationField(forms.MultiValueField):
-    """Input accurate timing. Interface with models.DurationField."""
+class TimeDeltaField(forms.MultiValueField):
+    """Input accurate timing. Interface with models.TimeDeltaField."""
 
     LABELS = [_('Hours'), _('Minutes'), _('Seconds'), _('Milliseconds')]
     SECONDS = [60 * 60, 60, 1, 0.001]
@@ -98,9 +98,9 @@ class DurationField(forms.MultiValueField):
         if not milliseconds:
             self.LABELS = self.LABELS[:3]
             self.SECONDS = self.SECONDS[:3]
-        self.widget = DurationWidget(milliseconds=milliseconds)
+        self.widget = TimeDeltaWidget(milliseconds=milliseconds)
         fields = [forms.CharField(label=label) for label in self.LABELS]
-        super(DurationField, self).__init__(fields, *args, **kwargs)
+        super(TimeDeltaField, self).__init__(fields, *args, **kwargs)
 
     def compress(self, value):
         if value:

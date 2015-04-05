@@ -49,7 +49,7 @@ __all__ = (
     'GroupedSelect',
     'SelectYearWidget', 'SelectMonthYearWidget',
     'ForeignKeySearchInput',
-    'DurationWidget',
+    'TimeDeltaWidget',
 )
 
 
@@ -278,7 +278,7 @@ class ForeignKeySearchInput(ForeignKeyRawIdWidget):
         return mark_safe(u''.join(output))
 
 
-class DurationWidget(forms.MultiWidget):
+class TimeDeltaWidget(forms.MultiWidget):
     """Input accurate timing. IntegerFields for hours, minutes, seconds and milliseconds."""
 
     def __init__(self, milliseconds=False, attrs=None):
@@ -292,7 +292,7 @@ class DurationWidget(forms.MultiWidget):
         widgets = [
             forms.TextInput(attrs=attrs)
         ] * self.NUM_FIELDS
-        super(DurationWidget, self).__init__(widgets, attrs)
+        super(TimeDeltaWidget, self).__init__(widgets, attrs)
 
     def format_output(self, widgets):
         widgets.insert(1, ' : ')
