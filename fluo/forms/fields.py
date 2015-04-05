@@ -103,8 +103,9 @@ class TimeDeltaField(forms.MultiValueField):
         super(TimeDeltaField, self).__init__(fields, *args, **kwargs)
 
     def compress(self, value):
+        from django.utils.six.moves import reduce
         if value:
-            return str(reduce(add, map(lambda x: mul(*x), zip(map(float, value), self.SECONDS))))
+            return "{}".format(reduce(add, map(lambda x: mul(*x), zip(map(float, value), self.SECONDS))))
         return None
 
 
