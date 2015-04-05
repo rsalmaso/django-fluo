@@ -257,7 +257,7 @@ class OrderField(models.IntegerField):
 class TimeDeltaField(models.DecimalField):
     description = _('TimeDelta field')
 
-    def __init__(self, milliseconds=True, verbose_name=None, name=None, default=0, *args, **kwargs):
+    def __init__(self, milliseconds=False, verbose_name=None, name=None, default=0, *args, **kwargs):
         self.milliseconds = milliseconds
         kwargs.setdefault('decimal_places', 3)
         kwargs.setdefault('max_digits', 12)
