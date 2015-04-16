@@ -170,10 +170,10 @@ class I18NProxy(object):
 
 class I18NModel(models.Model):
     def translate(self, language=None):
-        language = language or get_language()[:2]
         try:
+            language = language or get_language()[:2]
             return I18NProxy(self.translations.get(language__startswith=language), self)
-        except (models.ObjectDoesNotExist, AttributeError):
+        except (models.ObjectDoesNotExist, AttributeError, TypeError):
             return self
 
     class Meta:
