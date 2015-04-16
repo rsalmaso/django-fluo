@@ -28,4 +28,4 @@ from django.contrib.admin.sites import AdminSite, site # NOQA
 from django.contrib.admin import autodiscover # NOQA
 from django.contrib.contenttypes.generic import GenericInlineModelAdmin, GenericStackedInline, GenericTabularInline # NOQA
 from .base import CopyObject # NOQA
-from .models import ModelAdmin, OrderedModelAdmin, TreeOrderedModelAdmin, CategoryModelAdmin # NOQA
+from .models import ModelAdmin, OrderedModelAdmin, TreeOrderedModelAdmin, CategoryModelAdmin, ReadOnlyMixin, ReadOnlyStackedInline, ReadOnlyTabularInline # NOQA
