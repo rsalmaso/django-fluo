@@ -21,9 +21,21 @@
 # THE SOFTWARE.
 
 from __future__ import absolute_import, division, print_function, unicode_literals
-from django.core.management.commands.compilemessages import Command as BaseCommand
-from ..mixins import ChdirMixin
+import os
+from django.core.management.base import CommandError
 
 
-class Command(ChdirMixin, BaseCommand):
-    pass
+class ChdirMixin(object):
+    def handle(self, *args, **options):
+        if len(args) > 2:
+            raise CommandError("Too many command-line arguments (expecting 'path' or 'module')")
+        if len(args):
+            if os.path.exists(args[0]):
+                path = args[0]
+            else:
+                from django.utils.importlib import import_module
+                path = os.path.dirname(import_module(args[0]).__file__)
+            path = os.path.abspath(path)
+            os.chdir(path)
+
+        return super(ChdirMixin, self).handle(**options)
