@@ -52,13 +52,7 @@ The full error: %(error)s"""
         backend.createdb()
 
     def migrate(self):
-        if django.VERSION[:2] >= (1, 7):
-            call_command('migrate')
-        else:
-            from django.conf import settings
-            call_command('syncdb', interactive=False)
-            if 'south' in settings.INSTALLED_APPS:
-                call_command('migrate')
+        call_command('migrate')
 
     def post_execute(self, **options):
         self.migrate()

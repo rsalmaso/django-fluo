@@ -399,24 +399,3 @@ class Base64Field(models.TextField):
 
     def set_data(self, obj, data):
         setattr(obj, self.field_name, base64.encodestring(data))
-
-
-def _add_south_support():
-    from django.conf import settings
-    if 'south' in settings.INSTALLED_APPS:
-        from south.modelsinspector import add_introspection_rules
-        rules = [
-            ((TimeDeltaField,), [], {},),
-            ((StatusField,), [], {
-                "max_length": ["max_length", {"default": 10}],
-                "default": ["default", {"default": "active"}],
-            }),
-            ((CreationDateTimeField,), [], {}),
-            ((ModificationDateTimeField,), [], {}),
-            ((AutoSlugField,), [], {}),
-            ((OrderField,), [], {}),
-            ((JSONField,), [], {}),
-            ((Base64Field,), [], {}),
-        ]
-        add_introspection_rules(rules, ["^fluo\.db\.models\.fields"])
-_add_south_support()
