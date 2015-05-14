@@ -25,11 +25,7 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 import operator
-try:
-    from functools import update_wrapper
-    assert update_wrapper
-except ImportError:
-    from django.utils.functional import update_wrapper
+from functools import update_wrapper
 from django.conf import settings
 from django.db.models.query import QuerySet
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
