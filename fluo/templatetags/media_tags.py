@@ -50,16 +50,6 @@ def css_ie(script, media="all"):
 
 
 @register.simple_tag
-def css_ie6(script, media="all"):
-    return """<!--[if IE 6]>%s<![endif]-->""" % css(script, media)
-
-
-@register.simple_tag
-def css_ie7(script, media="all"):
-    return """<!--[if IE 7]>%s<![endif]-->""" % css(script, media)
-
-
-@register.simple_tag
 def js(script):
     return '<script type="text/javascript" src="%(static)s%(script)s"></script>' % {
         'static': STATIC_URL,
