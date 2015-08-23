@@ -24,6 +24,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import json
 import datetime
 from django.core.serializers.json import DjangoJSONEncoder
+from django.utils import six
 
 __all__ = [
     'decoder', 'encoder', 'scanner',
@@ -87,20 +88,23 @@ def dump(obj, fp, skipkeys=False, ensure_ascii=True, check_circular=True, allow_
 
     """
     cls = cls or JSONEncoder
-    return json.dump(
-        obj=obj,
-        fp=fp,
-        skipkeys=skipkeys,
-        ensure_ascii=ensure_ascii,
-        check_circular=check_circular,
-        allow_nan=allow_nan,
-        cls=cls,
-        indent=indent,
-        separators=separators,
-        encoding=encoding,
-        default=default,
-        **kw
-    )
+    kwargs = {
+        "obj": obj,
+        "fp": fp,
+        "skipkeys": skipkeys,
+        "ensure_ascii": ensure_ascii,
+        "check_circular": check_circular,
+        "allow_nan": allow_nan,
+        "cls": cls,
+        "indent": indent,
+        "separators": separators,
+        "default": default,
+    }
+    if six.PY2:
+        kwargs["encoding"] = encoding
+    kwargs.update(kw)
+
+    return json.dump(**kwargs)
 
 
 def dumps(obj, skipkeys=False, ensure_ascii=True, check_circular=True, allow_nan=True, cls=None, indent=None, separators=None, encoding='utf-8', default=None, **kw): # NOQA
@@ -143,46 +147,55 @@ def dumps(obj, skipkeys=False, ensure_ascii=True, check_circular=True, allow_nan
 
     """
     cls = cls or JSONEncoder
-    return json.dumps(
-        obj=obj,
-        skipkeys=skipkeys,
-        ensure_ascii=ensure_ascii,
-        check_circular=check_circular,
-        allow_nan=allow_nan,
-        cls=cls,
-        indent=indent,
-        separators=separators,
-        encoding=encoding,
-        default=default,
-        **kw
-    )
+    kwargs = {
+        "obj": obj,
+        "skipkeys": skipkeys,
+        "ensure_ascii": ensure_ascii,
+        "check_circular": check_circular,
+        "allow_nan": allow_nan,
+        "cls": cls,
+        "indent": indent,
+        "separators": separators,
+        "default": default,
+    }
+    if six.PY2:
+        kwargs["encoding"] = encoding
+    kwargs.update(kw)
+
+    return json.dumps(**kwargs)
 
 
 def load(fp, encoding=None, cls=None, object_hook=None, parse_float=None, parse_int=None, parse_constant=None, object_pairs_hook=None, **kw): # NOQA
-    return json.load(
-        fp=fp,
-        encoding=encoding,
-        cls=cls,
-        object_hook=object_hook,
-        parse_float=parse_float,
-        parse_int=parse_int,
-        parse_constant=parse_constant,
-        object_pairs_hook=object_pairs_hook,
-        **kw
-    )
+    kwargs = {
+        "fp": fp,
+        "cls": cls,
+        "object_hook": object_hook,
+        "parse_float": parse_float,
+        "parse_int": parse_int,
+        "parse_constant": parse_constant,
+        "object_pairs_hook": object_pairs_hook,
+    }
+    if six.PY2:
+        kwargs["encoding"] = encoding
+    kwargs.update(kw)
+
+    return json.dumps(**kwargs)
 load.__doc__ = json.load.__doc__
 
 
 def loads(s, encoding=None, cls=None, object_hook=None, parse_float=None, parse_int=None, parse_constant=None, object_pairs_hook=None, **kw): # NOQA
-    return json.loads(
-        s=s,
-        encoding=encoding,
-        cls=cls,
-        object_hook=object_hook,
-        parse_float=parse_float,
-        parse_int=parse_int,
-        parse_constant=parse_constant,
-        object_pairs_hook=object_pairs_hook,
-        **kw
-    )
+    kwargs = {
+        "s": s,
+        "cls": cls,
+        "object_hook": object_hook,
+        "parse_float": parse_float,
+        "parse_int": parse_int,
+        "parse_constant": parse_constant,
+        "object_pairs_hook": object_pairs_hook,
+    }
+    if six.PY2:
+        kwargs["encoding"] = encoding
+    kwargs.update(kw)
+
+    return json.loads(**kwargs)
 loads.__doc__ = json.loads.__doc__
