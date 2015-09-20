@@ -34,12 +34,12 @@ from django.conf import settings
 from django.http import HttpResponseRedirect
 from fluo.settings import NO_LOCALE_PATTERNS
 
-SUB = re.compile(ur'<a([^>]+)href="/(?!(%s|%s|%s))([^"]*)"([^>]*)>' % (
+SUB = re.compile(r'<a([^>]+)href="/(?!(%s|%s|%s))([^"]*)"([^>]*)>' % (
     "|".join(map(lambda l: l[0] + "/", settings.LANGUAGES)),
     settings.MEDIA_URL[1:],
     settings.STATIC_URL[1:],
 ))
-SUB2 = re.compile(ur'<form([^>]+)action="/(?!(%s|%s|%s))([^"]*)"([^>]*)>' % (
+SUB2 = re.compile(r'<form([^>]+)action="/(?!(%s|%s|%s))([^"]*)"([^>]*)>' % (
     "|".join(map(lambda l: l[0] + "/", settings.LANGUAGES)),
      settings.MEDIA_URL[1:],
      settings.STATIC_URL[1:],
@@ -167,11 +167,11 @@ class LocaleMiddleware(object):
 
         if not skip_translation(path) and response.status_code == 200 and response._headers['content-type'][1].split(';')[0] == "text/html": # NOQA
             response.content = SUB.sub(
-                ur'<a\1href="/%s/\3"\4>' % request.LANGUAGE_CODE,
+                r'<a\1href="/%s/\3"\4>' % request.LANGUAGE_CODE,
                 response.content.decode('utf-8'),
             )
             response.content = SUB2.sub(
-                ur'<form\1action="/%s/\3"\4>' % request.LANGUAGE_CODE,
+                r'<form\1action="/%s/\3"\4>' % request.LANGUAGE_CODE,
                 response.content.decode('utf-8'),
             )
         if response.status_code == 301 or response.status_code == 302:

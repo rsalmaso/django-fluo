@@ -42,4 +42,4 @@ def languages_as_li(context, template='fluo/tags/languages_as_li.html'):
 @register.inclusion_tag('fluo/tags/content.html', takes_context=True)
 def page_language_url(context, lang):
     request = context['request']
-    return {'content': ur'/%s%s' % (lang, request.get_full_path())}
+    return {'content': r'/%s%s' % (lang, request.get_full_path())}
