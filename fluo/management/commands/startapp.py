@@ -30,7 +30,7 @@ class Command(TemplateCommand):
     Override default startapp command with fluo app_tempate
     """
 
-    def handle(self, app_name=None, target=None, **options):
+    def handle(self, **options):
         if not options['template']:
             realpath = os.path.realpath(__file__)
             path = os.path.split(
@@ -40,4 +40,4 @@ class Command(TemplateCommand):
             )[0]
             options['template'] = os.path.join(path, 'conf', 'app_template')
 
-        super(Command, self).handle(app_name, target, **options)
+        super(Command, self).handle(**options)
