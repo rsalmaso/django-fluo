@@ -21,11 +21,11 @@
 # THE SOFTWARE.
 
 from __future__ import absolute_import, division, print_function, unicode_literals
+from .utils.version import get_version
 
 
 VERSION = (0, 2, 0, 'alpha', 9)
 
-
-def get_version(*args, **kwargs):
-    from .utils.version import get_version
-    return get_version(*args, **kwargs)
+__version__  = get_version(VERSION)
+__author__  = "Raffaele Salmaso"
+__email__ = "raffaele@salmaso.org"
