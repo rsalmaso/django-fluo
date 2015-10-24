@@ -33,6 +33,7 @@ from django.utils.six.moves import reduce
 from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import smart_str
 from django.utils.text import get_text_list
+from django.utils import six
 from django.contrib import admin
 from ..db import models
 from ..forms import ForeignKeySearchInput
@@ -57,7 +58,7 @@ admin.options.FORMFIELD_FOR_DBFIELD_DEFAULTS.update({
 # end admin customization
 
 
-class ModelAdmin(admin.ModelAdmin):
+class AutocompleteMixin(object):
     """Admin class for models using the autocomplete feature.
 
     There are two additional fields:
@@ -87,6 +88,28 @@ class ModelAdmin(admin.ModelAdmin):
     related_string_functions = {}
     autocomplete_limit = getattr(settings, 'FOREIGNKEY_AUTOCOMPLETE_LIMIT', None)
 
+    def get_help_text(self, field_name, model_name):
+        searchable_fields = self.related_search_fields.get(field_name, None)
+        if searchable_fields:
+            help_kwargs = {
+                'model_name': model_name,
+                'field_list': get_text_list(searchable_fields, _('and')),
+            }
+            return _('Use the left field to do %(model_name)s lookups in the fields %(field_list)s.') % help_kwargs
+        return ''
+
+    def formfield_for_foreignkey(self, db_field, request=None, **kwargs):
+        if db_field.name in self.related_search_fields:
+            model_name = db_field.rel.to._meta.object_name
+            help_text = self.get_help_text(db_field.name, model_name)
+            if kwargs.get('help_text'):
+                help_text = '{} {}'.format(kwargs['help_text'], help_text)
+            kwargs['widget'] = ForeignKeySearchInput(db_field.rel, self.related_search_fields[db_field.name])
+            kwargs['help_text'] = help_text
+        return super(AutocompleteMixin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+
+
+class ModelAdmin(AutocompleteMixin, admin.ModelAdmin):
     def get_urls(self):
         from django.conf.urls import url
 
@@ -98,10 +121,10 @@ class ModelAdmin(admin.ModelAdmin):
         info = self.model._meta.app_label, self.model._meta.model_name
 
         return [
-            url(r'foreignkey_autocomplete/$', wrap(self.foreignkey_autocomplete), name='%s_%s_autocomplete' % info),
-        ] + super(ModelAdmin, self).get_urls()
+            url(r'autocomplete/$', wrap(self.autocomplete_view), name='%s_%s_autocomplete' % info),
+        ] + super(AutocompleteMixin, self).get_urls()
 
-    def foreignkey_autocomplete(self, request):
+    def autocomplete_view(self, request):
         """
         Searches in the fields of the given related model and returns the
         result as a simple string to be used by the jQuery Autocomplete plugin
@@ -115,19 +138,22 @@ class ModelAdmin(admin.ModelAdmin):
         try:
             to_string_function = self.related_string_functions[model_name]
         except KeyError:
-            to_string_function = lambda x: x.__unicode__()
+            to_string_function = lambda x: six.text_type(x)
 
         if search_fields and app_label and model_name and (query or object_pk):
+
             def construct_search(field_name):
                 # use different lookup methods depending on the notation
                 if field_name.startswith('^'):
-                    return "%s__istartswith" % field_name[1:]
+                    fmt, name = "{}__istartswith", field_name[1:]
                 elif field_name.startswith('='):
-                    return "%s__iexact" % field_name[1:]
+                    fmt, name = "{}__iexact", field_name[1:]
                 elif field_name.startswith('@'):
-                    return "%s__search" % field_name[1:]
+                    fmt, name = "{}__search", field_name[1:]
                 else:
-                    return "%s__icontains" % field_name
+                    fmt, name = "{}__icontains", field_name
+                return fmt.format(name)
+
             model = models.get_model(app_label, model_name)
             queryset = model._default_manager.all()
             data = ''
@@ -146,8 +172,11 @@ class ModelAdmin(admin.ModelAdmin):
                 if self.autocomplete_limit:
                     queryset = queryset[:self.autocomplete_limit]
 
-                data = ''.join([u'%s|%s\n' % (
-                    to_string_function(f), f.pk) for f in queryset])
+                data = ''.join([
+                    '{}|{}\n'.format(to_string_function(f), f.pk)
+                    for f
+                    in queryset
+                ])
             elif object_pk:
                 try:
                     obj = queryset.get(pk=object_pk)
@@ -158,29 +187,13 @@ class ModelAdmin(admin.ModelAdmin):
             return HttpResponse(data)
         return HttpResponseNotFound()
 
-    def get_help_text(self, field_name, model_name):
-        searchable_fields = self.related_search_fields.get(field_name, None)
-        if searchable_fields:
-            help_kwargs = {
-                'model_name': model_name,
-                'field_list': get_text_list(searchable_fields, _('and')),
-            }
-            return _('Use the left field to do %(model_name)s lookups in the fields %(field_list)s.') % help_kwargs
-        return ''
 
-    def formfield_for_dbfield(self, db_field, **kwargs):
-        """
-        Overrides the default widget for Foreignkey fields if they are
-        specified in the related_search_fields class attribute.
-        """
-        if (isinstance(db_field, models.ForeignKey) and db_field.name in self.related_search_fields):
-            model_name = db_field.rel.to._meta.object_name
-            help_text = self.get_help_text(db_field.name, model_name)
-            if kwargs.get('help_text'):
-                help_text = u'%s %s' % (kwargs['help_text'], help_text)
-            kwargs['widget'] = ForeignKeySearchInput(db_field.rel, self.related_search_fields[db_field.name])
-            kwargs['help_text'] = help_text
-        return super(ModelAdmin, self).formfield_for_dbfield(db_field, **kwargs)
+class StackedInline(AutocompleteMixin, admin.StackedInline):
+    pass
+
+
+class TabularInline(AutocompleteMixin, admin.TabularInline):
+    pass
 
 
 class OrderedModelAdmin(ModelAdmin):
@@ -267,9 +280,9 @@ class ReadOnlyMixin(object):
         return False
 
 
-class ReadOnlyStackedInline(ReadOnlyMixin, admin.StackedInline):
+class ReadOnlyStackedInline(ReadOnlyMixin, StackedInline):
     pass
 
 
-class ReadOnlyTabularInline(ReadOnlyMixin, admin.TabularInline):
+class ReadOnlyTabularInline(ReadOnlyMixin, TabularInline):
     pass

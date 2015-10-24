@@ -251,13 +251,11 @@ class ForeignKeySearchInput(ForeignKeyRawIdWidget):
             attrs['class'] = 'vForeignKeyRawIdAdminField'
         # Call the TextInput render method directly to have more control
         output = [forms.TextInput.render(self, name, value, attrs)]
-        if value:
-            label = self.label_for_value(value)
-        else:
-            label = u''
+        label = self.label_for_value(value) if value else ''
 
         admin_media_prefix = settings.STATIC_URL + "admin/"
 
+        from django.template.defaultfilters import slugify
         context = {
             'url': url,
             'related_url': related_url,
@@ -268,6 +266,7 @@ class ForeignKeySearchInput(ForeignKeyRawIdWidget):
             'app_label': app_label,
             'label': label,
             'name': name,
+            'slug': slugify(name).replace('-', '_'),
         }
         output.append(render_to_string(self.widget_template or (
             'fluo/widgets/%s/%s/foreignkey_searchinput.html' % (app_label, model_name),
