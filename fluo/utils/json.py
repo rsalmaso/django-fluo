@@ -179,7 +179,7 @@ def load(fp, encoding=None, cls=None, object_hook=None, parse_float=None, parse_
         kwargs["encoding"] = encoding
     kwargs.update(kw)
 
-    return json.dumps(**kwargs)
+    return json.load(**kwargs)
 load.__doc__ = json.load.__doc__
 
 
