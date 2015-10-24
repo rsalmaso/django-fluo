@@ -30,7 +30,6 @@
 # Copyright (c) 2012 Brad Jasper
 
 from __future__ import absolute_import, division, print_function, unicode_literals
-import base64
 import copy
 import re
 from django.core import exceptions, validators
@@ -50,7 +49,6 @@ __all__ = (
     'AutoSlugField',
     'TimeDeltaField',
     'JSONField',
-    'Base64Field',
 )
 
 STATUS_CHOICES = (
@@ -380,22 +378,3 @@ class JSONField(six.with_metaclass(SubfieldBase, models.TextField)):
             # return 'jsonb'
         # else:
             # return super(JSONField, self).db_type(connection)
-
-
-class Base64Field(models.TextField):
-    """ Stolen from http://djangosnippets.org/snippets/1669/ """
-    def contribute_to_class(self, cls, name):
-        if self.db_column is None:
-            self.db_column = name
-        # check for south, which call contribute_to_class two times, the second
-        # one with already modified name
-        # TODO: check with django migrations
-        self.field_name = name if name.endswith('_base64') else name + '_base64'
-        super(Base64Field, self).contribute_to_class(cls, self.field_name)
-        setattr(cls, name, property(self.get_data, self.set_data))
-
-    def get_data(self, obj):
-        return base64.decodestring(getattr(obj, self.field_name))
-
-    def set_data(self, obj, data):
-        setattr(obj, self.field_name, base64.encodestring(data))
