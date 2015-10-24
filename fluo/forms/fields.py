@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-# JSONField taken and adapted from https://github.com/bradjasper/django-jsonfield.git
+# JsonField taken and adapted from https://github.com/bradjasper/django-jsonfield.git
 # Copyright (c) 2012 Brad Jasper
 
 from __future__ import absolute_import, division, print_function, unicode_literals
@@ -39,7 +39,7 @@ __all__ = (
     'TextField',
     'GroupedChoiceField',
     'TimeDeltaField',
-    'JSONField',
+    'JsonField',
 )
 
 
@@ -109,7 +109,7 @@ class TimeDeltaField(forms.MultiValueField):
         return None
 
 
-class JSONField(forms.CharField):
+class JsonField(forms.CharField):
     def to_python(self, value):
         if isinstance(value, six.string_types):
             try:
@@ -124,6 +124,6 @@ class JSONField(forms.CharField):
 
         # Trap cleaning errors & bubble them up as JSON errors
         try:
-            return super(JSONField, self).clean(value)
+            return super(JsonField, self).clean(value)
         except TypeError:
             raise ValidationError(_("Enter valid JSON"))

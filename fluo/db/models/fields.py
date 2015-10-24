@@ -26,7 +26,7 @@
 #   - ModificationDateTimeField
 #   - AutoSlugField
 
-# JSONField taken and adapted from https://github.com/bradjasper/django-jsonfield.git
+# JsonField taken and adapted from https://github.com/bradjasper/django-jsonfield.git
 # Copyright (c) 2012 Brad Jasper
 
 from __future__ import absolute_import, division, print_function, unicode_literals
@@ -48,7 +48,7 @@ __all__ = (
     'OrderField',
     'AutoSlugField',
     'TimeDeltaField',
-    'JSONField',
+    'JsonField',
 )
 
 STATUS_CHOICES = (
@@ -276,9 +276,9 @@ class TimeDeltaField(models.DecimalField):
         return models.Field.formfield(self, **defaults)
 
 
-class JSONField(six.with_metaclass(SubfieldBase, models.TextField)):
+class JsonField(six.with_metaclass(SubfieldBase, models.TextField)):
     description = _("JSON object")
-    form_class = forms.JSONField
+    form_class = forms.JsonField
     empty_values = ()
 
     def __init__(self, *args, **kwargs):
@@ -286,7 +286,7 @@ class JSONField(six.with_metaclass(SubfieldBase, models.TextField)):
             'separators': (',', ':')
         })
         self.load_kwargs = kwargs.pop('load_kwargs', {})
-        super(JSONField, self).__init__(*args, **kwargs)
+        super(JsonField, self).__init__(*args, **kwargs)
 
     def pre_init(self, value, obj):
         """
@@ -328,7 +328,7 @@ class JSONField(six.with_metaclass(SubfieldBase, models.TextField)):
         return self.get_db_prep_value(value, None)
 
     def value_from_object(self, obj):
-        value = super(JSONField, self).value_from_object(obj)
+        value = super(JsonField, self).value_from_object(obj)
         if self.null and value is None:
             return None
         return self.dumps_for_display(value)
@@ -341,8 +341,8 @@ class JSONField(six.with_metaclass(SubfieldBase, models.TextField)):
     def formfield(self, **kwargs):
         if "form_class" not in kwargs:
             kwargs["form_class"] = self.form_class
-        field = super(JSONField, self).formfield(**kwargs)
-        if isinstance(field, forms.JSONField):
+        field = super(JsonField, self).formfield(**kwargs)
+        if isinstance(field, forms.JsonField):
             field.load_kwargs = self.load_kwargs
 
         if not field.help_text:
@@ -366,7 +366,7 @@ class JSONField(six.with_metaclass(SubfieldBase, models.TextField)):
                 return self.default()
             return copy.deepcopy(self.default)
         # If the field doesn't have a default, then we punt to models.Field.
-        return super(JSONField, self).get_default()
+        return super(JsonField, self).get_default()
 
     # json field type doesn't play nice with django because it doesn't implement
     # the equality operator, so when it use the DISTINCT clause (ie in admin
@@ -377,4 +377,4 @@ class JSONField(six.with_metaclass(SubfieldBase, models.TextField)):
         # if connection.vendor == 'postgresql' and connection.pg_version >= 90400:
             # return 'jsonb'
         # else:
-            # return super(JSONField, self).db_type(connection)
+            # return super(JsonField, self).db_type(connection)
