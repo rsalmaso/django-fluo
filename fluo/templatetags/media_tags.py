@@ -25,6 +25,7 @@ from django.apps import apps
 from django import template
 from django.utils.translation import get_language
 from django.utils.encoding import iri_to_uri
+from django.utils.safestring import mark_safe
 from fluo.settings import MEDIA_URL, JQUERY_MINIFIED
 
 if apps.is_installed('django.contrib.staticfiles'):
@@ -42,40 +43,40 @@ def static(path):
 
 @register.simple_tag
 def css(script, media="all"):
-    return '<link rel="stylesheet" type="text/css" href="%(script)s" media="%(media)s"/>' % {
+    return mark_safe('<link rel="stylesheet" type="text/css" href="%(script)s" media="%(media)s"/>' % {
         'script': _static(iri_to_uri(script)),
         'media': media,
-    }
+    })
 
 
 @register.simple_tag
 def css_print(script):
-    return css(script, media="print")
+    return mark_safe(css(script, media="print"))
 
 
 @register.simple_tag
 def css_ie(script, media="all"):
-    return """<!--[if IE]>%s<![endif]-->""" % css(script, media)
+    return mark_safe("""<!--[if IE]>%s<![endif]-->""" % css(script, media))
 
 
 @register.simple_tag
 def js(script):
-    return '<script type="text/javascript" src="%(script)s"></script>' % {
+    return mark_safe('<script type="text/javascript" src="%(script)s"></script>' % {
         'script': _static(iri_to_uri(script)),
-    }
+    })
 
 
 @register.simple_tag
 def jquery():
-    return js("fluo/jquery/%(jquery)s" % {
+    return mark_safe(js("fluo/jquery/%(jquery)s" % {
         'jquery': {True: 'jquery.min.js', False: 'jquery.js'}[JQUERY_MINIFIED],
-    })
+    }))
 
 
 @register.simple_tag
 def jqueryui():
     minified = ".min" if JQUERY_MINIFIED else ""
-    return '''
+    return mark_safe('''
 %(jqueryui)s
 %(i18n)s
 ''' % { # NOQA
@@ -84,63 +85,63 @@ def jqueryui():
             minified=minified,
             language=get_language()[:2]
         )),
-    }
+    })
 
 
 @register.simple_tag
 def jqueryui_default_theme():
-    return css("fluo/jquery/theme/jquery.ui.css", media="all")
+    return mark_safe(css("fluo/jquery/theme/jquery.ui.css", media="all"))
 
 
 @register.simple_tag
 def thickbox():
-    return """%(css)s
+    return mark_safe("""%(css)s
 <script type="text/javascript">var tb_pathToImage = "%(img)s";</script>
 %(js)s""" % {
         "css": css("fluo/thickbox/css/thickbox.css", media="all"),
         "img": _static("fluo/thickbox/images/loadingAnimation.gif"),
         "js": js("fluo/thickbox/js/%(thickbox)s" % {True: 'thickbox.min.js', False: 'thickbox.js'}[JQUERY_MINIFIED]),
-    }
+    })
 
 
 @register.simple_tag
 def jquery_ajaxqueue():
-    return js("fluo/jquery-ajaxqueue/%(js)s" % {
+    return mark_safe(js("fluo/jquery-ajaxqueue/%(js)s" % {
         'js': {True: 'jquery.ajaxqueue.min.js', False: 'jquery.ajaxqueue.js'}[JQUERY_MINIFIED],
-    })
+    }))
 
 
 @register.simple_tag
 def jquery_autocomplete():
-    return js("fluo/jquery-autocomplete/%(js)s" % {
+    return mark_safe(js("fluo/jquery-autocomplete/%(js)s" % {
         'js': {True: 'jquery.autocomplete.min.js', False: 'jquery.autocomplete.js'}[JQUERY_MINIFIED],
-    })
+    }))
 
 
 @register.simple_tag
 def jquery_listreorder():
-    return js("fluo/jquery-listreorder/%(js)s" % {
+    return mark_safe(js("fluo/jquery-listreorder/%(js)s" % {
         'js': {True: 'jquery.listreorder.min.js', False: 'jquery.listreorder.js'}[JQUERY_MINIFIED],
-    })
+    }))
 
 
 @register.simple_tag
 def jquery_tablednd():
-    return js("fluo/jquery-tablednd/%(js)s" % {
+    return mark_safe(js("fluo/jquery-tablednd/%(js)s" % {
         'js': {True: 'jquery.tablednd.min.js', False: 'jquery.tablednd.js'}[JQUERY_MINIFIED],
-    })
+    }))
 
 
 @register.simple_tag
 def jquery_bgiframe():
-    return js("fluo/jquery-bgiframe/%(js)s" % {
+    return mark_safe(js("fluo/jquery-bgiframe/%(js)s" % {
         'js': {True: 'jquery.bgiframe.min.js', False: 'jquery.bgiframe.js'}[JQUERY_MINIFIED],
-    })
+    }))
 
 
 @register.simple_tag
 def jquery_disable_text_select():
-    return js("fluo/jquery-disable-text-select/jquery.disable.text.select.pack.js")
+    return mark_safe(js("fluo/jquery-disable-text-select/jquery.disable.text.select.pack.js"))
 
 
 @register.simple_tag
