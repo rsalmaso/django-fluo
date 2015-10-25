@@ -22,7 +22,7 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 from django.db.models import * # NOQA
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation # NOQA
 from django.contrib.contenttypes.models import ContentTypeManager, ContentType # NOQA
-from django.contrib.contenttypes.generic import GenericForeignKey, GenericRelation # NOQA
 from .fields import * # NOQA
 from .models import * # NOQA

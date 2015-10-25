@@ -31,8 +31,8 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils import timezone
 from django.utils.http import urlquote
 from django.template.defaultfilters import slugify
+from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes.generic import GenericForeignKey
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager, BaseUserManager
 from ... import settings
 from . import fields

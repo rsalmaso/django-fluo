@@ -22,7 +22,7 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 from django.forms import * # NOQA
-from django.contrib.contenttypes.generic import BaseGenericInlineFormSet, generic_inlineformset_factory # NOQA
+from django.contrib.contenttypes.forms import BaseGenericInlineFormSet, generic_inlineformset_factory # NOQA
 from django.forms.extras.widgets import SelectDateWidget # NOQA
 from .fields import * # NOQA
 from .widgets import * # NOQA

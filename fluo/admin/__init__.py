@@ -25,6 +25,6 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from django.contrib.admin.options import HORIZONTAL, VERTICAL # NOQA
 from django.contrib.admin.sites import AdminSite, site # NOQA
 from django.contrib.admin import autodiscover # NOQA
-from django.contrib.contenttypes.generic import GenericInlineModelAdmin, GenericStackedInline, GenericTabularInline # NOQA
+from django.contrib.contenttypes.admin import GenericInlineModelAdmin, GenericStackedInline, GenericTabularInline # NOQA
 from .base import CopyObject # NOQA
 from .models import ModelAdmin, StackedInline, TabularInline, OrderedModelAdmin, TreeOrderedModelAdmin, CategoryModelAdmin, ReadOnlyMixin, ReadOnlyStackedInline, ReadOnlyTabularInline # NOQA
