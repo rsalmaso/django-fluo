@@ -22,10 +22,6 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 from django.db.models import * # NOQA
-try:
-    QuerySet
-except:
-    from django.db.models.query import QuerySet # NOQA
 from django.contrib.contenttypes.models import ContentTypeManager, ContentType # NOQA
 from django.contrib.contenttypes.generic import GenericForeignKey, GenericRelation # NOQA
 from .fields import * # NOQA
