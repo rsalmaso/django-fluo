@@ -21,8 +21,8 @@
 # THE SOFTWARE.
 
 from __future__ import absolute_import, division, print_function, unicode_literals
+from importlib import import_module
 import os
-from django.utils.importlib import import_module
 from django.utils.translation import ugettext as _
 from django.core.exceptions import ImproperlyConfigured
 
