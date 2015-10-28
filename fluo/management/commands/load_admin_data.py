@@ -21,15 +21,15 @@
 # THE SOFTWARE.
 
 from __future__ import absolute_import, division, print_function, unicode_literals
-from django.core.management.base import NoArgsCommand
+from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
-class Command(NoArgsCommand):
+class Command(BaseCommand):
     help = "Load a default admin user data: username=admin password=admin"
 
-    def handle_noargs(self, **options):
+    def handle(self, *args, **options):
         """Load a default admin user"""
         try:
             admin = User.objects.get(username='admin')

@@ -23,7 +23,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 from optparse import make_option
 import sys
-from django.core.management.base import NoArgsCommand
+from django.core.management.base import BaseCommand
 from django.core.management.base import CommandError
 from django.db import connections, DEFAULT_DB_ALIAS
 from django.utils.six.moves import input
@@ -31,7 +31,6 @@ from django.utils import six
 from fluo.db.backend import get_backend
 
 
-class DatabaseCommand(NoArgsCommand):
     option_list = NoArgsCommand.option_list + (
         make_option(
             '--noinput',
@@ -49,6 +48,7 @@ class DatabaseCommand(NoArgsCommand):
         ),
     )
 
+class DatabaseCommand(BaseCommand):
     output_transaction = True
 
     message = """You have requested to drop "%(name)s" database.
@@ -64,7 +64,7 @@ The full error: %(error)s"""
     default = "yes"
     should_ask = True
 
-    def handle_noargs(self, **options):
+    def handle(self, *args, **options):
         db = options.get('database')
         connection = connections[db]
         interactive = options.get('interactive')

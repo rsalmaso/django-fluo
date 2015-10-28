@@ -21,7 +21,7 @@
 # THE SOFTWARE.
 
 from __future__ import absolute_import, division, print_function, unicode_literals
-from django.core.management.base import NoArgsCommand
+from django.core.management.base import BaseCommand
 from django.core.management.sql import sql_flush
 from django.core.management.color import no_style
 from django.db import connection, transaction
@@ -29,7 +29,7 @@ from django.utils.translation import ugettext as _
 from django.conf import settings
 
 
-class Command(NoArgsCommand):
+class Command(BaseCommand):
     help = "Try to reset the database"
 
     def handle_noargs(self, **options):
