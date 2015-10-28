@@ -21,7 +21,6 @@
 # THE SOFTWARE.
 
 from __future__ import absolute_import, division, print_function, unicode_literals
-from optparse import make_option
 import sys
 from django.core.management.base import BaseCommand
 from django.core.management.base import CommandError
@@ -30,23 +29,6 @@ from django.utils.six.moves import input
 from django.utils import six
 from fluo.db.backend import get_backend
 
-
-    option_list = NoArgsCommand.option_list + (
-        make_option(
-            '--noinput',
-            action='store_false',
-            dest='interactive',
-            default=True,
-            help='Tells Django to NOT prompt the user for input of any kind.',
-        ),
-        make_option(
-            '--database',
-            action='store',
-            dest='database',
-            default=DEFAULT_DB_ALIAS,
-            help='Nominates a database. Defaults to the "default" database.',
-        ),
-    )
 
 class DatabaseCommand(BaseCommand):
     output_transaction = True
@@ -63,6 +45,22 @@ Are you sure you want to do this?"""
 The full error: %(error)s"""
     default = "yes"
     should_ask = True
+
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--noinput',
+            action='store_false',
+            dest='interactive',
+            default=True,
+            help='Tells Django to NOT prompt the user for input of any kind.',
+        )
+        parser.add_argument(
+            '--database',
+            action='store',
+            dest='database',
+            default=DEFAULT_DB_ALIAS,
+            help='Nominates a database. Defaults to the "default" database.',
+        )
 
     def handle(self, *args, **options):
         db = options.get('database')

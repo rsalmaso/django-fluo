@@ -21,20 +21,10 @@
 # THE SOFTWARE.
 
 from __future__ import absolute_import, division, print_function, unicode_literals
-from optparse import make_option
 from ..database import DatabaseCommand
 
 
 class Command(DatabaseCommand):
-    option_list = DatabaseCommand.option_list + (
-        make_option(
-            '--force',
-            action='store_true',
-            dest='force',
-            default=False,
-            help='Drop database if exists before (re)create it.',
-        ),
-    )
     help = "Try to (re)create the database in an empty state!"
     message = """You have requested to create "%(name)s" database."""
     error_message = """Database %(name)s couldn't be created. Possible reasons:
@@ -42,6 +32,16 @@ class Command(DatabaseCommand):
   * The database alread exists.
 The full error: %(error)s"""
     should_ask = False
+
+    def add_arguments(self, parser):
+        super(Command, self).add_arguments(parser)
+        parser.add_argument(
+            '--force',
+            action='store_true',
+            dest='force',
+            default=False,
+            help='Drop database if exists before (re)create it.',
+        )
 
     def execute_sql(self, backend, **options):
         if options.get('force'):

@@ -21,22 +21,11 @@
 # THE SOFTWARE.
 
 from __future__ import absolute_import, division, print_function, unicode_literals
-from optparse import make_option
-import django
 from django.core.management import call_command
 from ..database import DatabaseCommand
 
 
 class Command(DatabaseCommand):
-    option_list = DatabaseCommand.option_list + (
-        make_option(
-            '--noadmin',
-            action='store_false',
-            dest='noadmin',
-            default=True,
-            help='Tells Django to NOT create a default admin user.',
-        ),
-    )
     help = "(Re)create and initialize database with common data"
     message = """You have requested to create "%(name)s" database.
 This will IRREVERSIBLY DELETE all data currently in the "%(name)s" database if already exists,
@@ -46,6 +35,16 @@ Are you sure you want to do this?"""
   * The database isn't running or isn't configured correctly.
   * The database is in use by another user.
 The full error: %(error)s"""
+
+    def add_arguments(self, parser):
+        super(Command, self).add_arguments(parser)
+        parser.add_argument(
+            '--noadmin',
+            action='store_false',
+            dest='noadmin',
+            default=True,
+            help='Tells Django to NOT create a default admin user.',
+        )
 
     def execute_sql(self, backend, **options):
         backend.dropdb()
