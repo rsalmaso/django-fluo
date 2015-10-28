@@ -26,6 +26,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 import operator
 from functools import update_wrapper
+from django.apps import apps
 from django.conf import settings
 from django.db.models.query import QuerySet
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
@@ -154,7 +155,7 @@ class ModelAdmin(AutocompleteMixin, admin.ModelAdmin):
                     fmt, name = "{}__icontains", field_name
                 return fmt.format(name)
 
-            model = models.get_model(app_label, model_name)
+            model = apps.get_model(app_label, model_name)
             queryset = model._default_manager.all()
             data = ''
             if query:
