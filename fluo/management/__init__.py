@@ -25,15 +25,19 @@ Creates permissions for all installed apps that need permissions.
 """
 
 from __future__ import absolute_import, division, print_function, unicode_literals
+import logging
 from optparse import make_option
 from django.db import DEFAULT_DB_ALIAS
-from django.db.models import get_models, signals
+from django.db.models import signals
 from django.core.management.base import BaseCommand
 from django.utils import six
 from .. import settings
 
 
 __all__ = ['DatabaseCommand']
+
+
+log = logging.getLogger("fluo")
 
 
 class DatabaseCommand(BaseCommand):
@@ -130,13 +134,10 @@ def _get_all_permissions(opts):
     return perms + list(opts.permissions)
 
 
-def create_permissions(app, created_models, verbosity, **kwargs):
+def create_permissions(app_config, **kwargs):
     from django.contrib.contenttypes.models import ContentType
     from django.contrib.auth.models import Permission
-    app_models = get_models(app)
-    if not app_models:
-        return
-    for klass in app_models:
+    for klass in app_config.get_models():
         ctype = ContentType.objects.get_for_model(klass)
         for codename, name in _get_all_permissions(klass._meta):
             p, created = Permission.objects.get_or_create(
@@ -144,7 +145,7 @@ def create_permissions(app, created_models, verbosity, **kwargs):
                 content_type__pk=ctype.id,
                 defaults={'name': name, 'content_type': ctype},
             )
-            if created and verbosity >= 2:
-                print("Adding permission '%s'" % p)
+            if created and kwargs.get("verbosity", 0) >= 2:
+                log.info("Adding permission '{}'".format(p))
 
-signals.post_syncdb.connect(create_permissions, dispatch_uid="fluo.management.create_permissions")
+signals.post_migrate.connect(create_permissions, dispatch_uid="fluo.management.create_permissions")
