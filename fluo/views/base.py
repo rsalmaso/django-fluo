@@ -102,14 +102,13 @@ class TemplateView(View):
         msg = _("%s must either define 'template_name' or override 'get_template_names()'")
         raise ImproperlyConfigured(msg % self.__class__.__name__)
 
-    def render(self, request, template_name, context=None, content_type=None, status=None, current_app=None):
+    def render(self, request, template_name, context=None, content_type=None, status=None):
         return TemplateResponse(
             request=request,
             template=template_name,
             context=context,
             content_type=self.content_type if content_type is None else content_type,
             status=status,
-            current_app=current_app,
         )
 
     def get(self, request, *args, **kwargs):
