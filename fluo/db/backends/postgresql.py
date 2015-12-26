@@ -25,10 +25,10 @@ import psycopg2
 from .. import backend
 
 
-__all__ = ['Postgresql']
+__all__ = ['Backend']
 
 
-class Postgresql(backend.Backend):
+class Backend(backend.Backend):
     def connect(self):
         if self.name == '':
             raise AssertionError("You must specify a value for database NAME in settings file.")

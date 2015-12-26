@@ -21,7 +21,7 @@
 # THE SOFTWARE.
 
 from __future__ import absolute_import, division, print_function, unicode_literals
-from .postgresql import Postgresql
+from .postgresql import Backend as Postgresql
 
 
 __all__ = ['Backend']
