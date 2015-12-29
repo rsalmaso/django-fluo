@@ -275,6 +275,11 @@ class ReadOnlyMixin(object):
     def has_add_permission(self, request):
         return False
 
+    def has_change_permission(self, request, obj=None):
+        if request.method not in ('GET', 'HEAD'):
+            return False
+        return super(ReadOnlyMixin, self).has_change_permission(request, obj)
+
 
 class ReadOnlyModelAdmin(ReadOnlyMixin, admin.ModelAdmin):
     actions = None
