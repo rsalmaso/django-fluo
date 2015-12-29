@@ -267,7 +267,6 @@ class CategoryModelAdmin(OrderedModelAdmin):
 class ReadOnlyMixin(object):
     can_delete = False
     extra = 0
-    editable_fields = []
 
     def get_readonly_fields(self, request, obj=None):
         return self.fields or [f.name for f in self.model._meta.fields]
