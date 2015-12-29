@@ -45,6 +45,8 @@ __all__ = [
     'OrderedModelAdmin',
     'TreeOrderedModelAdmin',
     'CategoryModelAdmin',
+    'StackedInline',
+    'TabularInline',
     'ReadOnlyMixin',
     'ReadOnlyModelAdmin',
     'ReadOnlyInlineMixin',
