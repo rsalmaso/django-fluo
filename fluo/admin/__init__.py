@@ -23,8 +23,8 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 from django.contrib.admin.options import HORIZONTAL, VERTICAL # NOQA
-from django.contrib.admin.sites import AdminSite, site # NOQA
 from django.contrib.admin import autodiscover # NOQA
 from django.contrib.contenttypes.admin import GenericInlineModelAdmin, GenericStackedInline, GenericTabularInline # NOQA
 from .base import CopyObject # NOQA
 from .models import * # NOQA
+from .sites import AdminSite, site # NOQA
