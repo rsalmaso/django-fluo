@@ -46,6 +46,8 @@ __all__ = [
     'TreeOrderedModelAdmin',
     'CategoryModelAdmin',
     'ReadOnlyMixin',
+    'ReadOnlyModelAdmin',
+    'ReadOnlyInlineMixin',
     'ReadOnlyStackedInline',
     'ReadOnlyTabularInline',
 ]
@@ -265,9 +267,6 @@ class CategoryModelAdmin(OrderedModelAdmin):
 
 
 class ReadOnlyMixin(object):
-    can_delete = False
-    extra = 0
-
     def get_readonly_fields(self, request, obj=None):
         return self.fields or [f.name for f in self.model._meta.fields]
 
@@ -275,9 +274,18 @@ class ReadOnlyMixin(object):
         return False
 
 
-class ReadOnlyStackedInline(ReadOnlyMixin, StackedInline):
+class ReadOnlyModelAdmin(ReadOnlyMixin, admin.ModelAdmin):
+    actions = None
+
+
+class ReadOnlyInlineMixin(ReadOnlyMixin):
+    can_delete = False
+    extra = 0
+
+
+class ReadOnlyStackedInline(ReadOnlyInlineMixin, StackedInline):
     pass
 
 
-class ReadOnlyTabularInline(ReadOnlyMixin, TabularInline):
+class ReadOnlyTabularInline(ReadOnlyInlineMixin, TabularInline):
     pass
