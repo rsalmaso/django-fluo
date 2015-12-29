@@ -280,6 +280,9 @@ class ReadOnlyMixin(object):
             return False
         return super(ReadOnlyMixin, self).has_change_permission(request, obj)
 
+    def has_delete_permission(self, request, obj=None):
+        return False
+
 
 class ReadOnlyModelAdmin(ReadOnlyMixin, admin.ModelAdmin):
     actions = None
