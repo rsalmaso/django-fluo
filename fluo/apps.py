@@ -19,3 +19,12 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
+
+from __future__ import absolute_import, division, print_function, unicode_literals
+from django.apps import AppConfig
+from django.utils.translation import ugettext_lazy as _
+
+
+class FluoConfig(AppConfig):
+    name = "fluo"
+    verbose_name = _("Fluo")
