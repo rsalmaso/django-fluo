@@ -22,9 +22,8 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 import sys
-from django.core.management.base import BaseCommand
-from django.core.management.base import CommandError
-from django.db import connections, DEFAULT_DB_ALIAS
+from django.core.management.base import BaseCommand, CommandError
+from django.db import close_old_connections, connections, DEFAULT_DB_ALIAS
 from django.utils.six.moves import input
 from django.utils import six
 from fluo.db.backend import get_backend
@@ -63,6 +62,8 @@ The full error: %(error)s"""
         )
 
     def handle(self, *args, **options):
+        close_old_connections()
+
         db = options.get('database')
         connection = connections[db]
         interactive = options.get('interactive')
