@@ -31,6 +31,7 @@ from fluo.db.backend import get_backend
 
 class DatabaseCommand(BaseCommand):
     output_transaction = True
+    requires_system_checks = False
 
     message = """You have requested to drop "%(name)s" database.
 This will IRREVERSIBLY DELETE all data currently in the "%(name)s" database.
