@@ -35,7 +35,6 @@ from django.utils.safestring import mark_safe
 from django.utils.dates import MONTHS
 from django.utils.text import Truncator
 from django.template.loader import render_to_string
-from django.forms.extras.widgets import SelectDateWidget
 from django.contrib.admin.widgets import AdminDateWidget as DateWidget
 from django.contrib.admin.widgets import AdminTimeWidget as TimeWidget
 from django.contrib.admin.widgets import AdminSplitDateTime as DateTimeWidget
@@ -44,7 +43,6 @@ from django.contrib.admin.sites import site
 
 
 __all__ = (
-    'SelectDateWidget',
     'DateWidget', 'TimeWidget', 'DateTimeWidget',
     'GroupedSelect',
     'SelectYearWidget', 'SelectMonthYearWidget',
