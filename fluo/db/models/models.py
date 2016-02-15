@@ -129,6 +129,7 @@ class TreeOrderedModel(OrderedModel):
         'self',
         blank=True,
         null=True,
+        on_delete=models.CASCADE,
         related_name='children',
         verbose_name=_('Parent node'),
         help_text=_('The parent node of this field.'),
@@ -251,6 +252,7 @@ class CategoryTranslationModel(TranslationModel):
 class GenericModel(models.Model):
     content_type = models.ForeignKey(
         ContentType,
+        on_delete=models.CASCADE,
         verbose_name=_('Object Type'),
     )
     object_id = models.PositiveIntegerField(
