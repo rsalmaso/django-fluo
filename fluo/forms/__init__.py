@@ -22,7 +22,11 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 from django.forms import * # NOQA
+try:
+    SelectDateWidget
+except (AttributeError, NameError):
+    # keep until support django 1.8
+    from django.forms.extras.widgets import SelectDateWidget # NOQA
 from django.contrib.contenttypes.forms import BaseGenericInlineFormSet, generic_inlineformset_factory # NOQA
-from django.forms.extras.widgets import SelectDateWidget # NOQA
 from .fields import * # NOQA
 from .widgets import * # NOQA
