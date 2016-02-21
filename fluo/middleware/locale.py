@@ -95,7 +95,7 @@ def get_default_language(language_code=None):
 
 
 def get_language_from_request(request):
-    language = request.REQUEST.get('language', None)
+    language = request.GET.get('language', request.POST.get('language', None))
 
     if language:
         if language not in dict(settings.LANGUAGES).keys():
