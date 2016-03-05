@@ -40,7 +40,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
 from ... import forms
 from ...utils import json
-from .subclassing import SubfieldBase
+
 
 __all__ = (
     'StatusField', 'STATUS_CHOICES',
@@ -50,6 +50,7 @@ __all__ = (
     'TimeDeltaField',
     'JsonField',
 )
+
 
 STATUS_CHOICES = (
     ('active', _('Active')),
@@ -276,7 +277,7 @@ class TimeDeltaField(models.DecimalField):
         return models.Field.formfield(self, **defaults)
 
 
-class JsonField(six.with_metaclass(SubfieldBase, models.TextField)):
+class JsonField(models.TextField):
     description = _("JSON object")
     form_class = forms.JsonField
     empty_values = ()
@@ -288,55 +289,33 @@ class JsonField(six.with_metaclass(SubfieldBase, models.TextField)):
         self.load_kwargs = kwargs.pop('load_kwargs', {})
         super(JsonField, self).__init__(*args, **kwargs)
 
-    def pre_init(self, value, obj):
-        """
-        Convert a string value to JSON only if it needs to be deserialized.
-
-        SubfieldBase metaclass has been modified to call this method instead of
-        to_python so that we can check the obj state and determine if it needs to be
-        deserialized
-        """
-
-        if obj._state.adding:
-            # Make sure the primary key actually exists on the object before
-            # checking if it's empty. This is a special case for South datamigrations
-            # see: https://github.com/bradjasper/django-jsonfield/issues/52
-            if hasattr(obj, "pk") and obj.pk is not None:
-                if isinstance(value, six.string_types):
-                    try:
-                        return json.loads(value, **self.load_kwargs)
-                    except ValueError:
-                        raise exceptions.ValidationError(_("Enter valid JSON"))
-
-        return value
-
     def to_python(self, value):
-        """
-        The SubfieldBase metaclass calls pre_init instead of to_python,
-        however to_python is still necessary for Django's deserializer
-        """
+        if value is None or value == "":
+            value = {}
+        if isinstance(value, six.string_types):
+            try:
+                value = json.loads(value, **self.load_kwargs)
+            except ValueError:
+                raise exceptions.ValidationError(_("Enter valid JSON"))
         return value
 
-    def get_db_prep_value(self, value, connection, prepared=False):
-        """ Convert JSON object to a string """
+    def from_db_value(self, value, expression, connection, context):
+        return self.to_python(value)
+
+    def get_db_prep_value(self, value, connection, **kwargs):
         if self.null and value is None:
-            return None
-        return json.dumps(value, **self.dump_kwargs)
+            value = None
+        if not isinstance(value, six.string_types):
+            dump_kwargs = {"indent": 2}
+            dump_kwargs.update(self.dump_kwargs)
+            value = json.dumps(value, **dump_kwargs)
+        return value
 
-    def value_to_string(self, obj):
-        value = self._get_val_from_obj(obj)
-        return self.get_db_prep_value(value, None)
-
-    def value_from_object(self, obj):
-        value = super(JsonField, self).value_from_object(obj)
-        if self.null and value is None:
-            return None
-        return self.dumps_for_display(value)
-
-    def dumps_for_display(self, value):
-        kwargs = {"indent": 2}
-        kwargs.update(self.dump_kwargs)
-        return json.dumps(value, **kwargs)
+    def deconstruct(self):
+        name, path, args, kwargs = super(JsonField, self).deconstruct()
+        if self.default == '{}':
+            del kwargs['default']
+        return name, path, args, kwargs
 
     def formfield(self, **kwargs):
         if "form_class" not in kwargs:
@@ -351,30 +330,12 @@ class JsonField(six.with_metaclass(SubfieldBase, models.TextField)):
         return field
 
     def get_default(self):
-        """
-        Returns the default value for this field.
-
-        The default implementation on models.Field calls force_unicode
-        on the default, which means you can't set arbitrary Python
-        objects as the default. To fix this, we just return the value
-        without calling force_unicode on it. Note that if you set a
-        callable as a default, the field will still call it. It will
-        *not* try to pickle and encode it.
-        """
         if self.has_default():
             if callable(self.default):
-                return self.default()
-            return copy.deepcopy(self.default)
+                default = self.default()
+            else:
+                default = copy.deepcopy(self.default)
         # If the field doesn't have a default, then we punt to models.Field.
-        return super(JsonField, self).get_default()
-
-    # json field type doesn't play nice with django because it doesn't implement
-    # the equality operator, so when it use the DISTINCT clause (ie in admin
-    # when list_filter is set) it raises a ProgrammingError
-    # jsonb (from 9.4) will not have this problem, as it will implement the equality operator
-    # so for now use the default TextField value
-    # def db_type(self, connection):
-        # if connection.vendor == 'postgresql' and connection.pg_version >= 90400:
-            # return 'jsonb'
-        # else:
-            # return super(JsonField, self).db_type(connection)
+        else:
+            default = super(JsonField, self).get_default()
+        return default
