@@ -110,7 +110,7 @@ class ModificationDateTimeField(CreationDateTimeField):
 
 
 class URIField(models.CharField):
-    description = _("URL")
+    description = _("URI")
 
     def __init__(self, verbose_name=None, name=None, **kwargs):
         kwargs['max_length'] = kwargs.get('max_length', 8196)
