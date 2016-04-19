@@ -43,7 +43,7 @@ from ...utils import json
 
 
 __all__ = (
-    'StatusField', 'STATUS_CHOICES',
+    'StatusField', 'STATUS_ACTIVE', 'STATUS_INACTIVE', 'STATUS_CHOICES',
     'CreationDateTimeField', 'ModificationDateTimeField',
     'OrderField',
     'AutoSlugField',
@@ -53,9 +53,11 @@ __all__ = (
 )
 
 
+STATUS_ACTIVE = 'active'
+STATUS_INACTIVE = 'inactive'
 STATUS_CHOICES = (
-    ('active', _('Active')),
-    ('inactive', _('Inactive')),
+    (STATUS_ACTIVE, _('Active')),
+    (STATUS_INACTIVE, _('Inactive')),
 )
 
 
@@ -63,7 +65,7 @@ class StatusField(models.CharField):
     def __init__(self,
                  choices=STATUS_CHOICES,
                  max_length=10,
-                 default='active',
+                 default=STATUS_ACTIVE,
                  blank=False,
                  null=False,
                  verbose_name=_('status'),
