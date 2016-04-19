@@ -49,6 +49,7 @@ __all__ = (
     'AutoSlugField',
     'TimeDeltaField',
     'JsonField',
+    'URIField',
 )
 
 
