@@ -191,7 +191,7 @@ class TranslationModel(models.Model):
 
     class Meta:
         abstract = True
-        ordering = ('language',)
+        ordering = ['language']
 
 
 class CategoryModelQuerySet(models.QuerySet):
@@ -231,7 +231,7 @@ class CategoryModel(StatusModel, OrderedModel):
 
     class Meta:
         abstract = True
-        ordering = ('name',)
+        ordering = ['name']
 
     def __str__(self):
         return self.name

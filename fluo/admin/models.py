@@ -82,11 +82,11 @@ class AutocompleteMixin(object):
          object is used.
     """
     class Media:
-        js = (
+        js = [
             'admin/js/jquery.min.js',
-        )
+        ]
         css = {
-            'all': ('fluo/jquery-autocomplete/jquery.autocomplete.css',),
+            'all': ['fluo/jquery-autocomplete/jquery.autocomplete.css'],
         }
 
     related_search_fields = {}
@@ -202,7 +202,7 @@ class TabularInline(AutocompleteMixin, admin.TabularInline):
 
 
 class OrderedModelAdmin(ModelAdmin):
-    ordering = ('ordering',)
+    ordering = ['ordering']
 
     def get_queryset(self, request):
         return super(OrderedModelAdmin, self).get_queryset(request).order_by('ordering')
@@ -259,13 +259,13 @@ class TreeOrderedModelAdmin(OrderedModelAdmin):
 
 
 class CategoryModelAdmin(OrderedModelAdmin):
-    search_fields = ('status', 'name',)
-    ordering = ('ordering', 'name',)
-    fieldsets = (
+    search_fields = ['status', 'name']
+    ordering = ['ordering', 'name']
+    fieldsets = [
         (_('visualization admin'), {'fields': ('ordering',), 'classes': ('collapse',)}),
         (_('general admin'), {'fields': ('status', 'default')}),
         (None, {"fields": ("name",)}),
-    )
+    ]
 
 
 class ReadOnlyMixin(object):
