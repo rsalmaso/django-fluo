@@ -39,6 +39,7 @@ from django.contrib import admin
 from ..db import models
 from ..forms import ForeignKeySearchInput
 from ..shortcuts import reverse
+from .nested import NestedModelAdmin, NestedStackedInline, NestedTabularInline
 
 __all__ = [
     'ModelAdmin',
@@ -83,7 +84,7 @@ class AutocompleteMixin(object):
     """
     class Media:
         js = [
-            'admin/js/jquery.min.js',
+            'admin/js/vendor/jquery/jquery.min.js',
         ]
         css = {
             'all': ['fluo/jquery-autocomplete/jquery.autocomplete.css'],
@@ -114,7 +115,7 @@ class AutocompleteMixin(object):
         return super(AutocompleteMixin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
 
-class ModelAdmin(AutocompleteMixin, admin.ModelAdmin):
+class ModelAdmin(AutocompleteMixin, NestedModelAdmin):
     def get_urls(self):
         from django.conf.urls import url
 
@@ -193,11 +194,11 @@ class ModelAdmin(AutocompleteMixin, admin.ModelAdmin):
         return HttpResponseNotFound()
 
 
-class StackedInline(AutocompleteMixin, admin.StackedInline):
+class StackedInline(AutocompleteMixin, NestedStackedInline):
     pass
 
 
-class TabularInline(AutocompleteMixin, admin.TabularInline):
+class TabularInline(AutocompleteMixin, NestedTabularInline):
     pass
 
 
