@@ -43,7 +43,6 @@ setup(
     include_package_data=True,
     platforms="any",
     classifiers=[
-        "Environment :: Fluo",
         "Operating System :: OS Independent",
         "Programming Language :: Python",
         "Topic :: Internet :: WWW/HTTP",
