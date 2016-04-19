@@ -194,9 +194,13 @@ class TranslationModel(models.Model):
         ordering = ('language',)
 
 
-class CategoryModelManager(models.Manager):
+class CategoryModelQuerySet(models.QuerySet):
     def default(self):
-        return self.get_query_set().get(default=True)
+        return self.get(default=True)
+
+
+class CategoryModelManager(models.Manager.from_queryset(CategoryModelQuerySet)):
+    use_for_related_fields = True
 
 
 @python_2_unicode_compatible
