@@ -198,6 +198,12 @@ class CategoryModelQuerySet(models.QuerySet):
     def default(self):
         return self.get(default=True)
 
+    def active(self):
+        return self.filter(status=fields.STATUS_ACTIVE)
+
+    def inactive(self):
+        return self.filter(status=fields.STATUS_INACTIVE)
+
 
 class CategoryModelManager(models.Manager.from_queryset(CategoryModelQuerySet)):
     use_for_related_fields = True
