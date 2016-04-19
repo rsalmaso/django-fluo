@@ -27,7 +27,7 @@ from setuptools import setup, find_packages
 import fluo
 
 
-with io.open("README.md", "rU") as f:
+with io.open("README.md", "rt") as f:
     description = f.read()
 
 
