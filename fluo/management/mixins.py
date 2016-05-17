@@ -21,6 +21,7 @@
 # THE SOFTWARE.
 
 from __future__ import absolute_import, division, print_function, unicode_literals
+from importlib import import_module
 import os
 
 
@@ -35,7 +36,6 @@ class ChdirMixin(object):
             if os.path.exists(module):
                 path = module
             else:
-                from django.utils.importlib import import_module
                 path = os.path.dirname(import_module(module).__file__)
             path = os.path.abspath(path)
             os.chdir(path)
