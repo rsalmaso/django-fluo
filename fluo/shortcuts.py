@@ -24,26 +24,16 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from django.shortcuts import get_object_or_404, get_list_or_404, redirect
 from django.template import Template, Context, RequestContext
 from django.template import loader
+from django.template.loader import render_to_string
 from django.http import HttpResponse
 from django.core.urlresolvers import reverse as django_reverse
+
 
 __all__ = [
     'get_object_or_404', 'get_list_or_404', 'redirect',
     'render_to_string', 'render_to_response', 'render_from_string',
     'reverse',
 ]
-
-
-def render_to_string(template_name, request=None, **kwargs):
-    if request:
-        context_instance = RequestContext(request)
-    else:
-        context_instance = None
-    return loader.render_to_string(
-        template_name=template_name,
-        dictionary=kwargs,
-        context_instance=context_instance,
-    )
 
 
 def render_to_response(template_name, request=None, mimetype=None, content_type=None, **kwargs):
