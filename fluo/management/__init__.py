@@ -41,61 +41,60 @@ log = logging.getLogger("fluo")
 
 
 class DatabaseCommand(BaseCommand):
-    option_list = BaseCommand.option_list + (
-        make_option(
+    def add_arguments(self, parser):
+        parser.add_argument(
             '--noinput',
             action='store_false',
             dest='interactive',
             default=True,
             help='Tells Django to NOT prompt the user for input of any kind.'
-        ),
-        make_option(
+        )
+        parser.add_argument(
             '--no-utf8',
             action='store_true',
             dest='no_utf8_support',
             default=False,
             help='Tells Django to not create a UTF-8 charset database',
-        ),
-        make_option(
+        )
+        parser.add_argument(
             '-U',
             '--user',
             action='store',
             dest='user',
             default=None,
             help='Use another user for the database then defined in settings.py',
-        ),
-        make_option(
+        )
+        parser.add_argument(
             '-P',
             '--password',
             action='store',
             dest='password',
             default=None,
             help='Use another password for the database then defined in settings.py',
-        ),
-        make_option(
+        )
+        parser.add_argument(
             '-D',
             '--dbname',
             action='store',
             dest='dbname',
             default=None,
             help='Use another database name then defined in settings.py (For PostgreSQL this defaults to "template1")',
-        ),
-        make_option(
+        )
+        parser.add_argument(
             '--database',
             action='store',
             dest='database',
             default=DEFAULT_DB_ALIAS,
             help='Nominates a database to synchronize. Defaults to the "default" database.',
-        ),
-        make_option(
+        )
+        parser.add_argument(
             '-e',
             '--exclude',
             dest='exclude',
             action='append',
             default=[],
             help='App to exclude (use multiple --exclude to exclude multiple apps).',
-        ),
-    )
+        )
     requires_model_validation = False
 
     def handle(self, *args, **options):

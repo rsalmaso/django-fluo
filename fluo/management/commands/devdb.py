@@ -21,7 +21,6 @@
 # THE SOFTWARE.
 
 from __future__ import absolute_import, division, print_function, unicode_literals
-from optparse import make_option
 from django.core.management.base import BaseCommand
 from django.contrib.sites.models import Site
 from django.contrib.auth import get_user_model
@@ -30,40 +29,40 @@ User = get_user_model()
 
 class Command(BaseCommand):
     help = "Set some data useful for local development."
-    option_list = BaseCommand.option_list + (
-        make_option(
+    def add_arguments(self, parser):
+        super(Command, self).add_arguments(parser)
+        parser.add_argument(
             '--username',
             '-u',
             action='store',
             dest='username',
             default='admin',
             help='Use username as admin user.',
-        ),
-        make_option(
+        )
+        parser.add_argument(
             '--password',
             '-p',
             action='store',
             dest='password',
             default='admin',
             help='New password for "admin" user.',
-        ),
-        make_option(
+        )
+        parser.add_argument(
             '--site',
             '-s',
             action='store',
             dest='site',
             default='1',
             help='Update this SITE_ID domain/name.',
-        ),
-        make_option(
+        )
+        parser.add_argument(
             '--domain',
             '-d',
             action='store',
             dest='domain',
             default='localhost:8000',
             help='Use this domain/name for SITE_ID.',
-        ),
-    )
+        )
 
     def handle(self, **options):
         user = User.objects.get(username=options.get('username'))
