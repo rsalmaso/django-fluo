@@ -21,8 +21,8 @@
 # THE SOFTWARE.
 
 from __future__ import absolute_import, division, print_function, unicode_literals
-from django.template import Template, Context, RequestContext
 from django.shortcuts import get_object_or_404, get_list_or_404, redirect, render as render_to_response
+from django.template import Template
 from django.template.loader import render_to_string
 from django.core.urlresolvers import reverse as django_reverse
 
@@ -34,13 +34,8 @@ __all__ = [
 ]
 
 
-def render_from_string(template_string, request=None, **kwargs):
-    t = Template(template_string)
-    if request:
-        context_instance = RequestContext(request, kwargs)
-    else:
-        context_instance = Context(kwargs)
-    return t.render(context_instance)
+def render_from_string(template_string, context=None, request=None):
+    return Template(template_string).render(context, request)
 
 
 def reverse(viewname, *args, **kwargs):
