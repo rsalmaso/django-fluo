@@ -84,7 +84,7 @@ class AutocompleteMixin(object):
     """
     class Media:
         js = [
-            'admin/js/vendor/jquery/jquery.min.js',
+            'fluo/jquery/jquery.min.js',
         ]
         css = {
             'all': ['fluo/jquery-autocomplete/jquery.autocomplete.css'],
