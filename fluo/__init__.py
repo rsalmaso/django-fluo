@@ -24,7 +24,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from .utils.version import get_version
 
 
-VERSION = (0, 3, 0, "final", 0)
+VERSION = (0, 3, 1, "final", 0)
 
 __version__  = get_version(VERSION)
 __author__  = "Raffaele Salmaso"
