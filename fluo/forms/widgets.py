@@ -27,6 +27,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import datetime
 import re
 from django.conf import settings
+from django.core.urlresolvers import reverse
 from django import forms
 from django.utils.encoding import smart_text
 from django.utils.html import escape
@@ -239,7 +240,7 @@ class ForeignKeySearchInput(ForeignKeyRawIdWidget):
         opts = self.rel.to._meta
         app_label = opts.app_label
         model_name = opts.object_name.lower()
-        related_url = '../../../%s/%s/' % (app_label, model_name)
+        related_url = reverse('admin:{}_{}_changelist'.format(app_label, model_name))
         params = self.url_parameters()
         if params:
             url = '?' + '&amp;'.join(['%s=%s' % (k, v) for k, v in params.items()])
