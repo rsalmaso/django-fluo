@@ -34,7 +34,7 @@ from django.utils.html import escape
 from django.forms.utils import flatatt
 from django.utils.safestring import mark_safe
 from django.utils.dates import MONTHS
-from django.utils.text import Truncator
+from django.utils.text import slugify, Truncator
 from django.template.loader import render_to_string
 from django.contrib.admin.widgets import AdminDateWidget as DateWidget
 from django.contrib.admin.widgets import AdminTimeWidget as TimeWidget
@@ -254,7 +254,6 @@ class ForeignKeySearchInput(ForeignKeyRawIdWidget):
 
         admin_media_prefix = settings.STATIC_URL + "admin/"
 
-        from django.template.defaultfilters import slugify
         context = {
             'url': url,
             'related_url': related_url,
