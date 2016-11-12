@@ -27,7 +27,6 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import datetime
 import re
 from django.conf import settings
-from django.core.urlresolvers import reverse
 from django import forms
 from django.utils.encoding import smart_text
 from django.utils.html import escape
@@ -41,6 +40,7 @@ from django.contrib.admin.widgets import AdminTimeWidget as TimeWidget
 from django.contrib.admin.widgets import AdminSplitDateTime as DateTimeWidget
 from django.contrib.admin.widgets import ForeignKeyRawIdWidget
 from django.contrib.admin.sites import site
+from fluo.urls import reverse
 
 
 __all__ = (
