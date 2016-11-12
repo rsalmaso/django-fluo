@@ -34,11 +34,11 @@ __all__ = [
     'url', 'include', 'patterns',
     'NoReverseMatch', 'RegexURLPattern', 'RegexURLResolver', 'ResolverMatch', 'Resolver404', 'get_script_prefix',
     'reverse', 'reverse_lazy', 'resolve',
-    'Urls',
+    'UrlsMixin',
 ]
 
 
-class Urls(object):
+class UrlsMixin(object):
     def get_urls(self):
         raise NotImplemented
 
