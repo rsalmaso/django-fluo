@@ -22,8 +22,9 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 from django.conf.urls import handler400, handler403, handler404, handler500, include, patterns, url
-from django.core.urlresolvers import resolve
-from django.core.urlresolvers import reverse as django_reverse
+from django.urls import (
+    NoReverseMatch, RegexURLPattern, RegexURLResolver, ResolverMatch, Resolver404, get_script_prefix, reverse as django_reverse, resolve
+)
 from django.utils import six
 from django.utils.functional import lazy
 
@@ -31,6 +32,7 @@ from django.utils.functional import lazy
 __all__ = [
     'handler400', 'handler403', 'handler404', 'handler500',
     'url', 'include', 'patterns',
+    'NoReverseMatch', 'RegexURLPattern', 'RegexURLResolver', 'ResolverMatch', 'Resolver404', 'get_script_prefix',
     'reverse', 'reverse_lazy', 'resolve',
     'Urls',
 ]
