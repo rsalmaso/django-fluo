@@ -26,6 +26,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 import getpass
 from django.core.management.base import BaseCommand, CommandError
+from django.db.models import Q
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -35,19 +36,19 @@ class Command(BaseCommand):
     requires_model_validation = False
 
     def add_arguments(self, parser):
-        parser.add_argument('username', help='user username')
-        parser.add_argument('password', nargs='?', default='', help='new password')
+        parser.add_argument("username", help="user username or email")
+        parser.add_argument("password", nargs="?", default="", help="new password")
 
     def handle(self, *args, **options):
-        username = options.get('username')
+        username = options.get("username")
 
         try:
-            user = User.objects.get(username__iexact=username)
+            user = User.objects.get(Q(username__iexact=username)|Q(email__iexact=username))
         except User.DoesNotExist:
             raise CommandError("user %s does not exist" % username)
 
         print("Changing password for user %s" % user.username)
-        password = options.get('password')
+        password = options.get("password")
 
         p1 = p2 = password
 
