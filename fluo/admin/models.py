@@ -38,7 +38,7 @@ from django.utils import six
 from django.contrib import admin
 from ..db import models
 from ..forms import ForeignKeySearchInput
-from ..shortcuts import reverse
+from ..urls import reverse
 from .nested import NestedModelAdmin, NestedStackedInline, NestedTabularInline
 
 __all__ = [
@@ -241,13 +241,13 @@ class OrderedModelAdmin(ModelAdmin):
         data = []
         if not node.is_first(): # up node
             data.append(u'<a href="%s" class="nodes-up">%s</a>' % (
-                reverse('%sadmin_%s_%s_up' % info, node.id), _('up'),
+                reverse('%sadmin_%s_%s_up' % info, args=[node.id]), _('up'),
             ))
         if not node.is_last() and not node.is_first():
             data.append(u'<span style="font-weight:normal"> | </span>')
         if not node.is_last(): # down node
             data.append(u'<a href="%s" class="nodes-down">%s</a>' % (
-                reverse('%sadmin_%s_%s_down' % info, node.id), _('down'),
+                reverse('%sadmin_%s_%s_down' % info, args=[node.id]), _('down'),
             ))
         return u''.join(data)
     move_actions.short_description = _('move')
