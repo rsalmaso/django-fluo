@@ -207,6 +207,7 @@ class CategoryModelQuerySet(models.QuerySet):
 
 class CategoryModelManager(models.Manager.from_queryset(CategoryModelQuerySet)):
     use_for_related_fields = True
+    silence_use_for_related_fields_deprecation = True
 
 
 @python_2_unicode_compatible
@@ -231,6 +232,7 @@ class CategoryModel(StatusModel, OrderedModel):
 
     class Meta:
         abstract = True
+        base_manager_name = "objects"
         ordering = ['name']
 
     def __str__(self):
