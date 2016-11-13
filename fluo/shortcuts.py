@@ -24,19 +24,13 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from django.shortcuts import get_object_or_404, get_list_or_404, redirect, render as render_to_response
 from django.template import Template
 from django.template.loader import render_to_string
-from django.core.urlresolvers import reverse as django_reverse
 
 
 __all__ = [
     'get_object_or_404', 'get_list_or_404', 'redirect',
     'render_to_string', 'render_to_response', 'render_from_string',
-    'reverse',
 ]
 
 
 def render_from_string(template_string, context=None, request=None):
     return Template(template_string).render(context, request)
-
-
-def reverse(viewname, *args, **kwargs):
-    return django_reverse(viewname, args=args, kwargs=kwargs)
