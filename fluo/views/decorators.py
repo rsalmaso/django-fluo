@@ -21,6 +21,7 @@
 # THE SOFTWARE.
 
 from __future__ import absolute_import, division, print_function, unicode_literals
+import django
 from django.utils.cache import cache
 from django.http import HttpResponseForbidden, HttpResponseBadRequest
 from django.utils.decorators import wraps, method_decorator
@@ -59,10 +60,16 @@ def login_required(function=None, required=False, redirect_field_name=REDIRECT_F
     to the log-in page if necessary.
     """
     if required:
-        actual_decorator = user_passes_test(
-            lambda u: u.is_authenticated(),
-            redirect_field_name=redirect_field_name
-        )
+        if django.VERSION < (1, 11):
+            actual_decorator = user_passes_test(
+                lambda u: u.is_authenticated(),
+                redirect_field_name=redirect_field_name
+            )
+        else:
+            actual_decorator = user_passes_test(
+                lambda u: u.is_authenticated,
+                redirect_field_name=redirect_field_name
+            )
         if function:
             return actual_decorator(function)
         return actual_decorator
@@ -87,4 +94,3 @@ def throttle(func, limit=3, duration=900, methods=('POST','GET', 'PUT', 'DELETE'
         return func(request, *args, **kwargs)
     return inner
 throttle_m = method_decorator(throttle)
-
