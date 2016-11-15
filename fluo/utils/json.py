@@ -55,7 +55,7 @@ class JSONEncoder(DjangoJSONEncoder):
         elif isinstance(obj, Promise):
             # added in django 1.10
             return force_text(obj)
-        return super(JSONEncoder, self).default(obj)
+        return super().default(obj)
 
 
 decoder = json.decoder

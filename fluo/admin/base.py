@@ -26,7 +26,7 @@ class CopyObject(object):
     short_description = _("Duplicate as new")
 
     def __init__(self, *args, **kwargs):
-        super(CopyObject, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.__name__ = self.__class__.__name__
 
     def __call__(self, modeladmin, request, queryset):

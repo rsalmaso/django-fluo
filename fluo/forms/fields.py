@@ -57,7 +57,7 @@ class GroupedChoiceField(forms.ChoiceField):
     widget = GroupedSelect
 
     def __init__(self, choices=(), required=True, widget=None, label=None, initial=None, help_text=None, *args, **kwargs): # NOQA
-        super(GroupedChoiceField, self).__init__(
+        super().__init__(
             #choices=choices,
             required=required,
             widget=widget,
@@ -71,7 +71,7 @@ class GroupedChoiceField(forms.ChoiceField):
         """
         Validates that the input is in self.choices.
         """
-        value = super(GroupedChoiceField, self).clean(value)
+        value = super().clean(value)
         if value in (None, ''):
             value = u''
         value = smart_text(value)
@@ -97,7 +97,7 @@ class TimeDeltaField(forms.MultiValueField):
             self.SECONDS = self.SECONDS[:3]
         self.widget = TimeDeltaWidget(milliseconds=milliseconds)
         fields = [forms.CharField(label=label) for label in self.LABELS]
-        super(TimeDeltaField, self).__init__(fields, *args, **kwargs)
+        super().__init__(fields, *args, **kwargs)
 
     def compress(self, value):
         from django.utils.six.moves import reduce
@@ -121,6 +121,6 @@ class JsonField(forms.CharField):
 
         # Trap cleaning errors & bubble them up as JSON errors
         try:
-            return super(JsonField, self).clean(value)
+            return super().clean(value)
         except TypeError:
             raise ValidationError(_("Enter valid JSON"))

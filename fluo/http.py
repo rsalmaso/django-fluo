@@ -53,5 +53,5 @@ class JsonResponse(HttpResponse):
         if content is None:
             content = {}
         data = json.dumps(content, indent=indent, cls=JSONEncoder)
-        super(JsonResponse, self).__init__(content=data, content_type=content_type, status=status)
+        super().__init__(content=data, content_type=content_type, status=status)
         self['Content-Length'] = len(data)

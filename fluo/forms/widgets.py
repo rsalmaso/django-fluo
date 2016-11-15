@@ -228,12 +228,12 @@ class ForeignKeySearchInput(ForeignKeyRawIdWidget):
 
     def __init__(self, rel, search_fields, attrs=None):
         self.search_fields = search_fields
-        super(ForeignKeySearchInput, self).__init__(rel, site, attrs)
+        super().__init__(rel, site, attrs)
 
     def render(self, name, value, attrs=None):
         if attrs is None:
             attrs = {}
-        # output = [super(ForeignKeySearchInput, self).render(name, value, attrs)]
+        # output = [super().render(name, value, attrs)]
         opts = self.rel.to._meta
         app_label = opts.app_label
         model_name = opts.object_name.lower()
@@ -286,7 +286,7 @@ class TimeDeltaWidget(forms.MultiWidget):
         widgets = [
             forms.TextInput(attrs=attrs)
         ] * self.NUM_FIELDS
-        super(TimeDeltaWidget, self).__init__(widgets, attrs)
+        super().__init__(widgets, attrs)
 
     def format_output(self, widgets):
         widgets.insert(1, ' : ')

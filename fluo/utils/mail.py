@@ -29,9 +29,9 @@ class EmailMessage(mail.EmailMessage):
         if isinstance(bcc, basestring):
             bcc = (bcc,)
         self.cc = cc
-        super(EmailMessage, self).__init__(subject, body, from_email, to, bcc, connection, attachments, headers)
+        super().__init__(subject, body, from_email, to, bcc, connection, attachments, headers)
     def message(self):
-        msg = super(EmailMessage, self).message()
+        msg = super().message()
         msg['Cc'] = ', '.join(self.cc)
         return msg
     def recipients(self):

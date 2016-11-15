@@ -14,4 +14,4 @@
         #pass
 
     #def save(self, *args, **kwargs):
-        #super(Model, self).save(*args, **kwargs)
+        #super().save(*args, **kwargs)

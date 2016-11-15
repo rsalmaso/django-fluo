@@ -34,7 +34,7 @@ Are you sure you want to do this?"""
 The full error: %(error)s"""
 
     def add_arguments(self, parser):
-        super(Command, self).add_arguments(parser)
+        super().add_arguments(parser)
         parser.add_argument(
             '--noadmin',
             action='store_false',

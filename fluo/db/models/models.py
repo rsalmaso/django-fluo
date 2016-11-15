@@ -68,10 +68,10 @@ class OrderedModel(models.Model):
         if not self.ordering:
             self.ordering = 1
             ordering = True
-        super(OrderedModel, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         if ordering:
             self._set_default_ordering()
-            super(OrderedModel, self).save(*args, **kwargs)
+            super().save(*args, **kwargs)
 
     def brothers_and_me(self):
         return self._default_manager.all()
@@ -237,7 +237,7 @@ class CategoryModel(StatusModel, OrderedModel):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
-        super(CategoryModel, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         if self.default:
             for c in self._default_manager.exclude(pk=self.id):
                 c.default = False
@@ -246,7 +246,7 @@ class CategoryModel(StatusModel, OrderedModel):
             c = self._default_manager.get(default=True)
         except models.ObjectDoesNotExist:
             self.default = True
-            super(CategoryModel, self).save(*args, **kwargs)
+            super().save(*args, **kwargs)
 
 
 class CategoryTranslationModel(TranslationModel):

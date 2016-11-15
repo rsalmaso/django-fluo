@@ -24,7 +24,7 @@ import os
 
 class ChdirMixin(object):
     def add_arguments(self, parser):
-        super(ChdirMixin, self).add_arguments(parser)
+        super().add_arguments(parser)
         parser.add_argument('module', nargs='?', default=None, help='path/module to process')
 
     def handle(self, *args, **options):
@@ -37,4 +37,4 @@ class ChdirMixin(object):
             path = os.path.abspath(path)
             os.chdir(path)
 
-        return super(ChdirMixin, self).handle(**options)
+        return super().handle(**options)

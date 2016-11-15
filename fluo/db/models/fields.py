@@ -67,7 +67,7 @@ class StatusField(models.CharField):
                  null=False,
                  verbose_name=_('status'),
                  help_text=_('Is active?')):
-        super(StatusField, self).__init__(
+        super().__init__(
             choices=choices,
             max_length=max_length,
             default=default,
@@ -87,7 +87,7 @@ class CreationDateTimeField(models.DateTimeField):
         kwargs.setdefault('editable', False)
         kwargs.setdefault('blank', True)
         kwargs.setdefault('default', timezone.now)
-        super(CreationDateTimeField, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def get_internal_type(self):
         return "DateTimeField"
@@ -124,7 +124,7 @@ class URIField(models.CharField):
             'form_class': forms.URLField,
         }
         defaults.update(kwargs)
-        return super(URIField, self).formfield(**defaults)
+        return super().formfield(**defaults)
 
 
 class AutoSlugField(models.SlugField):
@@ -158,7 +158,7 @@ class AutoSlugField(models.SlugField):
             self._populate_from = populate_from
         self.separator = kwargs.pop('separator', u'-')
         self.overwrite = kwargs.pop('overwrite', False)
-        super(AutoSlugField, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def _slug_strip(self, value):
         """
@@ -250,7 +250,7 @@ class OrderField(models.IntegerField):
     def formfield(self, **kwargs):
         defaults = {'form_class': forms.OrderField}
         defaults.update(kwargs)
-        return super(OrderField, self).formfield(**defaults)
+        return super().formfield(**defaults)
 
 
 class TimeDeltaField(models.DecimalField):
@@ -260,7 +260,7 @@ class TimeDeltaField(models.DecimalField):
         self.milliseconds = milliseconds
         kwargs.setdefault('decimal_places', 3)
         kwargs.setdefault('max_digits', 12)
-        super(TimeDeltaField, self).__init__(
+        super().__init__(
             verbose_name=verbose_name,
             name=name,
             **kwargs
@@ -287,7 +287,7 @@ class JsonField(models.TextField):
             'separators': (',', ':')
         })
         self.load_kwargs = kwargs.pop('load_kwargs', {})
-        super(JsonField, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def to_python(self, value):
         if value is None or value == "":
@@ -312,7 +312,7 @@ class JsonField(models.TextField):
         return value
 
     def deconstruct(self):
-        name, path, args, kwargs = super(JsonField, self).deconstruct()
+        name, path, args, kwargs = super().deconstruct()
         if self.default == '{}':
             del kwargs['default']
         return name, path, args, kwargs
@@ -320,7 +320,7 @@ class JsonField(models.TextField):
     def formfield(self, **kwargs):
         if "form_class" not in kwargs:
             kwargs["form_class"] = self.form_class
-        field = super(JsonField, self).formfield(**kwargs)
+        field = super().formfield(**kwargs)
         if isinstance(field, forms.JsonField):
             field.load_kwargs = self.load_kwargs
 
@@ -337,5 +337,5 @@ class JsonField(models.TextField):
                 default = copy.deepcopy(self.default)
         # If the field doesn't have a default, then we punt to models.Field.
         else:
-            default = super(JsonField, self).get_default()
+            default = super().get_default()
         return default

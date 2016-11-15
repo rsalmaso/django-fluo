@@ -37,4 +37,4 @@ class Command(TemplateCommand):
             )[0]
             options['template'] = os.path.join(path, 'conf', 'app_template')
 
-        super(Command, self).handle(*args, **options)
+        super().handle(*args, **options)

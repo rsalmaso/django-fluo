@@ -126,7 +126,7 @@ class RedirectView(View):
         self.permanent = kwargs.pop('permanent', self.permanent)
         self.url = kwargs.pop('url', self.url)
         self.query_string = kwargs.pop('query_string', self.query_string)
-        super(RedirectView, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     def get_redirect_url(self, request, **kwargs):
         """

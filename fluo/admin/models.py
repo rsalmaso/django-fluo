@@ -109,7 +109,7 @@ class AutocompleteMixin(object):
                 help_text = '{} {}'.format(kwargs['help_text'], help_text)
             kwargs['widget'] = ForeignKeySearchInput(db_field.rel, self.related_search_fields[db_field.name])
             kwargs['help_text'] = help_text
-        return super(AutocompleteMixin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 class ModelAdmin(AutocompleteMixin, NestedModelAdmin):
@@ -125,7 +125,7 @@ class ModelAdmin(AutocompleteMixin, NestedModelAdmin):
 
         return [
             url(r'autocomplete/$', wrap(self.autocomplete_view), name='%s_%s_autocomplete' % info),
-        ] + super(AutocompleteMixin, self).get_urls()
+        ] + super().get_urls()
 
     def autocomplete_view(self, request):
         """
@@ -203,7 +203,7 @@ class OrderedModelAdmin(ModelAdmin):
     ordering = ['ordering']
 
     def get_queryset(self, request):
-        return super(OrderedModelAdmin, self).get_queryset(request).order_by('ordering')
+        return super().get_queryset(request).order_by('ordering')
 
     def get_urls(self):
         from django.conf.urls import url
@@ -213,7 +213,7 @@ class OrderedModelAdmin(ModelAdmin):
         return [
             url(r'^(?P<id>\d+)/up/$', self.admin_site.admin_view(self.up), name='%s_%s_up' % info),
             url(r'^(?P<id>\d+)/down/$', self.admin_site.admin_view(self.down), name='%s_%s_down' % info),
-        ] + super(OrderedModelAdmin, self).get_urls()
+        ] + super().get_urls()
 
     def up(self, request, id):
         node = self.model._default_manager.get(pk=id)
@@ -253,7 +253,7 @@ class OrderedModelAdmin(ModelAdmin):
 
 class TreeOrderedModelAdmin(OrderedModelAdmin):
     def get_queryset(self, request):
-        return super(TreeOrderedModelAdmin, self).get_queryset(request).filter(parent__isnull=True)
+        return super().get_queryset(request).filter(parent__isnull=True)
 
 
 class CategoryModelAdmin(OrderedModelAdmin):
@@ -276,7 +276,7 @@ class ReadOnlyMixin(object):
     def has_change_permission(self, request, obj=None):
         if request.method not in ('GET', 'HEAD'):
             return False
-        return super(ReadOnlyMixin, self).has_change_permission(request, obj)
+        return super().has_change_permission(request, obj)
 
     def has_delete_permission(self, request, obj=None):
         return False

@@ -31,7 +31,7 @@ class FluoConfig(SimpleFluoConfig):
     def ready(self):
         site = self.get_admin_site()
         self.override_admin_site(site)
-        super(FluoConfig, self).ready()
+        super().ready()
         self.autodiscover()
 
     def get_admin_site(self):

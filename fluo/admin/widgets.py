@@ -25,7 +25,7 @@ from django.utils.safestring import mark_safe
 
 class AdminImageFileWidget(forms.FileInput):
     def __init__(self, attrs=None):
-        super(AdminImageFileWidget, self).__init__(attrs)
+        super().__init__(attrs)
 
     def render(self, name, value, attrs=None):
         output = []
@@ -44,7 +44,7 @@ class AdminImageFileWidget(forms.FileInput):
                 'value': value,
                 'change': _('Change:'),
             })
-        output.append(super(AdminImageFileWidget, self).render(name, value, attrs))
+        output.append(super().render(name, value, attrs))
         output.append('</div>')
         if value and hasattr(value, "url"):
             output.append('</div>')
