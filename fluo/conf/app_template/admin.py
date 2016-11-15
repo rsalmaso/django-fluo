@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import absolute_import, division, print_function, unicode_literals
 #from django.utils.translation import ugettext_lazy as _
 #from fluo import admin
 #from fluo import forms
@@ -15,4 +12,3 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 #class XAdmin(admin.ModelAdmin):
     #form = XAdminForm
 #admin.site.register(X, XAdmin)
-

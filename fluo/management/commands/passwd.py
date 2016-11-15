@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 # Copyright (C) 2007-2016, Raffaele Salmaso <raffaele@salmaso.org>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,7 +21,6 @@
 # Original code taken from django-extensions
 # Copyright (c) 2007 Michael Trier
 
-from __future__ import absolute_import, division, print_function, unicode_literals
 import getpass
 from django.core.management.base import BaseCommand, CommandError
 from django.db.models import Q

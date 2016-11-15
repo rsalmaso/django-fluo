@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 # Copyright (C) 2007-2016, Raffaele Salmaso <raffaele@salmaso.org>
 #
@@ -21,7 +20,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from __future__ import absolute_import, print_function
 import io
 from setuptools import setup, find_packages
 import fluo
@@ -52,7 +50,6 @@ setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Framework :: Django",
         "License :: OSI Approved :: MIT License",
-        "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.4",
         "Programming Language :: Python :: 3.5",

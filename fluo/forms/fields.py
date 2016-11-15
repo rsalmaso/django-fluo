@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 # Copyright (C) 2007-2016, Raffaele Salmaso <raffaele@salmaso.org>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,7 +21,6 @@
 # JsonField taken and adapted from https://github.com/bradjasper/django-jsonfield.git
 # Copyright (c) 2012 Brad Jasper
 
-from __future__ import absolute_import, division, print_function, unicode_literals
 from operator import add, mul
 from django import forms
 from django.utils.translation import ugettext

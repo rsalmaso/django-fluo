@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 # Copyright (C) 2007-2016, Raffaele Salmaso <raffaele@salmaso.org>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,7 +21,6 @@
 # taken and adapted from django-cms
 # Copyright (c) 2008, Batiste Bieler
 
-from __future__ import absolute_import, division, print_function, unicode_literals
 from django import template
 from fluo.middleware.locale import get_language_from_request
 
