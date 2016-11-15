@@ -19,7 +19,6 @@
 # THE SOFTWARE.
 
 import datetime
-import decimal
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models.query import QuerySet
 from django.utils.encoding import force_text
