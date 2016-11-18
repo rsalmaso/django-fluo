@@ -23,7 +23,6 @@ from django.core.exceptions import ImproperlyConfigured
 from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseRedirect, HttpResponsePermanentRedirect, HttpResponseGone
 from django.template.response import TemplateResponse
 from django.utils.translation import ugettext as _
-from django.utils import six
 
 
 log = logging.getLogger('fluo')
@@ -34,7 +33,7 @@ class View(object):
     content_type = None
 
     def __init__(self, **kwargs):
-        for key, value in six.iteritems(kwargs):
+        for key, value in kwargs.items():
             if key in self.METHODS:
                 raise TypeError(
                     "You tried to pass in the %s method name as a keyword argument to %s(). Don't do that." % (key, self.__class__.__name__),

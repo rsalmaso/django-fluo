@@ -21,8 +21,6 @@
 import sys
 from django.core.management.base import BaseCommand, CommandError
 from django.db import close_old_connections, connections, DEFAULT_DB_ALIAS
-from django.utils.six.moves import input
-from django.utils import six
 from fluo.db.backend import get_backend
 
 
@@ -81,10 +79,10 @@ The full error: %(error)s"""
             try:
                 self.execute_sql(backend, **options)
             except Exception as e:
-                six.reraise(CommandError, CommandError(self.error_message % {
+                raise CommandError(CommandError(self.error_message % {
                     'name': name,
                     'error': e,
-                }), sys.exc_info()[2])
+                })).with_traceback(sys.exc_info()[2])
             finally:
                 backend.close()
 

@@ -22,16 +22,14 @@
 # Autocomplete feature taken from django-extensions
 
 import operator
-from functools import update_wrapper
+from functools import reduce, update_wrapper
 from django.apps import apps
 from django.conf import settings
 from django.db.models.query import QuerySet
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
-from django.utils.six.moves import reduce
 from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import smart_str
 from django.utils.text import get_text_list
-from django.utils import six
 from django.contrib import admin
 from ..db import models
 from ..forms import ForeignKeySearchInput
@@ -141,7 +139,7 @@ class ModelAdmin(AutocompleteMixin, NestedModelAdmin):
         try:
             to_string_function = self.related_string_functions[model_name]
         except KeyError:
-            to_string_function = lambda x: six.text_type(x)
+            to_string_function = lambda x: str(x)
 
         if search_fields and app_label and model_name and (query or object_pk):
 

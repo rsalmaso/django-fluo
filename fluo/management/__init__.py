@@ -27,7 +27,6 @@ from optparse import make_option
 from django.db import DEFAULT_DB_ALIAS
 from django.db.models import signals
 from django.core.management.base import BaseCommand
-from django.utils import six
 from .. import settings
 
 
@@ -98,7 +97,7 @@ class DatabaseCommand(BaseCommand):
         database = settings.DATABASES[options.get('database', DEFAULT_DB_ALIAS)]
 
         if options.get('interactive'):
-            confirm = six.moves.input("""
+            confirm = input("""
 You have requested a database reset.
 This will IRREVERSIBLY DESTROY
 ALL data in the database "%s".

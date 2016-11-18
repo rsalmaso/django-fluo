@@ -23,7 +23,6 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models.query import QuerySet
 from django.utils.encoding import force_text
 from django.utils.functional import Promise
-from django.utils import six
 import json
 
 
@@ -37,7 +36,7 @@ __all__ = [
 class JSONEncoder(DjangoJSONEncoder):
     def default(self, obj):  # noqa
         if isinstance(obj, datetime.timedelta):
-            return six.text_type(obj.total_seconds())
+            return str(obj.total_seconds())
         ####
         elif isinstance(obj, QuerySet):
             return tuple(obj)
@@ -117,8 +116,6 @@ def dump(obj, fp, skipkeys=False, ensure_ascii=True, check_circular=True, allow_
         "separators": separators,
         "default": default,
     }
-    if six.PY2:
-        kwargs["encoding"] = encoding
     kwargs.update(kw)
 
     return json.dump(**kwargs)
@@ -175,8 +172,6 @@ def dumps(obj, skipkeys=False, ensure_ascii=True, check_circular=True, allow_nan
         "separators": separators,
         "default": default,
     }
-    if six.PY2:
-        kwargs["encoding"] = encoding
     kwargs.update(kw)
 
     return json.dumps(**kwargs)
@@ -192,8 +187,6 @@ def load(fp, encoding=None, cls=None, object_hook=None, parse_float=None, parse_
         "parse_constant": parse_constant,
         "object_pairs_hook": object_pairs_hook,
     }
-    if six.PY2:
-        kwargs["encoding"] = encoding
     kwargs.update(kw)
 
     return json.load(**kwargs)
@@ -210,8 +203,6 @@ def loads(s, encoding=None, cls=None, object_hook=None, parse_float=None, parse_
         "parse_constant": parse_constant,
         "object_pairs_hook": object_pairs_hook,
     }
-    if six.PY2:
-        kwargs["encoding"] = encoding
     kwargs.update(kw)
 
     return json.loads(**kwargs)

@@ -31,7 +31,6 @@ import copy
 import re
 from django.core import exceptions, validators
 from django.utils import timezone
-from django.utils import six
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
@@ -292,7 +291,7 @@ class JsonField(models.TextField):
     def to_python(self, value):
         if value is None or value == "":
             value = {}
-        if isinstance(value, six.string_types):
+        if isinstance(value, str):
             try:
                 value = json.loads(value, **self.load_kwargs)
             except ValueError:
@@ -305,7 +304,7 @@ class JsonField(models.TextField):
     def get_db_prep_value(self, value, connection, **kwargs):
         if self.null and value is None:
             value = None
-        if not isinstance(value, six.string_types):
+        if not isinstance(value, str):
             dump_kwargs = {"indent": 2}
             dump_kwargs.update(self.dump_kwargs)
             value = json.dumps(value, **dump_kwargs)

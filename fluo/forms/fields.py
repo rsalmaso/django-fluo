@@ -25,7 +25,6 @@ from operator import add, mul
 from django import forms
 from django.utils.translation import ugettext
 from django.utils.translation import ugettext_lazy as _
-from django.utils import six
 from django.core.exceptions import ValidationError
 from django.utils.encoding import smart_text
 from fluo.utils import json
@@ -100,7 +99,7 @@ class TimeDeltaField(forms.MultiValueField):
         super().__init__(fields, *args, **kwargs)
 
     def compress(self, value):
-        from django.utils.six.moves import reduce
+        from functools import reduce
         if value:
             return "{}".format(reduce(add, map(lambda x: mul(*x), zip(map(float, value), self.SECONDS))))
         return None
@@ -108,7 +107,7 @@ class TimeDeltaField(forms.MultiValueField):
 
 class JsonField(forms.CharField):
     def to_python(self, value):
-        if isinstance(value, six.string_types):
+        if isinstance(value, str):
             try:
                 return json.loads(value, **self.load_kwargs)
             except ValueError:

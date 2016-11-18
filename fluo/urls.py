@@ -22,7 +22,6 @@ from django.conf.urls import handler400, handler403, handler404, handler500, inc
 from django.urls import (
     NoReverseMatch, RegexURLPattern, RegexURLResolver, ResolverMatch, Resolver404, get_script_prefix, reverse as django_reverse, resolve
 )
-from django.utils import six
 from django.utils.functional import lazy
 
 
@@ -54,4 +53,4 @@ def reverse(viewname, args=None, kwargs=None, request=None, format=None, **extra
     return _url
 
 
-reverse_lazy = lazy(reverse, six.text_type)
+reverse_lazy = lazy(reverse, str)
