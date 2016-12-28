@@ -74,7 +74,7 @@ class OrderedModel(models.Model):
             super().save(*args, **kwargs)
 
     def brothers_and_me(self):
-        return self._default_manager.all()
+        return self.__class__._default_manager.all()
 
     def brothers(self):
         return self.brothers_and_me().exclude(pk=self.id)
@@ -137,9 +137,9 @@ class TreeOrderedModel(OrderedModel):
 
     def brothers_and_me(self):
         if self.parent:
-            return self._default_manager.filter(parent=self.parent)
+            return self.__class__._default_manager.filter(parent=self.parent)
         else:
-            return self._default_manager.filter(parent__isnull=True)
+            return self.__class__._default_manager.filter(parent__isnull=True)
 
 
 class TimestampModel(models.Model):
@@ -239,11 +239,11 @@ class CategoryModel(StatusModel, OrderedModel):
         self.slug = slugify(self.name)
         super().save(*args, **kwargs)
         if self.default:
-            for c in self._default_manager.exclude(pk=self.id):
+            for c in self.__class__._default_manager.exclude(pk=self.id):
                 c.default = False
                 c.save(*args, **kwargs)
         try:
-            c = self._default_manager.get(default=True)
+            c = self.__class__._default_manager.get(default=True)
         except models.ObjectDoesNotExist:
             self.default = True
             super().save(*args, **kwargs)
