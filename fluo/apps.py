@@ -20,8 +20,28 @@
 
 from django.apps import AppConfig
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.admin.apps import AdminConfig
 
 
 class FluoConfig(AppConfig):
     name = "fluo"
     verbose_name = _("Fluo")
+
+
+class FluoAdminConfig(AdminConfig):
+    default_site = "fluo.admin.sites.AdminSite"
+
+    def ready(self):
+        self.override_admin_site()
+        super().ready()
+
+    def override_admin_site(self):
+        from fluo.admin.sites import DefaultAdminSite
+        from django.contrib import admin as django_admin
+        from django.contrib.admin import sites as django_sites
+        from fluo import admin as fluo_admin
+
+        site = DefaultAdminSite()
+        setattr(django_admin, "site", site)
+        setattr(django_sites, "site", site)
+        setattr(fluo_admin, "site", site)
