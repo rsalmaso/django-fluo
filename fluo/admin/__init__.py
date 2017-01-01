@@ -19,8 +19,8 @@
 # THE SOFTWARE.
 
 from django.contrib.admin.options import HORIZONTAL, VERTICAL # NOQA
-from django.contrib.admin import autodiscover # NOQA
+from django.contrib.admin import autodiscover, site # NOQA
 from django.contrib.contenttypes.admin import GenericInlineModelAdmin, GenericStackedInline, GenericTabularInline # NOQA
 from .base import CopyObject # NOQA
 from .models import * # NOQA
-from .sites import AdminSite, site # NOQA
+from .sites import AdminSite # NOQA

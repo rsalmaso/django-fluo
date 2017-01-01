@@ -76,7 +76,3 @@ class DefaultAdminSite(LazyObject):
         module = getattr(admin_config, "default_site", "fluo.admin.sites.AdminSite")
         AdminSiteClass = import_string(module)
         self._wrapped = AdminSiteClass()
-
-
-site = AdminSite()
-admin.site = site
