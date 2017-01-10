@@ -19,8 +19,8 @@
 # THE SOFTWARE.
 
 from django.apps import AppConfig
-from django.utils.translation import ugettext_lazy as _
 from django.contrib.admin.apps import AdminConfig
+from django.utils.translation import ugettext_lazy as _
 
 
 class FluoConfig(AppConfig):
@@ -36,12 +36,13 @@ class FluoAdminConfig(AdminConfig):
         super().ready()
 
     def override_admin_site(self):
-        from fluo.admin.sites import DefaultAdminSite
+        from django.utils.module_loading import import_string
         from django.contrib import admin as django_admin
         from django.contrib.admin import sites as django_sites
         from fluo import admin as fluo_admin
 
-        site = DefaultAdminSite()
+        site = import_string(self.default_site)()
+
         setattr(django_admin, "site", site)
         setattr(django_sites, "site", site)
         setattr(fluo_admin, "site", site)
