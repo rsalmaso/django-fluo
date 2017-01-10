@@ -18,9 +18,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from django.views.debug import technical_500_response, technical_404_response
 import sys
+
 from django.http import Http404
+from django.views.debug import technical_404_response, technical_500_response
 
 
 class UserBasedExceptionMiddleware(object):

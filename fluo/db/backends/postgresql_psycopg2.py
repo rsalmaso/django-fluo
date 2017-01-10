@@ -20,7 +20,6 @@
 
 from .postgresql import Backend as Postgresql
 
-
 __all__ = ['Backend']
 
 

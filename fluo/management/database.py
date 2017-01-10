@@ -19,8 +19,9 @@
 # THE SOFTWARE.
 
 import sys
+
 from django.core.management.base import BaseCommand, CommandError
-from django.db import close_old_connections, connections, DEFAULT_DB_ALIAS
+from django.db import DEFAULT_DB_ALIAS, close_old_connections, connections
 from fluo.db.backend import get_backend
 
 

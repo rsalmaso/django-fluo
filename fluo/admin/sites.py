@@ -18,13 +18,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+from functools import update_wrapper
+
 from django.apps import apps
+from django.contrib import admin
+from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, HttpResponseRedirect
 from django.utils.translation import ugettext as _
-from django.contrib import admin
-from django.contrib.contenttypes.models import ContentType
-from functools import update_wrapper
 
 
 class AdminSite(admin.AdminSite):

@@ -22,9 +22,11 @@
 # Copyright (c) 2007 Michael Trier
 
 import getpass
+
+from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand, CommandError
 from django.db.models import Q
-from django.contrib.auth import get_user_model
+
 User = get_user_model()
 
 

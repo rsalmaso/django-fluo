@@ -19,6 +19,7 @@
 # THE SOFTWARE.
 
 import os
+
 from django.core.management.commands.startapp import Command as TemplateCommand
 
 

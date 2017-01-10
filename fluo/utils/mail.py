@@ -20,6 +20,7 @@
 
 from django.core import mail
 
+
 class EmailMessage(mail.EmailMessage):
     def __init__(self, subject='', body='', from_email=None, to=None, cc=None, bcc=None, connection=None, attachments=None, headers=None):
         if isinstance(to, basestring):
@@ -41,4 +42,3 @@ class EmailMultiAlternatives(mail.EmailMessage):
     multipart_subtype = 'alternative'
     def attach_alternative(self, content, mimetype=None):
         self.attach(content=content, mimetype=mimetype)
-

@@ -19,8 +19,8 @@
 # THE SOFTWARE.
 
 import _mysql
-from .. import backend
 
+from .. import backend
 
 __all__ = ['Backend']
 

@@ -18,10 +18,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from django.shortcuts import get_object_or_404, get_list_or_404, redirect, render as render_to_response
+from django.shortcuts import render as render_to_response
+from django.shortcuts import get_list_or_404, get_object_or_404, redirect
 from django.template import Template
 from django.template.loader import render_to_string
-
 
 __all__ = [
     'get_object_or_404', 'get_list_or_404', 'redirect',

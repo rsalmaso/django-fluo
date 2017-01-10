@@ -19,11 +19,11 @@
 # THE SOFTWARE.
 
 import django
-from django.utils.cache import cache
-from django.http import HttpResponseForbidden, HttpResponseBadRequest
-from django.utils.decorators import wraps, method_decorator
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.contrib.auth.decorators import user_passes_test
+from django.http import HttpResponseBadRequest, HttpResponseForbidden
+from django.utils.cache import cache
+from django.utils.decorators import method_decorator, wraps
 
 __all__ = [
     'ajax_required', 'ajax_required_m',

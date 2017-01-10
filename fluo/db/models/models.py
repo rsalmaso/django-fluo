@@ -19,20 +19,23 @@
 # THE SOFTWARE.
 
 import re
-from django.db import models
-from django.core import validators
-from django.core.mail import send_mail
-from django.utils.translation import ugettext_lazy as _
-from django.utils.translation import get_language
-from django.utils.encoding import python_2_unicode_compatible
-from django.utils import timezone
-from django.utils.http import urlquote
-from django.template.defaultfilters import slugify
+
+from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager,
+                                        PermissionsMixin, UserManager)
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager, BaseUserManager
-from ... import settings
+from django.core import validators
+from django.core.mail import send_mail
+from django.db import models
+from django.template.defaultfilters import slugify
+from django.utils import timezone
+from django.utils.encoding import python_2_unicode_compatible
+from django.utils.http import urlquote
+from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import get_language
+
 from . import fields
+from ... import settings
 
 __all__ = [
     'StatusModel',

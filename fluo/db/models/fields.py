@@ -29,14 +29,15 @@
 
 import copy
 import re
+
 from django.core import exceptions, validators
-from django.utils import timezone
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
+from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
+
 from ... import forms
 from ...utils import json
-
 
 __all__ = (
     'StatusField', 'STATUS_ACTIVE', 'STATUS_INACTIVE', 'STATUS_CHOICES',

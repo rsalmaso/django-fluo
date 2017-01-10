@@ -19,6 +19,7 @@
 # THE SOFTWARE.
 
 from django.core.management.commands.makemessages import Command as BaseCommand
+
 from ..mixins import ChdirMixin
 
 

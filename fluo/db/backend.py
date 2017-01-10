@@ -18,10 +18,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from importlib import import_module
 import os
-from django.utils.translation import ugettext as _
+from importlib import import_module
+
 from django.core.exceptions import ImproperlyConfigured
+from django.utils.translation import ugettext as _
 
 __all__ = [
     'get_backend', 'Backend',

@@ -19,12 +19,12 @@
 # THE SOFTWARE.
 
 import datetime
+import json
+
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models.query import QuerySet
 from django.utils.encoding import force_text
 from django.utils.functional import Promise
-import json
-
 
 __all__ = [
     'decoder', 'encoder', 'scanner',

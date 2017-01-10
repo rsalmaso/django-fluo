@@ -18,9 +18,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+import pip
+
 from django.conf import settings
 from django.core.management.base import BaseCommand
-import pip
 
 
 class Command(BaseCommand):

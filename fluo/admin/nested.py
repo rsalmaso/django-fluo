@@ -19,23 +19,22 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from django import VERSION
+from django import VERSION, forms
+from django.conf import settings
 from django.contrib import admin
 from django.contrib.admin import helpers
-from django.contrib.admin.options import reverse, InlineModelAdmin
+from django.contrib.admin.options import InlineModelAdmin, reverse
+from django.contrib.admin.templatetags.admin_static import static
+from django.contrib.admin.utils import unquote
 from django.core.exceptions import PermissionDenied
+from django.db import models, transaction
 from django.forms.formsets import all_valid
 from django.http import Http404
 from django.utils.decorators import method_decorator
 from django.utils.encoding import force_text
-from django.views.decorators.csrf import csrf_protect
-from django.utils.translation import ugettext as _
-from django.contrib.admin.utils import unquote
-from django.db import transaction, models
 from django.utils.html import escape
-from django.conf import settings
-from django import forms
-from django.contrib.admin.templatetags.admin_static import static
+from django.utils.translation import ugettext as _
+from django.views.decorators.csrf import csrf_protect
 
 csrf_protect_m = method_decorator(csrf_protect)
 

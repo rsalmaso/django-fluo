@@ -18,12 +18,13 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from django.conf.urls import handler400, handler403, handler404, handler500, include, url
-from django.urls import (
-    NoReverseMatch, RegexURLPattern, RegexURLResolver, ResolverMatch, Resolver404, get_script_prefix, reverse as django_reverse, resolve
-)
+from django.conf.urls import (handler400, handler403, handler404, handler500,
+                              include, url)
+from django.urls import reverse as django_reverse
+from django.urls import (NoReverseMatch, RegexURLPattern, RegexURLResolver,
+                         Resolver404, ResolverMatch, get_script_prefix,
+                         resolve)
 from django.utils.functional import lazy
-
 
 __all__ = [
     'handler400', 'handler403', 'handler404', 'handler500',

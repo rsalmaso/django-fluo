@@ -19,11 +19,13 @@
 # THE SOFTWARE.
 
 import logging
+
 from django.core.exceptions import ImproperlyConfigured
-from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseRedirect, HttpResponsePermanentRedirect, HttpResponseGone
+from django.http import (HttpResponse, HttpResponseGone,
+                         HttpResponseNotAllowed, HttpResponsePermanentRedirect,
+                         HttpResponseRedirect)
 from django.template.response import TemplateResponse
 from django.utils.translation import ugettext as _
-
 
 log = logging.getLogger('fluo')
 

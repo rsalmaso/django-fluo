@@ -18,12 +18,12 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from django.apps import apps
 from django import template
-from django.utils.translation import get_language
+from django.apps import apps
 from django.utils.encoding import iri_to_uri
 from django.utils.safestring import mark_safe
-from fluo.settings import MEDIA_URL, JQUERY_MINIFIED
+from django.utils.translation import get_language
+from fluo.settings import JQUERY_MINIFIED, MEDIA_URL
 
 if apps.is_installed('django.contrib.staticfiles'):
     from django.contrib.staticfiles.templatetags.staticfiles import static as _static

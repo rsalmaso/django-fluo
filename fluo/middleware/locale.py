@@ -24,11 +24,12 @@
 "this is the locale selecting middleware that will look at accept headers"
 
 import re
-from django.core.exceptions import ImproperlyConfigured
-from django.utils.cache import patch_vary_headers
-from django.utils import translation
+
 from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
 from django.http import HttpResponseRedirect
+from django.utils import translation
+from django.utils.cache import patch_vary_headers
 from fluo.settings import NO_LOCALE_PATTERNS
 
 SUB = re.compile(r'<a([^>]+)href="/(?!(%s|%s|%s))([^"]*)"([^>]*)>' % (

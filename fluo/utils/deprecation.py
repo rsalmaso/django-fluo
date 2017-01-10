@@ -20,7 +20,6 @@
 
 from django.utils.deprecation import RenameMethodsBase
 
-
 __all__ = [
     "RemovedIn030Warning",
     "RemovedInNextVersionWarning",

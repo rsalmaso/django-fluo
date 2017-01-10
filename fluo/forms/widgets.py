@@ -23,22 +23,22 @@
 
 import datetime
 import re
-from django.conf import settings
+
 from django import forms
+from django.conf import settings
+from django.contrib.admin.sites import site
+from django.contrib.admin.widgets import AdminDateWidget as DateWidget
+from django.contrib.admin.widgets import AdminSplitDateTime as DateTimeWidget
+from django.contrib.admin.widgets import AdminTimeWidget as TimeWidget
+from django.contrib.admin.widgets import ForeignKeyRawIdWidget
+from django.forms.utils import flatatt
+from django.template.loader import render_to_string
+from django.utils.dates import MONTHS
 from django.utils.encoding import smart_text
 from django.utils.html import escape
-from django.forms.utils import flatatt
 from django.utils.safestring import mark_safe
-from django.utils.dates import MONTHS
-from django.utils.text import slugify, Truncator
-from django.template.loader import render_to_string
-from django.contrib.admin.widgets import AdminDateWidget as DateWidget
-from django.contrib.admin.widgets import AdminTimeWidget as TimeWidget
-from django.contrib.admin.widgets import AdminSplitDateTime as DateTimeWidget
-from django.contrib.admin.widgets import ForeignKeyRawIdWidget
-from django.contrib.admin.sites import site
+from django.utils.text import Truncator, slugify
 from fluo.urls import reverse
-
 
 __all__ = (
     'DateWidget', 'TimeWidget', 'DateTimeWidget',

@@ -19,9 +19,10 @@
 # THE SOFTWARE.
 
 import json
-from django.http import * # NOQA
-from .utils.json import JSONEncoder
 
+from django.http import *  # NOQA
+
+from .utils.json import JSONEncoder
 
 __all__ = [
     'JsonResponse',

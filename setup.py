@@ -21,9 +21,10 @@
 # THE SOFTWARE.
 
 import io
-from setuptools import setup, find_packages
-import fluo
 
+from setuptools import find_packages, setup
+
+import fluo
 
 with io.open("README.md", "rt") as f:
     description = f.read()

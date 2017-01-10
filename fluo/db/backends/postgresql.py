@@ -19,8 +19,8 @@
 # THE SOFTWARE.
 
 import psycopg2
-from .. import backend
 
+from .. import backend
 
 __all__ = ['Backend']
 

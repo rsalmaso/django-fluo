@@ -20,7 +20,6 @@
 
 from . import sqlite3
 
-
 __all__ = ['Backend']
 
 
