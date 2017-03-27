@@ -21,7 +21,7 @@
 from .utils.version import get_version
 
 
-VERSION = (0, 4, 0, "alpha", 2)
+VERSION = (0, 4, 0, "alpha", 3)
 
 __version__  = get_version(VERSION)
 __author__  = "Raffaele Salmaso"
