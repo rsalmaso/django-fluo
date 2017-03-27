@@ -20,6 +20,7 @@
 
 import copy
 
+from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 
 
@@ -30,6 +31,7 @@ class CopyObject:
         super().__init__(*args, **kwargs)
         self.__name__ = self.__class__.__name__
 
+    @transaction.atomic
     def __call__(self, modeladmin, request, queryset):
         for original in queryset:
             instance = copy.copy(original)
