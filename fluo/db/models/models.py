@@ -29,9 +29,8 @@ from django.core.mail import send_mail
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.utils import timezone
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.http import urlquote
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.utils.translation import get_language
 
 from . import fields
@@ -164,7 +163,7 @@ class I18NProxy(object):
 
     def __getattr__(self, name):
         attr = getattr(self._tr, name, None)
-        if not attr or (attr and (attr == '' or attr == u'')):
+        if not attr or (attr and (attr == '' or attr == '')):
             attr = getattr(self._original, name)
         return attr
 
@@ -210,7 +209,6 @@ class CategoryModelManager(models.Manager.from_queryset(CategoryModelQuerySet)):
     silence_use_for_related_fields_deprecation = True
 
 
-@python_2_unicode_compatible
 class CategoryModel(StatusModel, OrderedModel):
     objects = CategoryModelManager()
 

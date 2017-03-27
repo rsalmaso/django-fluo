@@ -34,7 +34,7 @@ from django.core import exceptions, validators
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from ... import forms
 from ...utils import json
@@ -156,7 +156,7 @@ class AutoSlugField(models.SlugField):
             raise ValueError("missing 'populate_from' argument")
         else:
             self._populate_from = populate_from
-        self.separator = kwargs.pop('separator', u'-')
+        self.separator = kwargs.pop('separator', '-')
         self.overwrite = kwargs.pop('overwrite', False)
         super().__init__(*args, **kwargs)
 

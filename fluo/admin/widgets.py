@@ -20,7 +20,7 @@
 
 from django import forms
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 
 class AdminImageFileWidget(forms.FileInput):
@@ -48,4 +48,4 @@ class AdminImageFileWidget(forms.FileInput):
         output.append('</div>')
         if value and hasattr(value, "url"):
             output.append('</div>')
-        return mark_safe(u''.join(output))
+        return mark_safe(''.join(output))

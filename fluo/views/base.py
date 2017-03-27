@@ -25,7 +25,7 @@ from django.http import (HttpResponse, HttpResponseGone,
                          HttpResponseNotAllowed, HttpResponsePermanentRedirect,
                          HttpResponseRedirect)
 from django.template.response import TemplateResponse
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 log = logging.getLogger('fluo')
 

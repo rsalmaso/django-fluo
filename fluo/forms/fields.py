@@ -26,8 +26,8 @@ from operator import add, mul
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.encoding import smart_text
-from django.utils.translation import ugettext_lazy as _
-from django.utils.translation import ugettext
+from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext
 from fluo.utils import json
 
 from .widgets import GroupedSelect, TimeDeltaWidget
@@ -74,15 +74,15 @@ class GroupedChoiceField(forms.ChoiceField):
         """
         value = super().clean(value)
         if value in (None, ''):
-            value = u''
+            value = ''
         value = smart_text(value)
-        if value == u'':
+        if value == '':
             return value
         valid_values = []
         for group_label, group in self.choices:
             valid_values += [str(k) for k, v in group]
         if value not in valid_values:
-            raise ValidationError(ugettext(u'Select a valid choice. That choice is not one of the available choices.'))
+            raise ValidationError(gettext('Select a valid choice. That choice is not one of the available choices.'))
         return value
 
 

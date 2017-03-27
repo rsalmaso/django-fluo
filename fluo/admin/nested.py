@@ -33,7 +33,7 @@ from django.http import Http404
 from django.utils.decorators import method_decorator
 from django.utils.encoding import force_text
 from django.utils.html import escape
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.views.decorators.csrf import csrf_protect
 
 csrf_protect_m = method_decorator(csrf_protect)
@@ -165,7 +165,7 @@ class NestedModelAdmin(admin.ModelAdmin):
 
                     #TODO - find out why this breaks when extra = 1 and just adding new item with no sub items
                     if (not hasattr(form, 'cleaned_data') or not form.cleaned_data) and self.formset_has_nested_data(form.nested_formsets):
-                        form._errors["__all__"] = form.error_class([u"Parent object must be created when creating nested inlines."])
+                        form._errors["__all__"] = form.error_class(["Parent object must be created when creating nested inlines."])
                         return False
         return True
 

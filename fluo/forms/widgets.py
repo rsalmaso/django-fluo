@@ -58,23 +58,23 @@ class GroupedSelect(forms.Select):
         if value is None:
             value = ''
         final_attrs = self.build_attrs(attrs, name=name)
-        output = [u'<select%s>' % flatatt(final_attrs)]
+        output = ['<select%s>' % flatatt(final_attrs)]
         str_value = smart_text(value)
         for group_label, group in self.choices:
             if group_label: # should belong to an optgroup
                 group_label = smart_text(group_label)
-                output.append(u'<optgroup label="%s">' % escape(group_label))
+                output.append('<optgroup label="%s">' % escape(group_label))
             for k, v in group:
                 option_value = smart_text(k)
                 option_label = smart_text(v)
-                selected_html = (option_value == str_value) and u' selected="selected"' or ''
-                output.append(u'<option value="%s"%s>%s</option>' % (
+                selected_html = (option_value == str_value) and ' selected="selected"' or ''
+                output.append('<option value="%s"%s>%s</option>' % (
                     escape(option_value), selected_html, escape(option_label)
                 ))
             if group_label:
-                output.append(u'</optgroup>')
-        output.append(u'</select>')
-        return mark_safe(u'\n'.join(output))
+                output.append('</optgroup>')
+        output.append('</select>')
+        return mark_safe('\n'.join(output))
 
 
 class SelectYearWidget(forms.Widget):
@@ -116,7 +116,7 @@ class SelectYearWidget(forms.Widget):
         select_html = s.render(self.year_field % name, year_val, local_attrs)
         output.append(select_html)
 
-        return mark_safe(u'\n'.join(output))
+        return mark_safe('\n'.join(output))
 
     def id_for_label(self, id_):
         return '%s_year' % id_
@@ -180,7 +180,7 @@ class SelectMonthYearWidget(forms.Widget):
         select_html = s.render(self.year_field % name, year_val, local_attrs)
         output.append(select_html)
 
-        return mark_safe(u'\n'.join(output))
+        return mark_safe('\n'.join(output))
 
     def id_for_label(self, id_):
         return '%s_month' % id_
@@ -269,7 +269,7 @@ class ForeignKeySearchInput(ForeignKeyRawIdWidget):
             'fluo/widgets/foreignkey_searchinput.html',
         ), context))
         output.reverse()
-        return mark_safe(u''.join(output))
+        return mark_safe(''.join(output))
 
 
 class TimeDeltaWidget(forms.MultiWidget):

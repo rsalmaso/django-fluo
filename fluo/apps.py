@@ -20,7 +20,7 @@
 
 from django.apps import AppConfig
 from django.contrib.admin.apps import AdminConfig
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 
 class FluoConfig(AppConfig):

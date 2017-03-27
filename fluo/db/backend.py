@@ -22,7 +22,7 @@ import os
 from importlib import import_module
 
 from django.core.exceptions import ImproperlyConfigured
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 __all__ = [
     'get_backend', 'Backend',

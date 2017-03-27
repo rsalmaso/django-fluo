@@ -118,14 +118,14 @@ Type 'yes' to continue, or 'no' to cancel: """ % database['NAME'])
 
 
 def _get_permission_codename(action, opts):
-    return u'%s_%s' % (action, opts.object_name.lower())
+    return '%s_%s' % (action, opts.object_name.lower())
 
 
 def _get_all_permissions(opts):
     "Returns (codename, name) for all permissions in the given opts."
     perms = []
     for action in settings.DEFAULT_PERMISSIONS:
-        perms.append((_get_permission_codename(action, opts), u'Can %s %s' % (action, opts.verbose_name_raw)))
+        perms.append((_get_permission_codename(action, opts), 'Can %s %s' % (action, opts.verbose_name_raw)))
     return perms + list(opts.permissions)
 
 

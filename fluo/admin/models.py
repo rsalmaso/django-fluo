@@ -32,7 +32,7 @@ from django.http import (HttpResponse, HttpResponseNotFound,
                          HttpResponseRedirect)
 from django.utils.encoding import smart_str
 from django.utils.text import get_text_list
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from ..db import models
 from ..forms import ForeignKeySearchInput
@@ -238,16 +238,16 @@ class OrderedModelAdmin(ModelAdmin):
         info = self.admin_site.name, self.model._meta.app_label, self.model._meta.model_name
         data = []
         if not node.is_first(): # up node
-            data.append(u'<a href="%s" class="nodes-up">%s</a>' % (
+            data.append('<a href="%s" class="nodes-up">%s</a>' % (
                 reverse('%sadmin_%s_%s_up' % info, args=[node.id]), _('up'),
             ))
         if not node.is_last() and not node.is_first():
-            data.append(u'<span style="font-weight:normal"> | </span>')
+            data.append('<span style="font-weight:normal"> | </span>')
         if not node.is_last(): # down node
-            data.append(u'<a href="%s" class="nodes-down">%s</a>' % (
+            data.append('<a href="%s" class="nodes-down">%s</a>' % (
                 reverse('%sadmin_%s_%s_down' % info, args=[node.id]), _('down'),
             ))
-        return u''.join(data)
+        return ''.join(data)
     move_actions.short_description = _('move')
     move_actions.allow_tags = True
 
