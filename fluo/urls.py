@@ -35,7 +35,7 @@ __all__ = [
 ]
 
 
-class UrlsMixin(object):
+class UrlsMixin:
     def get_urls(self):
         raise NotImplemented
 

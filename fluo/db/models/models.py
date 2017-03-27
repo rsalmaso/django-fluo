@@ -156,7 +156,7 @@ class TimestampModel(models.Model):
         abstract = True
 
 
-class I18NProxy(object):
+class I18NProxy:
     def __init__(self, tr, original):
         self._tr = tr
         self._original = original

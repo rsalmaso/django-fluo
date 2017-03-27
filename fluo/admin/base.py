@@ -23,7 +23,7 @@ import copy
 from django.utils.translation import gettext_lazy as _
 
 
-class CopyObject(object):
+class CopyObject:
     short_description = _("Duplicate as new")
 
     def __init__(self, *args, **kwargs):

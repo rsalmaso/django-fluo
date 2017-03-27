@@ -30,7 +30,7 @@ from django.utils.translation import gettext as _
 log = logging.getLogger('fluo')
 
 
-class View(object):
+class View:
     METHODS = ('head', 'get', 'post', 'put', 'delete', 'trace', 'options', 'connect', 'trace', 'patch',)
     content_type = None
 

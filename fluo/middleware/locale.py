@@ -112,7 +112,7 @@ def get_language_from_request(request):
     return language
 
 
-class LocaleMiddleware(object):
+class LocaleMiddleware:
     def get_language_from_request(self, request):
         changed = False
         prefix = has_lang_prefix(request.path_info)

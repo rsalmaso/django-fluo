@@ -62,7 +62,7 @@ admin.options.FORMFIELD_FOR_DBFIELD_DEFAULTS.update({
 # end admin customization
 
 
-class AutocompleteMixin(object):
+class AutocompleteMixin:
     """Admin class for models using the autocomplete feature.
 
     There are two additional fields:
@@ -267,7 +267,7 @@ class CategoryModelAdmin(OrderedModelAdmin):
     ]
 
 
-class ReadOnlyMixin(object):
+class ReadOnlyMixin:
     def get_readonly_fields(self, request, obj=None):
         return self.fields or [f.name for f in self.model._meta.fields]
 

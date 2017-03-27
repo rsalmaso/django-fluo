@@ -22,7 +22,7 @@ import os
 from importlib import import_module
 
 
-class ChdirMixin(object):
+class ChdirMixin:
     def add_arguments(self, parser):
         super().add_arguments(parser)
         parser.add_argument('module', nargs='?', default=None, help='path/module to process')

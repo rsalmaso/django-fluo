@@ -43,7 +43,7 @@ class DropDBError(Exception):
     pass
 
 
-class Backend(object):
+class Backend:
     def __init__(self, options):
         self.host = options.get('host')
         self.port = options.get('port')
@@ -84,7 +84,7 @@ class Backend(object):
         ))
 
 
-class BackendWrapper(object):
+class BackendWrapper:
     def __init__(self, database):
         engine = database['ENGINE'].split('.')[-1]
         self.options = {
