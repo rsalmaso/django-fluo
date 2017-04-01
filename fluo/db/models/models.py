@@ -75,17 +75,21 @@ class OrderedModel(models.Model):
             self._set_default_ordering()
             super().save(*args, **kwargs)
 
+    @property
     def brothers_and_me(self):
         return self.__class__._default_manager.all()
 
+    @property
     def brothers(self):
-        return self.brothers_and_me().exclude(pk=self.id)
+        return self.brothers_and_me.exclude(pk=self.id)
 
+    @property
     def is_first(self):
-        return self.brothers_and_me().order_by('ordering')[0:1][0] == self
+        return self.brothers_and_me.order_by('ordering')[0:1][0] == self
 
+    @property
     def is_last(self):
-        return self.brothers_and_me().order_by('-ordering')[0:1][0] == self
+        return self.brothers_and_me.order_by('-ordering')[0:1][0] == self
 
     @transaction.atomic
     def _switch_node(self, other):
@@ -94,7 +98,7 @@ class OrderedModel(models.Model):
         other.save()
 
     def up(self):
-        brothers = self.brothers().order_by('-ordering').filter(ordering__lt=self.ordering + 1)[0:1]
+        brothers = self.brothers.order_by('-ordering').filter(ordering__lt=self.ordering + 1)[0:1]
         if not brothers.count():
             return False
         if brothers[0].ordering == self.ordering:
@@ -104,7 +108,7 @@ class OrderedModel(models.Model):
         return True
 
     def down(self):
-        brothers = self.brothers().order_by('ordering').filter(ordering__gt=self.ordering - 1)[0:1]
+        brothers = self.brothers.order_by('ordering').filter(ordering__gt=self.ordering - 1)[0:1]
         if not brothers.count():
             return False
         brother = brothers[0]
@@ -116,7 +120,7 @@ class OrderedModel(models.Model):
 
     def _set_default_ordering(self):
         max = 0
-        brothers = self.brothers()
+        brothers = self.brothers
         if brothers.count():
             for brother in brothers:
                 if brother.ordering >= max:
@@ -138,6 +142,7 @@ class TreeOrderedModel(OrderedModel):
     class Meta:
         abstract = True
 
+    @property
     def brothers_and_me(self):
         if self.parent:
             return self.__class__._default_manager.filter(parent=self.parent)
