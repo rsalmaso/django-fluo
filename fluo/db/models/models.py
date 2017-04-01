@@ -26,7 +26,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.core import validators
 from django.core.mail import send_mail
-from django.db import models
+from django.db import models, transaction
 from django.template.defaultfilters import slugify
 from django.utils import timezone
 from django.utils.http import urlquote
@@ -87,6 +87,7 @@ class OrderedModel(models.Model):
     def is_last(self):
         return self.brothers_and_me().order_by('-ordering')[0:1][0] == self
 
+    @transaction.atomic
     def _switch_node(self, other):
         self.ordering, other.ordering = other.ordering, self.ordering
         self.save()
