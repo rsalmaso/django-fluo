@@ -217,21 +217,23 @@ class OrderedModelAdmin(ModelAdmin):
         ] + super().get_urls()
 
     def up(self, request, id):
+        info = self.admin_site.name, self.model._meta.app_label, self.model._meta.model_name
         node = self.model._default_manager.get(pk=id)
         node.up()
         try:
             redirect_to = request.META['HTTP_REFERER']
         except:
-            redirect_to = '../../'
+            redirect_to = reverse('%sadmin_%s_%s_changelist' % info, args=[node.id]))
         return HttpResponseRedirect(redirect_to)
 
     def down(self, request, id):
+        info = self.admin_site.name, self.model._meta.app_label, self.model._meta.model_name
         node = self.model._default_manager.get(pk=id)
         node.down()
         try:
             redirect_to = request.META['HTTP_REFERER']
         except:
-            redirect_to = '../../'
+            redirect_to = reverse('%s:%s_%s_changelist' % info, args=[node.id]))
         return HttpResponseRedirect(redirect_to)
 
     def move_actions(self, node):
@@ -239,13 +241,13 @@ class OrderedModelAdmin(ModelAdmin):
         data = []
         if not node.is_first(): # up node
             data.append('<a href="%s" class="nodes-up">%s</a>' % (
-                reverse('%sadmin_%s_%s_up' % info, args=[node.id]), _('up'),
+                reverse('%s:%s_%s_up' % info, args=[node.id]), _('up'),
             ))
         if not node.is_last() and not node.is_first():
             data.append('<span style="font-weight:normal"> | </span>')
         if not node.is_last(): # down node
             data.append('<a href="%s" class="nodes-down">%s</a>' % (
-                reverse('%sadmin_%s_%s_down' % info, args=[node.id]), _('down'),
+                reverse('%s:%s_%s_down' % info, args=[node.id]), _('down'),
             ))
         return ''.join(data)
     move_actions.short_description = _('move')
