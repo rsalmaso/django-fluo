@@ -31,6 +31,7 @@ from django.db.models.query import QuerySet
 from django.http import (HttpResponse, HttpResponseNotFound,
                          HttpResponseRedirect)
 from django.utils.encoding import smart_str
+from django.utils.safestring import mark_safe
 from django.utils.text import get_text_list
 from django.utils.translation import gettext_lazy as _
 
@@ -249,9 +250,8 @@ class OrderedModelAdmin(ModelAdmin):
             data.append('<a href="%s" class="nodes-down">%s</a>' % (
                 reverse('%s:%s_%s_down' % info, args=[node.id]), _('down'),
             ))
-        return ''.join(data)
+        return mark_safe(''.join(data))
     move_actions.short_description = _('move')
-    move_actions.allow_tags = True
 
 
 class TreeOrderedModelAdmin(OrderedModelAdmin):
