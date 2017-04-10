@@ -27,6 +27,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core import validators
 from django.core.mail import send_mail
 from django.db import models, transaction
+from django.db.models import Max
 from django.template.defaultfilters import slugify
 from django.utils import timezone
 from django.utils.http import urlquote
@@ -127,6 +128,9 @@ class OrderedModel(models.Model):
                 if brother.ordering >= max:
                     max = brother.ordering
         self.ordering = max + 1
+    def get_max_ordering(self):
+        ordering = self.brothers.aggregate(max=Max("ordering"))["max"]
+        return 0 if ordering is None else ordering
 
 
 class TreeOrderedModel(OrderedModel):
