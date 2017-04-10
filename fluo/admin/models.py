@@ -207,52 +207,6 @@ class OrderedModelAdmin(ModelAdmin):
     def get_queryset(self, request):
         return super().get_queryset(request).order_by('ordering')
 
-    def get_urls(self):
-        from django.conf.urls import url
-
-        info = self.model._meta.app_label, self.model._meta.model_name
-
-        return [
-            url(r'^(?P<id>\d+)/up/$', self.admin_site.admin_view(self.up), name='%s_%s_up' % info),
-            url(r'^(?P<id>\d+)/down/$', self.admin_site.admin_view(self.down), name='%s_%s_down' % info),
-        ] + super().get_urls()
-
-    def up(self, request, id):
-        info = self.admin_site.name, self.model._meta.app_label, self.model._meta.model_name
-        node = self.model._default_manager.get(pk=id)
-        node.up()
-        try:
-            redirect_to = request.META['HTTP_REFERER']
-        except:
-            redirect_to = reverse('%sadmin_%s_%s_changelist' % info, args=[node.id]))
-        return HttpResponseRedirect(redirect_to)
-
-    def down(self, request, id):
-        info = self.admin_site.name, self.model._meta.app_label, self.model._meta.model_name
-        node = self.model._default_manager.get(pk=id)
-        node.down()
-        try:
-            redirect_to = request.META['HTTP_REFERER']
-        except:
-            redirect_to = reverse('%s:%s_%s_changelist' % info, args=[node.id]))
-        return HttpResponseRedirect(redirect_to)
-
-    def move_actions(self, node):
-        info = self.admin_site.name, self.model._meta.app_label, self.model._meta.model_name
-        data, is_first, is_last = [], node.is_first, node.is_last
-        if not is_first: # up node
-            data.append('<a href="%s" class="nodes-up">%s</a>' % (
-                reverse('%s:%s_%s_up' % info, args=[node.id]), _('up'),
-            ))
-        if not (is_first or is_last):
-            data.append('<span style="font-weight:normal"> | </span>')
-        if not is_last: # down node
-            data.append('<a href="%s" class="nodes-down">%s</a>' % (
-                reverse('%s:%s_%s_down' % info, args=[node.id]), _('down'),
-            ))
-        return mark_safe(''.join(data))
-    move_actions.short_description = _('move')
-
 
 class TreeOrderedModelAdmin(OrderedModelAdmin):
     def get_queryset(self, request):

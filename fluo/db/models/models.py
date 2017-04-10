@@ -26,7 +26,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.core import validators
 from django.core.mail import send_mail
-from django.db import models, transaction
+from django.db import models
 from django.db.models import Max
 from django.template.defaultfilters import slugify
 from django.utils import timezone
@@ -81,49 +81,6 @@ class OrderedModel(models.Model):
     def brothers(self):
         return self.brothers_and_me.exclude(pk=self.id)
 
-    @property
-    def is_first(self):
-        return self.brothers_and_me.order_by('ordering')[0:1][0] == self
-
-    @property
-    def is_last(self):
-        return self.brothers_and_me.order_by('-ordering')[0:1][0] == self
-
-    @transaction.atomic
-    def _switch_node(self, other):
-        self.ordering, other.ordering = other.ordering, self.ordering
-        self.save()
-        other.save()
-
-    def up(self):
-        brothers = self.brothers.order_by('-ordering').filter(ordering__lt=self.ordering + 1)[0:1]
-        if not brothers.count():
-            return False
-        if brothers[0].ordering == self.ordering:
-            self._set_default_order()
-            self.save()
-        self._switch_node(brothers[0])
-        return True
-
-    def down(self):
-        brothers = self.brothers.order_by('ordering').filter(ordering__gt=self.ordering - 1)[0:1]
-        if not brothers.count():
-            return False
-        brother = brothers[0]
-        if brother.ordering == self.ordering:
-            brother._set_default_ordering()
-            brother.save()
-        self._switch_node(brother)
-        return True
-
-    def _set_default_ordering(self):
-        max = 0
-        brothers = self.brothers
-        if brothers.count():
-            for brother in brothers:
-                if brother.ordering >= max:
-                    max = brother.ordering
-        self.ordering = max + 1
     def get_max_ordering(self):
         ordering = self.brothers.aggregate(max=Max("ordering"))["max"]
         return 0 if ordering is None else ordering
