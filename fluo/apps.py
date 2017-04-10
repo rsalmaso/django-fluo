@@ -36,13 +36,14 @@ class FluoAdminConfig(AdminConfig):
         super().ready()
 
     def override_admin_site(self):
-        from django.utils.module_loading import import_string
         from django.contrib import admin as django_admin
         from django.contrib.admin import sites as django_sites
         from fluo import admin as fluo_admin
+        from fluo.admin.sites import DefaultAdminSite
 
-        site = import_string(self.default_site)()
+        site = DefaultAdminSite()
 
         setattr(django_admin, "site", site)
         setattr(django_sites, "site", site)
+        setattr(django_sites, "DefaultAdminSite", DefaultAdminSite)
         setattr(fluo_admin, "site", site)
