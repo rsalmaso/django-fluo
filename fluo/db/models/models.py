@@ -227,7 +227,7 @@ class CategoryModel(StatusModel, OrderedModel):
         unique=True,
         editable=False,
         verbose_name=_('slug'),
-        help_text=_('A "slug" is a unique URL-friendly title for the object automatically generated from the "name" field.'),
+        help_text=_('A "slug" is a unique URL-friendly title for the object automatically generated from the "name" field.'),  # noqa: E501
     )
     default = models.BooleanField(
         default=False,
@@ -330,7 +330,7 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(
         default=True,
         verbose_name=_('active'),
-        help_text=_('Designates whether this user should be treated as active. Unselect this instead of deleting accounts.'),
+        help_text=_('Designates whether this user should be treated as active. Unselect this instead of deleting accounts.'),  # noqa: E501
     )
     date_joined = models.DateTimeField(
         default=timezone.now,
