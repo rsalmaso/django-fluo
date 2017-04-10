@@ -239,14 +239,14 @@ class OrderedModelAdmin(ModelAdmin):
 
     def move_actions(self, node):
         info = self.admin_site.name, self.model._meta.app_label, self.model._meta.model_name
-        data = []
-        if not node.is_first(): # up node
+        data, is_first, is_last = [], node.is_first, node.is_last
+        if not is_first: # up node
             data.append('<a href="%s" class="nodes-up">%s</a>' % (
                 reverse('%s:%s_%s_up' % info, args=[node.id]), _('up'),
             ))
-        if not node.is_last() and not node.is_first():
+        if not (is_first or is_last):
             data.append('<span style="font-weight:normal"> | </span>')
-        if not node.is_last(): # down node
+        if not is_last: # down node
             data.append('<a href="%s" class="nodes-down">%s</a>' % (
                 reverse('%s:%s_%s_down' % info, args=[node.id]), _('down'),
             ))
