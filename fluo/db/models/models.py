@@ -58,6 +58,7 @@ class OrderedModel(models.Model):
     ordering = fields.OrderField(
         default=0,
         blank=True,
+        db_index=True,
         verbose_name=_('ordering'),
         help_text=_('Ordered'),
     )
