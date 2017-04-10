@@ -68,14 +68,9 @@ class OrderedModel(models.Model):
         abstract = True
 
     def save(self, *args, **kwargs):
-        ordering = False
         if not self.ordering:
-            self.ordering = 1
-            ordering = True
+            self.ordering = self.get_max_ordering() + 1
         super().save(*args, **kwargs)
-        if ordering:
-            self._set_default_ordering()
-            super().save(*args, **kwargs)
 
     @property
     def brothers_and_me(self):
