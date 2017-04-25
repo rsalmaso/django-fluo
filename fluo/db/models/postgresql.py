@@ -26,6 +26,7 @@ if not apps.get_containing_app_config("django.contrib.postgres"):
 else:
     __all__ = [
         'ArrayField',
+        'CICharField', 'CIEmailField', 'CIText', 'CITextField',
         'DateTimeRangeField', 'DateRangeField',
         'IntegerRangeField', 'BigIntegerRangeField', 'FloatRangeField',
         'JSONField',
@@ -34,3 +35,20 @@ else:
     ]
 
     from django.contrib.postgres.fields import *  # noqa
+    try:
+        CIText  # noqa: F405
+    except NameError as ex:
+        from django.db.models import CharField, EmailField, TextField
+
+        class CIText:
+            def db_type(self, connection):
+                return 'citext'
+
+        class CICharField(CIText, CharField):
+            pass
+
+        class CIEmailField(CIText, EmailField):
+            pass
+
+        class CITextField(CIText, TextField):
+            pass
