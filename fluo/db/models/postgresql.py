@@ -18,9 +18,19 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from django.db.models import * # NOQA
-from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation # NOQA
-from django.contrib.contenttypes.models import ContentTypeManager, ContentType # NOQA
-from .fields import * # NOQA
-from .models import * # NOQA
-from .postgresql import * # NOQA
+from django.apps import apps
+
+
+if not apps.get_containing_app_config("django.contrib.postgres"):
+    __all__ = []
+else:
+    __all__ = [
+        'ArrayField',
+        'DateTimeRangeField', 'DateRangeField',
+        'IntegerRangeField', 'BigIntegerRangeField', 'FloatRangeField',
+        'JSONField',
+        'HStoreField',
+        'RangeField',
+    ]
+
+    from django.contrib.postgres.fields import *  # noqa
