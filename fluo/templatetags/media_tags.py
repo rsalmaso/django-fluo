@@ -179,11 +179,6 @@ def jquery_bgiframe():
 
 
 @register.simple_tag
-def jquery_disable_text_select():
-    return mark_safe(js("fluo/jquery-disable-text-select/jquery.disable.text.select.pack.js"))
-
-
-@register.simple_tag
 def static_url():
     """ Returns the string contained in the setting STATIC_URL. """
     return _static("")
