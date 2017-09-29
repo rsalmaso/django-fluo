@@ -38,6 +38,32 @@ def static(path):
     return _static(path)
 
 
+class MediaNode(template.Node):
+    def __init__(self, filename, args):
+        self.filename = filename
+        self.args = args
+
+    def render(self, context):
+        filename = self.filename.resolve(context)
+        args = ' %s' % ' '.join(self.args) if self.args else ''
+        script = filename if filename.startswith(('https://', 'http://', '//')) else _static(iri_to_uri(filename))
+        return mark_safe(self.fmt % {
+            'script': script,
+            'args': args,
+        })
+
+
+def media_tag(parser, token, node_class):
+    bits = token.split_contents()
+    if len(bits) < 2:
+        raise TemplateSyntaxError("'%s' takes at least one argument, the name of the script." % bits[0])
+
+    filename = parser.compile_filter(bits[1])
+    args = [bit for bit in bits[2:]]
+
+    return node_class(filename, args)
+
+
 @register.simple_tag
 def css(script, media="all"):
     return mark_safe('<link rel="stylesheet" type="text/css" href="%(script)s" media="%(media)s"/>' % {
