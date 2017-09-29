@@ -165,13 +165,6 @@ def jquery_listreorder():
 
 
 @register.simple_tag
-def jquery_tablednd():
-    return mark_safe(js("fluo/jquery-tablednd/%(js)s" % {
-        'js': {True: 'jquery.tablednd.min.js', False: 'jquery.tablednd.js'}[JQUERY_MINIFIED],
-    }))
-
-
-@register.simple_tag
 def static_url():
     """ Returns the string contained in the setting STATIC_URL. """
     return _static("")
