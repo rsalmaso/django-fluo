@@ -64,7 +64,15 @@ def media_tag(parser, token, node_class):
     return node_class(filename, args)
 
 
-@register.simple_tag
+class CssNode(MediaNode):
+    fmt = '<link rel="stylesheet" type="text/css" href="%(script)s"%(args)s/>'
+
+
+@register.tag("css")
+def css_tag(parser, token):
+    return media_tag(parser, token, CssNode)
+
+
 def css(script, media="all"):
     return mark_safe('<link rel="stylesheet" type="text/css" href="%(script)s" media="%(media)s"/>' % {
         'script': _static(iri_to_uri(script)),
