@@ -82,7 +82,15 @@ def css_ie(script, media="all"):
     return mark_safe("""<!--[if IE]>%s<![endif]-->""" % css(script, media))
 
 
-@register.simple_tag
+class JsNode(MediaNode):
+    fmt = '<script src="%(script)s"%(args)s></script>'
+
+
+@register.tag("js")
+def js_tag(parser, token):
+    return media_tag(parser, token, JsNode)
+
+
 def js(script):
     return mark_safe('<script type="text/javascript" src="%(script)s"></script>' % {
         'script': _static(iri_to_uri(script)),
