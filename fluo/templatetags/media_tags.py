@@ -172,13 +172,6 @@ def jquery_tablednd():
 
 
 @register.simple_tag
-def jquery_bgiframe():
-    return mark_safe(js("fluo/jquery-bgiframe/%(js)s" % {
-        'js': {True: 'jquery.bgiframe.min.js', False: 'jquery.bgiframe.js'}[JQUERY_MINIFIED],
-    }))
-
-
-@register.simple_tag
 def static_url():
     """ Returns the string contained in the setting STATIC_URL. """
     return _static("")

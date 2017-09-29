@@ -210,7 +210,6 @@ class ForeignKeySearchInput(ForeignKeyRawIdWidget):
 
     def _media(self):
         js_files = [
-            'fluo/jquery-bgiframe/jquery.bgiframe.min.js',
             'fluo/jquery-ajaxqueue/jquery.ajaxqueue.min.js',
             'fluo/jquery-autocomplete/jquery.autocomplete.min.js',
         ]
