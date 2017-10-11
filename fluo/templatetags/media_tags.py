@@ -158,13 +158,6 @@ def jquery_autocomplete():
 
 
 @register.simple_tag
-def jquery_listreorder():
-    return mark_safe(js("fluo/jquery-listreorder/%(js)s" % {
-        'js': {True: 'jquery.listreorder.min.js', False: 'jquery.listreorder.js'}[JQUERY_MINIFIED],
-    }))
-
-
-@register.simple_tag
 def static_url():
     """ Returns the string contained in the setting STATIC_URL. """
     return _static("")
