@@ -133,17 +133,6 @@ def jqueryui_default_theme():
 
 
 @register.simple_tag
-def thickbox():
-    return mark_safe("""%(css)s
-<script type="text/javascript">var tb_pathToImage = "%(img)s";</script>
-%(js)s""" % {
-        "css": css("fluo/thickbox/css/thickbox.css", media="all"),
-        "img": _static("fluo/thickbox/images/loadingAnimation.gif"),
-        "js": js("fluo/thickbox/js/%(thickbox)s" % {True: 'thickbox.min.js', False: 'thickbox.js'}[JQUERY_MINIFIED]),
-    })
-
-
-@register.simple_tag
 def jquery_ajaxqueue():
     return mark_safe(js("fluo/jquery-ajaxqueue/%(js)s" % {
         'js': {True: 'jquery.ajaxqueue.min.js', False: 'jquery.ajaxqueue.js'}[JQUERY_MINIFIED],
