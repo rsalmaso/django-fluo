@@ -21,10 +21,11 @@
 import sys
 
 from django.http import Http404
+from django.utils.deprecation import MiddlewareMixin
 from django.views.debug import technical_404_response, technical_500_response
 
 
-class UserBasedExceptionMiddleware:
+class UserBasedExceptionMiddleware(MiddlewareMixin):
     def process_exception(self, request, exception):
         if request.user.is_superuser:
             if isinstance(exception, Http404):

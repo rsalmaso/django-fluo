@@ -30,6 +30,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.http import HttpResponseRedirect
 from django.utils import translation
 from django.utils.cache import patch_vary_headers
+from django.utils.deprecation import MiddlewareMixin
 from fluo.settings import NO_LOCALE_PATTERNS
 
 SUB = re.compile(r'<a([^>]+)href="/(?!(%s|%s|%s))([^"]*)"([^>]*)>' % (
@@ -39,8 +40,8 @@ SUB = re.compile(r'<a([^>]+)href="/(?!(%s|%s|%s))([^"]*)"([^>]*)>' % (
 ))
 SUB2 = re.compile(r'<form([^>]+)action="/(?!(%s|%s|%s))([^"]*)"([^>]*)>' % (
     "|".join(map(lambda l: l[0] + "/", settings.LANGUAGES)),
-     settings.MEDIA_URL[1:],
-     settings.STATIC_URL[1:],
+    settings.MEDIA_URL[1:],
+    settings.STATIC_URL[1:],
 ))
 SUPPORTED = dict(settings.LANGUAGES)
 START_SUB = re.compile(r"^/(%s)/(.*)" % "|".join(map(lambda l: l[0], settings.LANGUAGES)))
@@ -112,7 +113,7 @@ def get_language_from_request(request):
     return language
 
 
-class LocaleMiddleware:
+class LocaleMiddleware(MiddlewareMixin):
     def get_language_from_request(self, request):
         changed = False
         prefix = has_lang_prefix(request.path_info)
@@ -144,7 +145,7 @@ class LocaleMiddleware:
         return lang
 
     def process_request(self, request):
-        path = unicode(request.path)
+        path = str(request.path)
         if skip_translation(path):
             return
 
@@ -156,7 +157,7 @@ class LocaleMiddleware:
         request.LANGUAGE_CODE = translation.get_language()
 
     def process_response(self, request, response):
-        path = unicode(request.path)
+        path = str(request.path)
         if skip_translation(path):
             return response
 
