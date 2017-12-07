@@ -18,18 +18,38 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from django.conf.urls import (handler400, handler403, handler404, handler500,
-                              include, url)
-from django.urls import reverse as django_reverse
-from django.urls import (NoReverseMatch, RegexURLPattern, RegexURLResolver,
-                         Resolver404, ResolverMatch, get_script_prefix,
-                         resolve)
+from django.conf.urls import handler400, handler403, handler404, handler500
+from django.urls import (
+    NoReverseMatch, Resolver404, ResolverMatch, get_script_prefix, resolve,
+    reverse as django_reverse,
+)
 from django.utils.functional import lazy
+
+try:
+    from django.urls import include
+except ImportError:
+    from django.conf.urls import include
+
+try:
+    from django.urls import path, re_path
+except ImportError:
+    path, re_path = None, None
+
+try:
+    from django.urls import re_path as url
+except ImportError:
+    from django.conf.urls import url
+
+try:
+    from django.urls import URLPattern, URLResolver
+except ImportError:
+    from django.urls import RegexURLPattern as URLPattern, RegexURLResolver as URLResolver
+
 
 __all__ = [
     'handler400', 'handler403', 'handler404', 'handler500',
-    'url', 'include',
-    'NoReverseMatch', 'RegexURLPattern', 'RegexURLResolver', 'ResolverMatch', 'Resolver404', 'get_script_prefix',
+    'path', 're_path', 'url', 'include',
+    'NoReverseMatch', 'URLPattern', 'URLResolver', 'ResolverMatch', 'Resolver404', 'get_script_prefix',
     'reverse', 'reverse_lazy', 'resolve',
     'UrlsMixin',
 ]
