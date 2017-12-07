@@ -113,26 +113,6 @@ def jquery():
 
 
 @register.simple_tag
-def jqueryui():
-    minified = ".min" if JQUERY_MINIFIED else ""
-    return mark_safe('''
-%(jqueryui)s
-%(i18n)s
-''' % { # NOQA
-        'jqueryui': js("fluo/jquery/jquery.ui{minified}.js".format(minified=minified)),
-        'i18n': js("fluo/jquery/i18n/jquery.ui.datepicker-{language}{minified}.js".format(
-            minified=minified,
-            language=get_language()[:2]
-        )),
-    })
-
-
-@register.simple_tag
-def jqueryui_default_theme():
-    return mark_safe(css("fluo/jquery/theme/jquery.ui.css", media="all"))
-
-
-@register.simple_tag
 def jquery_ajaxqueue():
     return mark_safe(js("fluo/jquery-ajaxqueue/%(js)s" % {
         'js': {True: 'jquery.ajaxqueue.min.js', False: 'jquery.ajaxqueue.js'}[JQUERY_MINIFIED],
