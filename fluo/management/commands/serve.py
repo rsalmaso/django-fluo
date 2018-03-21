@@ -92,6 +92,8 @@ class Command(BaseCommand):
         return os.environ.get('DJANGO_DEFAULT_PROTOCOL', 'http')
 
     def handle(self, *args, **options):
+        # remove when dropping django <= 1.11
+
         if not settings.DEBUG and not settings.ALLOWED_HOSTS:
             raise CommandError('You must set settings.ALLOWED_HOSTS if DEBUG is False.')
 
@@ -123,6 +125,8 @@ class Command(BaseCommand):
         self.run(**options)
 
     def inner_run(self, *args, **options):
+        # remove when dropping django <= 1.11
+
         # If an exception was silenced in ManagementUtility.execute in order
         # to be raised in the child process, raise it now.
         autoreload.raise_last_exception()
