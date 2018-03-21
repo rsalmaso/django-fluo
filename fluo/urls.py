@@ -64,7 +64,7 @@ class UrlsMixin:
     urls = property(urls)
 
 
-def reverse(viewname, args=None, kwargs=None, request=None, format=None, **extra):
+def reverse(viewname, *, args=None, kwargs=None, request=None, format=None, **extra):
     if format is not None:
         kwargs = kwargs or {}
         kwargs['format'] = format
