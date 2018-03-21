@@ -33,8 +33,7 @@ from datetime import datetime
 from django.apps import apps
 from django.conf import settings
 from django.core.management.base import CommandError
-from django.core.management.commands.runserver import Command as BaseCommand
-from django.core.management.commands.runserver import naiveip_re
+from django.core.management.commands.runserver import Command as BaseCommand, naiveip_re
 from django.core.servers.basehttp import WSGIRequestHandler, WSGIServer
 from django.utils import autoreload
 
@@ -178,6 +177,7 @@ class Command(BaseCommand):
             if shutdown_message:
                 self.stdout.write(shutdown_message)
             sys.exit(0)
+
 
 if use_static:
     class Command(Command):
