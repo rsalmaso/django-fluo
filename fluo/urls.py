@@ -59,9 +59,9 @@ class UrlsMixin:
     def get_urls(self):
         raise NotImplemented
 
+    @property
     def urls(self):
         return self.get_urls()
-    urls = property(urls)
 
 
 def reverse(viewname, *, args=None, kwargs=None, request=None, format=None, **extra):
