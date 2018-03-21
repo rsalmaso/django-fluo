@@ -68,10 +68,12 @@ def reverse(viewname, *, args=None, kwargs=None, request=None, format=None, **ex
     if format is not None:
         kwargs = kwargs or {}
         kwargs['format'] = format
-    _url = django_reverse(viewname, args=args, kwargs=kwargs, **extra)
+    url = django_reverse(viewname, args=args, kwargs=kwargs, **extra)
+
     if request:
-        _url = request.build_absolute_uri(url)
-    return _url
+        url = request.build_absolute_uri(url)
+
+    return url
 
 
 reverse_lazy = lazy(reverse, str)
