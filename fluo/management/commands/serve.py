@@ -30,6 +30,7 @@ import socketserver
 import sys
 from datetime import datetime
 
+from django.apps import apps
 from django.conf import settings
 from django.core.management.base import CommandError
 from django.core.management.commands.runserver import Command as BaseCommand
@@ -37,11 +38,7 @@ from django.core.management.commands.runserver import naiveip_re
 from django.core.servers.basehttp import WSGIRequestHandler, WSGIServer
 from django.utils import autoreload
 
-use_static = False
-for app in settings.INSTALLED_APPS:
-    use_static = "staticfiles" in app
-    if use_static:
-        break
+use_static = apps.is_installed("django.contrib.staticfiles")
 
 
 def run(addr, port, wsgi_handler, ipv6=False, threading=False, server_cls=WSGIServer):
