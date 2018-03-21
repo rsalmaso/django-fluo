@@ -24,11 +24,12 @@ Creates permissions for all installed apps that need permissions.
 
 import logging
 from optparse import make_option
+
+from django.core.management.base import BaseCommand
 from django.db import DEFAULT_DB_ALIAS
 from django.db.models import signals
-from django.core.management.base import BaseCommand
-from .. import settings
 
+from .. import settings
 
 __all__ = ['DatabaseCommand']
 

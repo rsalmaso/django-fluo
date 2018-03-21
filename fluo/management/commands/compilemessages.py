@@ -18,8 +18,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from django.core.management.commands.compilemessages import \
-    Command as BaseCommand
+from django.core.management.commands.compilemessages import Command as BaseCommand
 
 from ..mixins import ChdirMixin
 

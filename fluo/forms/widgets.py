@@ -27,10 +27,10 @@ import re
 from django import forms
 from django.conf import settings
 from django.contrib.admin.sites import site
-from django.contrib.admin.widgets import AdminDateWidget as DateWidget
-from django.contrib.admin.widgets import AdminSplitDateTime as DateTimeWidget
-from django.contrib.admin.widgets import AdminTimeWidget as TimeWidget
-from django.contrib.admin.widgets import ForeignKeyRawIdWidget
+from django.contrib.admin.widgets import (
+    AdminDateWidget as DateWidget, AdminSplitDateTime as DateTimeWidget, AdminTimeWidget as TimeWidget,
+    ForeignKeyRawIdWidget,
+)
 from django.forms.utils import flatatt
 from django.template.loader import render_to_string
 from django.utils.dates import MONTHS

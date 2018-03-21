@@ -26,8 +26,7 @@ from operator import add, mul
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.encoding import smart_text
-from django.utils.translation import gettext_lazy as _
-from django.utils.translation import gettext
+from django.utils.translation import gettext, gettext_lazy as _
 from fluo.utils import json
 
 from .widgets import GroupedSelect, TimeDeltaWidget

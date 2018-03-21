@@ -20,8 +20,7 @@
 
 from django.conf.urls import handler400, handler403, handler404, handler500
 from django.urls import (
-    NoReverseMatch, Resolver404, ResolverMatch, get_script_prefix, resolve,
-    reverse as django_reverse,
+    NoReverseMatch, Resolver404, ResolverMatch, get_script_prefix, resolve, reverse as django_reverse,
 )
 from django.utils.functional import lazy
 from django.utils.http import urlencode

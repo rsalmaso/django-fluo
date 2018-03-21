@@ -18,9 +18,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from django.db.models import * # NOQA
-from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation # NOQA
-from django.contrib.contenttypes.models import ContentTypeManager, ContentType # NOQA
-from .fields import * # NOQA
-from .models import * # NOQA
-from .postgresql import * # NOQA
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation  # NOQA
+from django.contrib.contenttypes.models import ContentType, ContentTypeManager  # NOQA
+from django.db.models import *  # NOQA
+
+from .fields import *  # NOQA
+from .models import *  # NOQA
+from .postgresql import *  # NOQA

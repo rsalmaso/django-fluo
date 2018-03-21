@@ -28,8 +28,7 @@ from django.apps import apps
 from django.conf import settings
 from django.contrib import admin
 from django.db.models.query import QuerySet
-from django.http import (HttpResponse, HttpResponseNotFound,
-                         HttpResponseRedirect)
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.utils.encoding import smart_str
 from django.utils.safestring import mark_safe
 from django.utils.text import get_text_list

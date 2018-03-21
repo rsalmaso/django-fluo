@@ -19,10 +19,9 @@
 # THE SOFTWARE.
 
 from django.contrib.admin import (  # NOQA
-    ACTION_CHECKBOX_NAME, AllValuesFieldListFilter, BooleanFieldListFilter,
-    ChoicesFieldListFilter, DateFieldListFilter, FieldListFilter, ListFilter,
-    RelatedFieldListFilter, RelatedOnlyFieldListFilter, SimpleListFilter,
-    autodiscover, register, site,
+    ACTION_CHECKBOX_NAME, AllValuesFieldListFilter, BooleanFieldListFilter, ChoicesFieldListFilter,
+    DateFieldListFilter, FieldListFilter, ListFilter, RelatedFieldListFilter, RelatedOnlyFieldListFilter,
+    SimpleListFilter, autodiscover, register, site,
 )
 from django.contrib.admin.options import HORIZONTAL, VERTICAL  # NOQA
 from django.contrib.contenttypes.admin import (  # NOQA
@@ -31,8 +30,7 @@ from django.contrib.contenttypes.admin import (  # NOQA
 
 from .base import CopyObject  # NOQA
 from .models import (  # NOQA
-    CategoryModelAdmin, ModelAdmin, OrderedModelAdmin, ReadOnlyInlineMixin,
-    ReadOnlyMixin, ReadOnlyModelAdmin, ReadOnlyStackedInline,
-    ReadOnlyTabularInline, StackedInline, TabularInline, TreeOrderedModelAdmin,
+    CategoryModelAdmin, ModelAdmin, OrderedModelAdmin, ReadOnlyInlineMixin, ReadOnlyMixin, ReadOnlyModelAdmin,
+    ReadOnlyStackedInline, ReadOnlyTabularInline, StackedInline, TabularInline, TreeOrderedModelAdmin,
 )
 from .sites import AdminSite  # NOQA
