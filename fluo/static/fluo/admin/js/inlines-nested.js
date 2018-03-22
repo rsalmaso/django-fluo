@@ -42,15 +42,16 @@
         var showAddButton = get_max_forms(options.prefix) === '' || (get_max_forms(options.prefix) - get_no_forms(options.prefix)) > 0;
         if ($this.length && showAddButton) {
             var addButton;
+            var numCols = this.eq(-1).children().length;
+            var addButtonHTML = '<tr class="' + options.addCssClass + '"><td colspan="' + numCols + '"><a href="javascript:void(0)">' + options.addText + "</a></tr>";
             if ($this.attr("tagName") == "TR") {
                 // If forms are laid out as table rows, insert the
                 // "add" button in a new table row:
-                var numCols = this.eq(-1).children().length;
-                $parent.append('<tr class="' + options.addCssClass + '"><td colspan="' + numCols + '"><a href="javascript:void(0)">' + options.addText + "</a></tr>");
+                $parent.append(addButtonHTML);
                 addButton = $parent.find("tr:last a");
             } else {
                 // Otherwise, insert it immediately after the last form:
-                $this.filter(":last").after('<div class="' + options.addCssClass + '"><a href="javascript:void(0)">' + options.addText + "</a></div>");
+                $this.filter(":last").after(addButtonHTML);
                 addButton = $this.filter(":last").next().find("a");
             }
             addButton.click(function(e) {
