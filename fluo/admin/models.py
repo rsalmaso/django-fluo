@@ -35,9 +35,9 @@ from django.utils.text import get_text_list
 from django.utils.translation import gettext_lazy as _
 
 from ..db import models
-from ..forms import ForeignKeySearchInput
 from ..urls import reverse
 from .nested import NestedModelAdmin, NestedStackedInline, NestedTabularInline
+from .widgets import ForeignKeySearchInput
 
 __all__ = [
     'ModelAdmin',
