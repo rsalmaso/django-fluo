@@ -23,11 +23,11 @@ from django.core import mail
 
 class EmailMessage(mail.EmailMessage):
     def __init__(self, subject='', body='', from_email=None, to=None, cc=None, bcc=None, connection=None, attachments=None, headers=None):
-        if isinstance(to, basestring):
+        if isinstance(to, str):
             to = (to,)
-        if isinstance(cc, basestring):
+        if isinstance(cc, str):
             cc = (cc,)
-        if isinstance(bcc, basestring):
+        if isinstance(bcc, str):
             bcc = (bcc,)
         self.cc = cc
         super().__init__(subject, body, from_email, to, bcc, connection, attachments, headers)

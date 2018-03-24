@@ -96,7 +96,7 @@ class SelectYearWidget(forms.Widget):
             year_val = value.year
         except AttributeError:
             year_val = month_val = None
-            if isinstance(value, basestring):
+            if isinstance(value, str):
                 match = RE_DATE.match(value)
                 if match:
                     year_val, month_val, day_val = [int(v) for v in match.groups()]
@@ -151,7 +151,7 @@ class SelectMonthYearWidget(forms.Widget):
             year_val, month_val = value.year, value.month
         except AttributeError:
             year_val = month_val = None
-            if isinstance(value, basestring):
+            if isinstance(value, str):
                 match = RE_DATE.match(value)
                 if match:
                     year_val, month_val, day_val = [int(v) for v in match.groups()]
