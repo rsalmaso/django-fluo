@@ -36,6 +36,14 @@ from django.utils.html import escape
 from django.utils.translation import gettext as _
 from django.views.decorators.csrf import csrf_protect
 
+__all__ = [
+    'NestedModelAdmin',
+    'NestedInline',
+    'NestedStackedInline',
+    'NestedTabularInline',
+]
+
+
 csrf_protect_m = method_decorator(csrf_protect)
 
 

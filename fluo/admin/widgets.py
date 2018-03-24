@@ -22,6 +22,10 @@ from django import forms
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext as _
 
+__all__ = [
+    'AdminImageFileWidget',
+]
+
 
 class AdminImageFileWidget(forms.FileInput):
     def __init__(self, attrs=None):

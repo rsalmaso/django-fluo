@@ -23,6 +23,10 @@ import copy
 from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 
+__all__ = [
+    'CopyObject',
+]
+
 
 class CopyObject:
     short_description = _("Duplicate as new")

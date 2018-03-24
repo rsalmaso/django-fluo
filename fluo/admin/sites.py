@@ -29,6 +29,10 @@ from django.utils.functional import LazyObject
 from django.utils.module_loading import import_string
 from django.utils.translation import gettext as _
 
+__all__ = [
+    'AdminSite',
+]
+
 
 class AdminSite(admin.AdminSite):
     def get_urls(self):
