@@ -23,9 +23,3 @@ from django.forms import *  # NOQA
 
 from .fields import *  # NOQA
 from .widgets import *  # NOQA
-
-try:
-    SelectDateWidget
-except (AttributeError, NameError):
-    # keep until support django 1.8
-    from django.forms.extras.widgets import SelectDateWidget # NOQA
