@@ -36,6 +36,7 @@ from django.core.management.base import CommandError
 from django.core.management.commands.runserver import Command as BaseCommand, naiveip_re
 from django.core.servers.basehttp import WSGIRequestHandler, WSGIServer
 from django.utils import autoreload
+from django.utils.functional import cached_property
 
 use_static = apps.is_installed("django.contrib.staticfiles")
 
@@ -62,19 +63,19 @@ def run(addr, port, wsgi_handler, ipv6=False, threading=False, server_cls=WSGISe
 class Command(BaseCommand):
     handler_cls = WSGIRequestHandler
 
-    @property
+    @cached_property
     def default_port(self):
         return self.get_default_port()
 
-    @property
+    @cached_property
     def default_addr(self):
         return self.get_default_addr()
 
-    @property
+    @cached_property
     def default_addr_ipv6(self):
         return self.get_default_addr_ipv6()
 
-    @property
+    @cached_property
     def protocol(self):
         return self.get_protocol()
 
