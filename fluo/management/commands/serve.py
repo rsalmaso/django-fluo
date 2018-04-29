@@ -60,8 +60,6 @@ def run(addr, port, wsgi_handler, ipv6=False, threading=False, server_cls=WSGISe
 
 
 class Command(BaseCommand):
-    server_cls = WSGIServer
-
     @property
     def default_port(self):
         return self.get_default_port()
