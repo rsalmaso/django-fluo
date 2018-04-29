@@ -124,12 +124,16 @@ class Command(BaseCommand):
             self._raw_ipv6 = self.use_ipv6
         self.run(**options)
 
+    def get_extra_messages(self, *args, **options):
+        return [], {}
+
     def get_extra_params(self, *args, **options):
         return {}
 
     def inner_run(self, *args, **options):
         # remove when dropping django <= 1.11
 
+        extra_msg, extra_msg_params = self.get_extra_messages(*args, **options)
         extra_params = self.get_extra_params(*args, **options)
 
         # If an exception was silenced in ManagementUtility.execute in order
@@ -148,17 +152,19 @@ class Command(BaseCommand):
         self.check_migrations()
         now = datetime.now().strftime('%B %d, %Y - %X')
         self.stdout.write(now)
-        self.stdout.write((
-            "Django version %(version)s, using settings %(settings)r\n"
-            "Starting development server at %(protocol)s://%(addr)s:%(port)s/\n"
-            "Quit the server with %(quit_command)s.\n"
-        ) % {
+        self.stdout.write("\n".join([
+            "Django version %(version)s, using settings %(settings)r",
+            "Starting development server at %(protocol)s://%(addr)s:%(port)s/",
+            *extra_msg,
+            "Quit the server with %(quit_command)s.",
+        ]) % {
             "version": self.get_version(),
             "settings": settings.SETTINGS_MODULE,
             "protocol": self.protocol,
             "addr": '[%s]' % self.addr if self._raw_ipv6 else self.addr,
             "port": self.port,
             "quit_command": quit_command,
+            **extra_msg_params,
         })
 
         try:
