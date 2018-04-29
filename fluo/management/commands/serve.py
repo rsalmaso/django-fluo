@@ -40,13 +40,13 @@ from django.utils import autoreload
 use_static = apps.is_installed("django.contrib.staticfiles")
 
 
-def run(addr, port, wsgi_handler, ipv6=False, threading=False, server_cls=WSGIServer):
+def run(addr, port, wsgi_handler, ipv6=False, threading=False, server_cls=WSGIServer, handler_cls=WSGIRequestHandler):
     server_address = (addr, port)
     if threading:
         httpd_cls = type('WSGIServer', (socketserver.ThreadingMixIn, server_cls), {})
     else:
         httpd_cls = server_cls
-    httpd = httpd_cls(server_address, WSGIRequestHandler, ipv6=ipv6)
+    httpd = httpd_cls(server_address, handler_cls, ipv6=ipv6)
     if threading:
         # ThreadingMixIn.daemon_threads indicates how threads will behave on an
         # abrupt shutdown; like quitting the server by the user or restarting
@@ -60,6 +60,8 @@ def run(addr, port, wsgi_handler, ipv6=False, threading=False, server_cls=WSGISe
 
 
 class Command(BaseCommand):
+    handler_cls = WSGIRequestHandler
+
     @property
     def default_port(self):
         return self.get_default_port()
@@ -156,7 +158,7 @@ class Command(BaseCommand):
         try:
             handler = self.get_handler(*args, **options)
             run(self.addr, int(self.port), handler,
-                ipv6=self.use_ipv6, threading=threading, server_cls=self.server_cls)
+                ipv6=self.use_ipv6, threading=threading, server_cls=self.server_cls, handler_cls=handler_cls)
         except socket.error as e:
             # Use helpful error messages instead of ugly tracebacks.
             ERRORS = {
