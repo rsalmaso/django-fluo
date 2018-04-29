@@ -41,13 +41,13 @@ from django.utils.functional import cached_property
 use_static = apps.is_installed("django.contrib.staticfiles")
 
 
-def run(addr, port, wsgi_handler, ipv6=False, threading=False, server_cls=WSGIServer, handler_cls=WSGIRequestHandler):
+def run(addr, port, wsgi_handler, ipv6=False, threading=False, server_cls=WSGIServer, handler_cls=WSGIRequestHandler, **extra_params):  # noqa: E501
     server_address = (addr, port)
     if threading:
         httpd_cls = type('WSGIServer', (socketserver.ThreadingMixIn, server_cls), {})
     else:
         httpd_cls = server_cls
-    httpd = httpd_cls(server_address, handler_cls, ipv6=ipv6)
+    httpd = httpd_cls(server_address, handler_cls, ipv6=ipv6, **extra_params)
     if threading:
         # ThreadingMixIn.daemon_threads indicates how threads will behave on an
         # abrupt shutdown; like quitting the server by the user or restarting
@@ -124,8 +124,13 @@ class Command(BaseCommand):
             self._raw_ipv6 = self.use_ipv6
         self.run(**options)
 
+    def get_extra_params(self, *args, **options):
+        return {}
+
     def inner_run(self, *args, **options):
         # remove when dropping django <= 1.11
+
+        extra_params = self.get_extra_params(*args, **options)
 
         # If an exception was silenced in ManagementUtility.execute in order
         # to be raised in the child process, raise it now.
@@ -158,8 +163,16 @@ class Command(BaseCommand):
 
         try:
             handler = self.get_handler(*args, **options)
-            run(self.addr, int(self.port), handler,
-                ipv6=self.use_ipv6, threading=threading, server_cls=self.server_cls, handler_cls=handler_cls)
+            run(
+                addr=self.addr,
+                port=int(self.port),
+                wsgi_handler=handler,
+                ipv6=self.use_ipv6,
+                threading=threading,
+                server_cls=self.server_cls,
+                handler_cls=self.handler_cls,
+                **extra_params,
+            )
         except socket.error as e:
             # Use helpful error messages instead of ugly tracebacks.
             ERRORS = {
