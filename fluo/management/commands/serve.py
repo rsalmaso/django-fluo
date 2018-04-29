@@ -131,8 +131,6 @@ class Command(BaseCommand):
         return {}
 
     def inner_run(self, *args, **options):
-        # remove when dropping django <= 1.11
-
         extra_msg, extra_msg_params = self.get_extra_messages(*args, **options)
         extra_params = self.get_extra_params(*args, **options)
 
