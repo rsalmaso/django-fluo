@@ -35,10 +35,7 @@ __all__ = [
 
 class JSONEncoder(DjangoJSONEncoder):
     def default(self, obj):  # noqa
-        if isinstance(obj, datetime.timedelta):
-            return str(obj.total_seconds())
-        ####
-        elif isinstance(obj, QuerySet):
+        if isinstance(obj, QuerySet):
             return tuple(obj)
         elif hasattr(obj, 'tolist'):
             # Numpy arrays and array scalars.
