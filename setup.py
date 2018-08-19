@@ -26,12 +26,14 @@ import fluo
 from setuptools import find_packages, setup
 
 with io.open("README.md", "rt") as f:
-    description = f.read()
+    long_description = f.read()
 
 
 setup(
     name="django-fluo",
-    description=description,
+    description="various django utilities",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     version=fluo.__version__,
     url="https://bitbucket.org/rsalmaso/django-fluo",
     author=fluo.__author__,
