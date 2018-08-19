@@ -18,7 +18,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-import pip
+import subprocess
+import sys
+
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
@@ -44,6 +46,9 @@ class Command(BaseCommand):
 
     def install(self, pkgs, options):
         cmd = [
+            sys.executable,
+            "-m",
+            "pip",
             "install",
         ]
         if options.get("upgrade"):
@@ -54,11 +59,14 @@ class Command(BaseCommand):
             "--target=%s" % settings.LIB_DIR,
         ])
         cmd.extend(pkgs)
-        pip.main(cmd)
+        subprocess.call(cmd)
 
     def uninstall(self, pkgs, options):
         cmd = [
+            sys.executable,
+            "-m",
+            "pip",
             "uninstall",
         ]
         cmd.extend(pkgs)
-        pip.main(cmd)
+        subprocess.call(cmd)
