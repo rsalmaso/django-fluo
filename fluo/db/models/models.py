@@ -254,7 +254,7 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
         unique=True,
         validators=[
             validators.RegexValidator(
-                re.compile('^[\w.@+-]+$'),
+                re.compile(r'^[\w.@+-]+$'),
                 _('Enter a valid username.'),
                 'invalid',
             ),
