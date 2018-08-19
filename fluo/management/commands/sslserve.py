@@ -66,12 +66,16 @@ class Command(BaseCommand):
         super().add_arguments(parser)
         parser.add_argument(
             "--certificate",
+            action="store",
             default=self.get_cert_file(),
+            dest="cert_file",
             help=gettext("Path to the certificate"),
         )
         parser.add_argument(
             "--key",
+            action="store",
             default=self.get_key_file(),
+            dest="key_file",
             help=gettext("Path to the key file"),
         )
 
