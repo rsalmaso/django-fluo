@@ -106,7 +106,7 @@ class ForeignKeySearchInput(ForeignKeyRawIdWidget):
             opts = self.rel.to.model._meta  # django <= 1.11
         app_label = opts.app_label
         model_name = opts.object_name.lower()
-        related_url = reverse('admin:{}_{}_changelist'.format(app_label, model_name))
+        related_url = reverse('{}:{}_{}_changelist'.format(self.admin_site.name, app_label, model_name))
         params = self.url_parameters()
         if params:
             url = '?' + '&amp;'.join(['%s=%s' % (k, v) for k, v in params.items()])
