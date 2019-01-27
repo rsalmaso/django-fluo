@@ -86,7 +86,10 @@ class ForeignKeySearchInput(ForeignKeyRawIdWidget):
 
     def label_for_value(self, value):
         key = self.rel.get_related_field().name
-        obj = self.rel.to._default_manager.get(**{key: value})
+        try:
+            obj = self.rel.to._default_manager.get(**{key: value})  # django <= 1.11
+        except Exception:  # FIXME!!!
+            obj = self.rel.remote_field._default_manager.get(**{key: value})  # django >= 2
         return Truncator(obj).words(14, truncate='...')
 
     def __init__(self, rel, search_fields, attrs=None):
@@ -97,7 +100,10 @@ class ForeignKeySearchInput(ForeignKeyRawIdWidget):
         if attrs is None:
             attrs = {}
         # output = [super().render(name, value, attrs)]
-        opts = self.rel.to._meta
+        try:
+            opts = self.rel.remote_field.model._meta  # django >= 2
+        except Exception:  # FIXME!!!
+            opts = self.rel.to.model._meta  # django <= 1.11
         app_label = opts.app_label
         model_name = opts.object_name.lower()
         related_url = reverse('admin:{}_{}_changelist'.format(app_label, model_name))
