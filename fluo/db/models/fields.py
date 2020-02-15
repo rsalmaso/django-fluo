@@ -23,9 +23,10 @@
 #   - CreationDateTimeField
 #   - ModificationDateTimeField
 
-from django.core import validators
+from django.core import checks, validators
 from django.db import models
 from django.utils import timezone
+from django.utils.encoding import smart_text
 from django.utils.translation import gettext_lazy as _
 
 from ... import forms
@@ -39,6 +40,7 @@ __all__ = (
     "ModificationDateTimeField",
     "OrderField",
     "TimeDeltaField",
+    "StringField",
     "URIField",
 )
 
@@ -151,3 +153,56 @@ class TimeDeltaField(models.DecimalField):
         # skip DecimalField.formfield
         # which injects decimal_places and max_digits
         return models.Field.formfield(self, **defaults)
+
+
+class StringField(models.Field):
+    description = _("String")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if isinstance(self.max_length, int) and self.max_length > 0:
+            self.validators.append(validators.MaxLengthValidator(self.max_length))
+
+    def check(self, **kwargs):
+        errors = super().check(**kwargs)
+        errors.extend(self._check_max_length_attribute(**kwargs))
+        return errors
+
+    def formfield(self, **kwargs):
+        defaults = {"max_length": self.max_length}
+        defaults.update(kwargs)
+        return super().formfield(**defaults)
+
+    def get_internal_type(self):
+        return "TextField" if self.max_length is None else "CharField"
+
+    def to_python(self, value):
+        if isinstance(value, str) or value is None:
+            return value
+        return smart_text(value)
+
+    def get_prep_value(self, value):
+        value = super().get_prep_value(value)
+        return self.to_python(value)
+
+    def deconstruct(self):
+        name, path, args, kwargs = super().deconstruct()
+        kwargs["max_length"] = self.max_length
+        return name, path, args, kwargs
+
+    def _check_max_length_attribute(self, **kwargs):
+        is_integer = isinstance(self.max_length, int)
+        is_negative = is_integer and self.max_length <= 0
+        is_none = self.max_length is None
+        if (is_integer and is_negative) or (not is_integer and not is_none):
+            errors = [
+                checks.Error(
+                    "StringField must define a 'max_length' attribute (can be None or a positive integer).",
+                    hint=None,
+                    obj=self,
+                    id="fluo.E1",
+                )
+            ]
+        else:
+            errors = []
+        return errors
