@@ -1,4 +1,4 @@
-# Copyright (C) 2007-2019, Raffaele Salmaso <raffaele@salmaso.org>
+# Copyright (C) 2007-2020, Raffaele Salmaso <raffaele@salmaso.org>
 # Copyright (c) 2015 S-Block
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
