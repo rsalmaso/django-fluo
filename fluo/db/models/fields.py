@@ -24,20 +24,15 @@
 #   - ModificationDateTimeField
 #   - AutoSlugField
 
-# JsonField taken and adapted from https://github.com/bradjasper/django-jsonfield.git
-# Copyright (c) 2012 Brad Jasper
-
-import copy
 import re
 
-from django.core import exceptions, validators
+from django.core import validators
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from ... import forms
-from ...utils import json
 
 __all__ = (
     "StatusField",
@@ -49,7 +44,6 @@ __all__ = (
     "OrderField",
     "AutoSlugField",
     "TimeDeltaField",
-    "JsonField",
     "URIField",
 )
 
@@ -278,65 +272,3 @@ class TimeDeltaField(models.DecimalField):
         # skip DecimalField.formfield
         # which injects decimal_places and max_digits
         return models.Field.formfield(self, **defaults)
-
-
-class JsonField(models.TextField):
-    description = _("JSON object")
-    form_class = forms.JsonField
-    empty_values = ()
-
-    def __init__(self, *args, **kwargs):
-        self.dump_kwargs = kwargs.pop("dump_kwargs", {"separators": (",", ":")})
-        self.load_kwargs = kwargs.pop("load_kwargs", {})
-        super().__init__(*args, **kwargs)
-
-    def to_python(self, value):
-        if value is None or value == "":
-            value = {}
-        if isinstance(value, str):
-            try:
-                value = json.loads(value, **self.load_kwargs)
-            except ValueError:
-                raise exceptions.ValidationError(_("Enter valid JSON"))
-        return value
-
-    def from_db_value(self, value, expression, connection, context):
-        return self.to_python(value)
-
-    def get_db_prep_value(self, value, connection, **kwargs):
-        if self.null and value is None:
-            value = None
-        if not isinstance(value, str):
-            dump_kwargs = {"indent": 2}
-            dump_kwargs.update(self.dump_kwargs)
-            value = json.dumps(value, **dump_kwargs)
-        return value
-
-    def deconstruct(self):
-        name, path, args, kwargs = super().deconstruct()
-        if self.default == "{}":
-            del kwargs["default"]
-        return name, path, args, kwargs
-
-    def formfield(self, **kwargs):
-        if "form_class" not in kwargs:
-            kwargs["form_class"] = self.form_class
-        field = super().formfield(**kwargs)
-        if isinstance(field, forms.JsonField):
-            field.load_kwargs = self.load_kwargs
-
-        if not field.help_text:
-            field.help_text = _("Enter valid JSON")
-
-        return field
-
-    def get_default(self):
-        if self.has_default():
-            if callable(self.default):
-                default = self.default()
-            else:
-                default = copy.deepcopy(self.default)
-        # If the field doesn't have a default, then we punt to models.Field.
-        else:
-            default = super().get_default()
-        return default
