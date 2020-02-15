@@ -24,7 +24,10 @@ from django.conf import settings
 from django.contrib import admin
 from django.contrib.admin import helpers
 from django.contrib.admin.options import InlineModelAdmin, reverse
-from django.contrib.admin.templatetags.admin_static import static
+try:  # django < 3.0
+    from django.contrib.admin.templatetags.admin_static import static
+except ImportError:
+    from django.templatetags import static
 from django.contrib.admin.utils import unquote
 from django.core.exceptions import PermissionDenied
 from django.db import models, transaction
