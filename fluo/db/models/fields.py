@@ -106,24 +106,6 @@ class ModificationDateTimeField(CreationDateTimeField):
         return "DateTimeField"
 
 
-class URIField(models.CharField):
-    description = _("URI")
-
-    def __init__(self, verbose_name=None, name=None, **kwargs):
-        kwargs["max_length"] = kwargs.get("max_length", 8196)
-        models.CharField.__init__(self, verbose_name, name, **kwargs)
-        self.validators.append(validators.URLValidator())
-
-    def formfield(self, **kwargs):
-        # As with CharField, this will cause URL validation to be performed
-        # twice.
-        defaults = {
-            "form_class": forms.URLField,
-        }
-        defaults.update(kwargs)
-        return super().formfield(**defaults)
-
-
 class OrderField(models.IntegerField):
     def __init__(self, *args, **kwargs):
         kwargs["default"] = 0
@@ -206,3 +188,16 @@ class StringField(models.Field):
         else:
             errors = []
         return errors
+
+
+class URIField(StringField):
+    default_validators = [validators.URLValidator()]
+    description = _("URI")
+
+    def formfield(self, **kwargs):
+        # As with StringField, this will cause URL validation to be performed twice.
+        defaults = {
+            "form_class": forms.URLField,
+        }
+        defaults.update(kwargs)
+        return super().formfield(**defaults)
