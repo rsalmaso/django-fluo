@@ -25,10 +25,13 @@ if not apps.get_containing_app_config("django.contrib.postgres"):
 else:
     from django.contrib.postgres.fields import *  # noqa
 
+    from . import fields as _fields
+
     __all__ = [
         "ArrayField",
         "CICharField",
         "CIEmailField",
+        "CIStringField",
         "CIText",
         "CITextField",
         "DateTimeRangeField",
@@ -40,3 +43,6 @@ else:
         "HStoreField",
         "RangeField",
     ]
+
+    class CIStringField(CIText, _fields.StringField):
+        pass
