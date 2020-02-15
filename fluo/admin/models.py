@@ -103,21 +103,10 @@ class AutocompleteMixin:
 
     def formfield_for_foreignkey(self, db_field, request=None, **kwargs):
         if db_field.name in self.related_search_fields:
-            try:
-                model_name = db_field.remote_field.model._meta.object_name  # django >= 2
-            except:  # FIXME!!!
-                model_name = db_field.rel.to._meta.object_name  # django <= 1.11
-            help_text = self.get_help_text(db_field.name, model_name)
+            help_text = self.get_help_text(db_field.name, db_field.remote_field.model._meta.object_name)
             if kwargs.get("help_text"):
                 help_text = "{} {}".format(kwargs["help_text"], help_text)
-            try:
-                kwargs["widget"] = ForeignKeySearchInput(
-                    db_field.remote_field, self.related_search_fields[db_field.name]
-                )  # django >= 2
-            except:  # FIXME!!!
-                kwargs["widget"] = ForeignKeySearchInput(
-                    db_field.rel, self.related_search_fields[db_field.name]
-                )  # django <= 1.11
+            kwargs["widget"] = ForeignKeySearchInput(db_field.remote_field, self.related_search_fields[db_field.name])
             kwargs["help_text"] = help_text
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 

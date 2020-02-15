@@ -30,23 +30,3 @@ class FluoConfig(AppConfig):
 
 class FluoAdminConfig(AdminConfig):
     default_site = "fluo.admin.sites.AdminSite"
-
-    def ready(self):
-        try:
-            from django.contrib.admin.sites import DefaultAdminSite  # noqa
-        except ImportError:
-            self.override_admin_site()
-        super().ready()
-
-    def override_admin_site(self):
-        from django.contrib import admin as django_admin
-        from django.contrib.admin import sites as django_sites
-        from fluo import admin as fluo_admin
-        from fluo.admin.sites import DefaultAdminSite
-
-        site = DefaultAdminSite()
-
-        setattr(django_admin, "site", site)
-        setattr(django_sites, "site", site)
-        setattr(django_sites, "DefaultAdminSite", DefaultAdminSite)
-        setattr(fluo_admin, "site", site)

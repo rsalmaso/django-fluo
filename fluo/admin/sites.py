@@ -20,13 +20,10 @@
 
 from functools import update_wrapper
 
-from django.apps import apps
 from django.contrib import admin
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, HttpResponseRedirect
-from django.utils.functional import LazyObject
-from django.utils.module_loading import import_string
 from django.utils.translation import gettext as _
 
 __all__ = [
@@ -75,9 +72,3 @@ class AdminSite(admin.AdminSite):
         absurl = get_absolute_url()
 
         return HttpResponseRedirect(absurl)
-
-
-class DefaultAdminSite(LazyObject):
-    def _setup(self):
-        AdminSiteClass = import_string(apps.get_app_config("admin").default_site)
-        self._wrapped = AdminSiteClass()

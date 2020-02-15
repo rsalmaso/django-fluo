@@ -26,7 +26,10 @@ from django.utils.translation import get_language
 from fluo.settings import JQUERY_MINIFIED, MEDIA_URL
 
 if apps.is_installed("django.contrib.staticfiles"):
-    from django.contrib.staticfiles.templatetags.staticfiles import static as _static
+    try:
+        from django.contrib.staticfiles.templatetags.staticfiles import static as _static  # django < 3.0
+    except ImportError:
+        from django.templatetags.static import static as _static  # django >= 3.0
 else:
     from django.templatetags.static import static as _static
 
