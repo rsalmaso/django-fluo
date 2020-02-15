@@ -24,12 +24,19 @@ if not apps.get_containing_app_config("django.contrib.postgres"):
     __all__ = []
 else:
     from django.contrib.postgres.fields import *  # noqa
+
     __all__ = [
-        'ArrayField',
-        'CICharField', 'CIEmailField', 'CIText', 'CITextField',
-        'DateTimeRangeField', 'DateRangeField',
-        'IntegerRangeField', 'BigIntegerRangeField', 'FloatRangeField',
-        'JSONField',
-        'HStoreField',
-        'RangeField',
+        "ArrayField",
+        "CICharField",
+        "CIEmailField",
+        "CIText",
+        "CITextField",
+        "DateTimeRangeField",
+        "DateRangeField",
+        "IntegerRangeField",
+        "BigIntegerRangeField",
+        "FloatRangeField",
+        "JSONField",
+        "HStoreField",
+        "RangeField",
     ]

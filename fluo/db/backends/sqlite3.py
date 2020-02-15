@@ -22,7 +22,7 @@ import os
 
 from .. import backend
 
-__all__ = ['Backend']
+__all__ = ["Backend"]
 
 
 class Backend(backend.Backend):

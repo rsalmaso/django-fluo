@@ -40,33 +40,39 @@ from ... import forms
 from ...utils import json
 
 __all__ = (
-    'StatusField', 'STATUS_ACTIVE', 'STATUS_INACTIVE', 'STATUS_CHOICES',
-    'CreationDateTimeField', 'ModificationDateTimeField',
-    'OrderField',
-    'AutoSlugField',
-    'TimeDeltaField',
-    'JsonField',
-    'URIField',
+    "StatusField",
+    "STATUS_ACTIVE",
+    "STATUS_INACTIVE",
+    "STATUS_CHOICES",
+    "CreationDateTimeField",
+    "ModificationDateTimeField",
+    "OrderField",
+    "AutoSlugField",
+    "TimeDeltaField",
+    "JsonField",
+    "URIField",
 )
 
 
-STATUS_ACTIVE = 'active'
-STATUS_INACTIVE = 'inactive'
+STATUS_ACTIVE = "active"
+STATUS_INACTIVE = "inactive"
 STATUS_CHOICES = (
-    (STATUS_ACTIVE, _('Active')),
-    (STATUS_INACTIVE, _('Inactive')),
+    (STATUS_ACTIVE, _("Active")),
+    (STATUS_INACTIVE, _("Inactive")),
 )
 
 
 class StatusField(models.CharField):
-    def __init__(self,
-                 choices=STATUS_CHOICES,
-                 max_length=10,
-                 default=STATUS_ACTIVE,
-                 blank=False,
-                 null=False,
-                 verbose_name=_('status'),
-                 help_text=_('Is active?')):
+    def __init__(
+        self,
+        choices=STATUS_CHOICES,
+        max_length=10,
+        default=STATUS_ACTIVE,
+        blank=False,
+        null=False,
+        verbose_name=_("status"),
+        help_text=_("Is active?"),
+    ):
         super().__init__(
             choices=choices,
             max_length=max_length,
@@ -74,7 +80,7 @@ class StatusField(models.CharField):
             blank=blank,
             null=null,
             verbose_name=verbose_name,
-            help_text=help_text
+            help_text=help_text,
         )
 
 
@@ -84,9 +90,9 @@ class CreationDateTimeField(models.DateTimeField):
     """
 
     def __init__(self, *args, **kwargs):
-        kwargs.setdefault('editable', False)
-        kwargs.setdefault('blank', True)
-        kwargs.setdefault('default', timezone.now)
+        kwargs.setdefault("editable", False)
+        kwargs.setdefault("blank", True)
+        kwargs.setdefault("default", timezone.now)
         super().__init__(*args, **kwargs)
 
     def get_internal_type(self):
@@ -113,7 +119,7 @@ class URIField(models.CharField):
     description = _("URI")
 
     def __init__(self, verbose_name=None, name=None, **kwargs):
-        kwargs['max_length'] = kwargs.get('max_length', 8196)
+        kwargs["max_length"] = kwargs.get("max_length", 8196)
         models.CharField.__init__(self, verbose_name, name, **kwargs)
         self.validators.append(validators.URLValidator())
 
@@ -121,7 +127,7 @@ class URIField(models.CharField):
         # As with CharField, this will cause URL validation to be performed
         # twice.
         defaults = {
-            'form_class': forms.URLField,
+            "form_class": forms.URLField,
         }
         defaults.update(kwargs)
         return super().formfield(**defaults)
@@ -147,17 +153,18 @@ class AutoSlugField(models.SlugField):
     Inspired by SmileyChris' Unique Slugify snippet:
     http://www.djangosnippets.org/snippets/690/
     """
+
     def __init__(self, *args, **kwargs):
-        kwargs.setdefault('blank', True)
+        kwargs.setdefault("blank", True)
         # kwargs.setdefault('editable', False)
 
-        populate_from = kwargs.pop('populate_from', None)
+        populate_from = kwargs.pop("populate_from", None)
         if populate_from is None:
             raise ValueError("missing 'populate_from' argument")
         else:
             self._populate_from = populate_from
-        self.separator = kwargs.pop('separator', '-')
-        self.overwrite = kwargs.pop('overwrite', False)
+        self.separator = kwargs.pop("separator", "-")
+        self.overwrite = kwargs.pop("overwrite", False)
         super().__init__(*args, **kwargs)
 
     def _slug_strip(self, value):
@@ -168,9 +175,9 @@ class AutoSlugField(models.SlugField):
         If an alternate separator is used, it will also replace any instances
         of the default '-' separator with the new separator.
         """
-        re_sep = '(?:-|%s)' % re.escape(self.separator)
-        value = re.sub('%s+' % re_sep, self.separator, value)
-        return re.sub(r'^%s+|%s+$' % (re_sep, re_sep), '', value)
+        re_sep = "(?:-|%s)" % re.escape(self.separator)
+        value = re.sub("%s+" % re_sep, self.separator, value)
+        return re.sub(r"^%s+|%s+$" % (re_sep, re_sep), "", value)
 
     def slugify_func(self, content):
         return slugify(content)
@@ -178,7 +185,7 @@ class AutoSlugField(models.SlugField):
     def create_slug(self, model_instance, add):
         # get fields to populate from and slug field to set
         if not isinstance(self._populate_from, (list, tuple)):
-            self._populate_from = (self._populate_from, )
+            self._populate_from = [self._populate_from]
         slug_field = model_instance._meta.get_field(self.attname)
 
         if add or self.overwrite:
@@ -223,12 +230,12 @@ class AutoSlugField(models.SlugField):
         # depending on the given slug, clean-up
         while not slug or queryset.filter(**kwargs):
             slug = original_slug
-            end = '%s%s' % (self.separator, next)
+            end = "%s%s" % (self.separator, next)
             end_len = len(end)
             if slug_len and len(slug) + end_len > slug_len:
-                slug = slug[:slug_len - end_len]
+                slug = slug[: slug_len - end_len]
                 slug = self._slug_strip(slug)
-            slug = '%s%s' % (slug, end)
+            slug = "%s%s" % (slug, end)
             kwargs[self.attname] = slug
             next += 1
         return slug
@@ -244,32 +251,28 @@ class AutoSlugField(models.SlugField):
 
 class OrderField(models.IntegerField):
     def __init__(self, *args, **kwargs):
-        kwargs['default'] = 0
+        kwargs["default"] = 0
         models.Field.__init__(self, *args, **kwargs)
 
     def formfield(self, **kwargs):
-        defaults = {'form_class': forms.OrderField}
+        defaults = {"form_class": forms.OrderField}
         defaults.update(kwargs)
         return super().formfield(**defaults)
 
 
 class TimeDeltaField(models.DecimalField):
-    description = _('TimeDelta field')
+    description = _("TimeDelta field")
 
     def __init__(self, milliseconds=False, verbose_name=None, name=None, default=0, *args, **kwargs):
         self.milliseconds = milliseconds
-        kwargs.setdefault('decimal_places', 3)
-        kwargs.setdefault('max_digits', 12)
-        super().__init__(
-            verbose_name=verbose_name,
-            name=name,
-            **kwargs
-        )
+        kwargs.setdefault("decimal_places", 3)
+        kwargs.setdefault("max_digits", 12)
+        super().__init__(verbose_name=verbose_name, name=name, **kwargs)
 
     def formfield(self, **kwargs):
         defaults = {
-            'form_class': forms.TimeDeltaField,
-            'milliseconds': self.milliseconds,
+            "form_class": forms.TimeDeltaField,
+            "milliseconds": self.milliseconds,
         }
         defaults.update(kwargs)
         # skip DecimalField.formfield
@@ -283,10 +286,8 @@ class JsonField(models.TextField):
     empty_values = ()
 
     def __init__(self, *args, **kwargs):
-        self.dump_kwargs = kwargs.pop('dump_kwargs', {
-            'separators': (',', ':')
-        })
-        self.load_kwargs = kwargs.pop('load_kwargs', {})
+        self.dump_kwargs = kwargs.pop("dump_kwargs", {"separators": (",", ":")})
+        self.load_kwargs = kwargs.pop("load_kwargs", {})
         super().__init__(*args, **kwargs)
 
     def to_python(self, value):
@@ -313,8 +314,8 @@ class JsonField(models.TextField):
 
     def deconstruct(self):
         name, path, args, kwargs = super().deconstruct()
-        if self.default == '{}':
-            del kwargs['default']
+        if self.default == "{}":
+            del kwargs["default"]
         return name, path, args, kwargs
 
     def formfield(self, **kwargs):

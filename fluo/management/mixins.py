@@ -25,10 +25,10 @@ from importlib import import_module
 class ChdirMixin:
     def add_arguments(self, parser):
         super().add_arguments(parser)
-        parser.add_argument('module', nargs='?', default=None, help='path/module to process')
+        parser.add_argument("module", nargs="?", default=None, help="path/module to process")
 
     def handle(self, *args, **options):
-        module = options.get('module')
+        module = options.get("module")
         if module is not None:
             if os.path.exists(module):
                 path = module

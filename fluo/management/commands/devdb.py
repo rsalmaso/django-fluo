@@ -27,48 +27,34 @@ User = get_user_model()
 
 class Command(BaseCommand):
     help = "Set some data useful for local development."
+
     def add_arguments(self, parser):
         super().add_arguments(parser)
         parser.add_argument(
-            '--username',
-            '-u',
-            action='store',
-            dest='username',
-            default='admin',
-            help='Use username as admin user.',
+            "--username", "-u", action="store", dest="username", default="admin", help="Use username as admin user.",
         )
         parser.add_argument(
-            '--password',
-            '-p',
-            action='store',
-            dest='password',
-            default='admin',
-            help='New password for "admin" user.',
+            "--password", "-p", action="store", dest="password", default="admin", help='New password for "admin" user.',
         )
         parser.add_argument(
-            '--site',
-            '-s',
-            action='store',
-            dest='site',
-            default='1',
-            help='Update this SITE_ID domain/name.',
+            "--site", "-s", action="store", dest="site", default="1", help="Update this SITE_ID domain/name.",
         )
         parser.add_argument(
-            '--domain',
-            '-d',
-            action='store',
-            dest='domain',
-            default='localhost:8000',
-            help='Use this domain/name for SITE_ID.',
+            "--domain",
+            "-d",
+            action="store",
+            dest="domain",
+            default="localhost:8000",
+            help="Use this domain/name for SITE_ID.",
         )
 
     def handle(self, **options):
-        user = User.objects.get(username=options.get('username'))
-        user.set_password(options.get('password'))
+        user = User.objects.get(username=options.get("username"))
+        user.set_password(options.get("password"))
         user.save()
 
-        site = Site.objects.get(pk=options.get('site'))
-        domain = options.get('domain')
+        site = Site.objects.get(pk=options.get("site"))
+        domain = options.get("domain")
         site.domain = domain
         site.name = domain
         site.save()

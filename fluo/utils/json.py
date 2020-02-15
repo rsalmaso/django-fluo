@@ -27,9 +27,13 @@ from django.utils.encoding import force_text
 from django.utils.functional import Promise
 
 __all__ = [
-    'decoder', 'encoder', 'scanner',
-    'dump', 'dumps',
-    'load', 'loads',
+    "decoder",
+    "encoder",
+    "scanner",
+    "dump",
+    "dumps",
+    "load",
+    "loads",
 ]
 
 
@@ -37,15 +41,15 @@ class JSONEncoder(DjangoJSONEncoder):
     def default(self, obj):  # noqa
         if isinstance(obj, QuerySet):
             return tuple(obj)
-        elif hasattr(obj, 'tolist'):
+        elif hasattr(obj, "tolist"):
             # Numpy arrays and array scalars.
             return obj.tolist()
-        elif hasattr(obj, '__getitem__'):
+        elif hasattr(obj, "__getitem__"):
             try:
                 return dict(obj)
             except:
                 pass
-        elif hasattr(obj, '__iter__'):
+        elif hasattr(obj, "__iter__"):
             return tuple(item for item in obj)
         return super().default(obj)
 
@@ -55,7 +59,20 @@ encoder = json.encoder
 scanner = json.scanner
 
 
-def dump(obj, fp, skipkeys=False, ensure_ascii=True, check_circular=True, allow_nan=True, cls=None, indent=None, separators=None, encoding='utf-8', default=None, **kw): # NOQA
+def dump(
+    obj,
+    fp,
+    skipkeys=False,
+    ensure_ascii=True,
+    check_circular=True,
+    allow_nan=True,
+    cls=None,
+    indent=None,
+    separators=None,
+    encoding="utf-8",
+    default=None,
+    **kw,
+):  # NOQA
     """Serialize ``obj`` as a JSON formatted stream to ``fp`` (a
     ``.write()``-supporting file-like object).
 
@@ -115,7 +132,19 @@ def dump(obj, fp, skipkeys=False, ensure_ascii=True, check_circular=True, allow_
     return json.dump(**kwargs)
 
 
-def dumps(obj, skipkeys=False, ensure_ascii=True, check_circular=True, allow_nan=True, cls=None, indent=None, separators=None, encoding='utf-8', default=None, **kw): # NOQA
+def dumps(
+    obj,
+    skipkeys=False,
+    ensure_ascii=True,
+    check_circular=True,
+    allow_nan=True,
+    cls=None,
+    indent=None,
+    separators=None,
+    encoding="utf-8",
+    default=None,
+    **kw,
+):  # NOQA
     """Serialize ``obj`` to a JSON formatted ``str``.
 
     If ``skipkeys`` is false then ``dict`` keys that are not basic types
@@ -171,7 +200,17 @@ def dumps(obj, skipkeys=False, ensure_ascii=True, check_circular=True, allow_nan
     return json.dumps(**kwargs)
 
 
-def load(fp, encoding=None, cls=None, object_hook=None, parse_float=None, parse_int=None, parse_constant=None, object_pairs_hook=None, **kw): # NOQA
+def load(
+    fp,
+    encoding=None,
+    cls=None,
+    object_hook=None,
+    parse_float=None,
+    parse_int=None,
+    parse_constant=None,
+    object_pairs_hook=None,
+    **kw,
+):  # NOQA
     kwargs = {
         "fp": fp,
         "cls": cls,
@@ -184,10 +223,22 @@ def load(fp, encoding=None, cls=None, object_hook=None, parse_float=None, parse_
     kwargs.update(kw)
 
     return json.load(**kwargs)
+
+
 load.__doc__ = json.load.__doc__
 
 
-def loads(s, encoding=None, cls=None, object_hook=None, parse_float=None, parse_int=None, parse_constant=None, object_pairs_hook=None, **kw): # NOQA
+def loads(
+    s,
+    encoding=None,
+    cls=None,
+    object_hook=None,
+    parse_float=None,
+    parse_int=None,
+    parse_constant=None,
+    object_pairs_hook=None,
+    **kw,
+):  # NOQA
     kwargs = {
         "s": s,
         "cls": cls,
@@ -200,4 +251,6 @@ def loads(s, encoding=None, cls=None, object_hook=None, parse_float=None, parse_
     kwargs.update(kw)
 
     return json.loads(**kwargs)
+
+
 loads.__doc__ = json.loads.__doc__

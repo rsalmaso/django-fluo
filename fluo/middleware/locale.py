@@ -33,16 +33,14 @@ from django.utils.cache import patch_vary_headers
 from django.utils.deprecation import MiddlewareMixin
 from fluo.settings import NO_LOCALE_PATTERNS
 
-SUB = re.compile(r'<a([^>]+)href="/(?!(%s|%s|%s))([^"]*)"([^>]*)>' % (
-    "|".join(map(lambda l: l[0] + "/", settings.LANGUAGES)),
-    settings.MEDIA_URL[1:],
-    settings.STATIC_URL[1:],
-))
-SUB2 = re.compile(r'<form([^>]+)action="/(?!(%s|%s|%s))([^"]*)"([^>]*)>' % (
-    "|".join(map(lambda l: l[0] + "/", settings.LANGUAGES)),
-    settings.MEDIA_URL[1:],
-    settings.STATIC_URL[1:],
-))
+SUB = re.compile(
+    r'<a([^>]+)href="/(?!(%s|%s|%s))([^"]*)"([^>]*)>'
+    % ("|".join(map(lambda l: l[0] + "/", settings.LANGUAGES)), settings.MEDIA_URL[1:], settings.STATIC_URL[1:])
+)
+SUB2 = re.compile(
+    r'<form([^>]+)action="/(?!(%s|%s|%s))([^"]*)"([^>]*)>'
+    % ("|".join(map(lambda l: l[0] + "/", settings.LANGUAGES)), settings.MEDIA_URL[1:], settings.STATIC_URL[1:])
+)
 SUPPORTED = dict(settings.LANGUAGES)
 START_SUB = re.compile(r"^/(%s)/(.*)" % "|".join(map(lambda l: l[0], settings.LANGUAGES)))
 NO_LOCALE_SUB = re.compile(r"^(%s|%s)(.*)" % ("|".join(NO_LOCALE_PATTERNS), settings.STATIC_URL))
@@ -94,14 +92,14 @@ def get_default_language(language_code=None):
 
 
 def get_language_from_request(request):
-    language = request.GET.get('language', request.POST.get('language', None))
+    language = request.GET.get("language", request.POST.get("language", None))
 
     if language:
         if language not in dict(settings.LANGUAGES).keys():
             language = None
 
     if language is None:
-        language = getattr(request, 'LANGUAGE_CODE', None)
+        language = getattr(request, "LANGUAGE_CODE", None)
 
     if language:
         if language not in dict(settings.LANGUAGES).keys():
@@ -151,7 +149,7 @@ class LocaleMiddleware(MiddlewareMixin):
 
         prefix = has_lang_prefix(request.path_info)
         if not prefix:
-            return HttpResponseRedirect('/%s%s' % (settings.LANGUAGE_CODE[:2], request.get_full_path()))
+            return HttpResponseRedirect("/%s%s" % (settings.LANGUAGE_CODE[:2], request.get_full_path()))
         language = self.get_language_from_request(request)
         translation.activate(language)
         request.LANGUAGE_CODE = translation.get_language()
@@ -161,23 +159,28 @@ class LocaleMiddleware(MiddlewareMixin):
         if skip_translation(path):
             return response
 
-        patch_vary_headers(response, ("Accept-Language",))
+        patch_vary_headers(response, ["Accept-Language"])
         translation.deactivate()
 
-        if not skip_translation(path) and response.status_code == 200 and response._headers['content-type'][1].split(';')[0] == "text/html": # NOQA
+        if (
+            not skip_translation(path)
+            and response.status_code == 200
+            and response._headers["content-type"][1].split(";")[0] == "text/html"
+        ):  # NOQA
             response.content = SUB.sub(
-                r'<a\1href="/%s/\3"\4>' % request.LANGUAGE_CODE,
-                response.content.decode('utf-8'),
+                r'<a\1href="/%s/\3"\4>' % request.LANGUAGE_CODE, response.content.decode("utf-8"),
             )
             response.content = SUB2.sub(
-                r'<form\1action="/%s/\3"\4>' % request.LANGUAGE_CODE,
-                response.content.decode('utf-8'),
+                r'<form\1action="/%s/\3"\4>' % request.LANGUAGE_CODE, response.content.decode("utf-8"),
             )
         if response.status_code == 301 or response.status_code == 302:
-            if 'Content-Language' not in response:
-                response['Content-Language'] = translation.get_language()
-            location = response._headers['location']
+            if "Content-Language" not in response:
+                response["Content-Language"] = translation.get_language()
+            location = response._headers["location"]
             prefix = has_lang_prefix(location[1])
             if not prefix and location[1].startswith("/") and not skip_translation(location[1]):
-                response._headers['location'] = (location[0], "/%s%s" % (request.LANGUAGE_CODE, location[1]))
+                response._headers["location"] = (
+                    location[0],
+                    "/%s%s" % (request.LANGUAGE_CODE, location[1]),
+                )
         return response

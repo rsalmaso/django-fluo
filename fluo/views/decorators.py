@@ -26,10 +26,14 @@ from django.utils.cache import cache
 from django.utils.decorators import method_decorator, wraps
 
 __all__ = [
-    'ajax_required', 'ajax_required_m',
-    'login_required', 'login_required_m',
-    'throttle', 'throttle_m',
+    "ajax_required",
+    "ajax_required_m",
+    "login_required",
+    "login_required_m",
+    "throttle",
+    "throttle_m",
 ]
+
 
 def ajax_required(func):
     # taken from djangosnippets.org
@@ -42,14 +46,19 @@ def ajax_required(func):
         ....
 
     """
+
     def wrap(request, *args, **kwargs):
         if not request.is_ajax():
             return HttpResponseBadRequest
         return func(request, *args, **kwargs)
+
     wrap.__doc__ = func.__doc__
     wrap.__name__ = func.__name__
     return wrap
+
+
 ajax_required_m = method_decorator(ajax_required)
+
 
 def login_required(function=None, required=False, redirect_field_name=REDIRECT_FIELD_NAME):
     """
@@ -58,15 +67,9 @@ def login_required(function=None, required=False, redirect_field_name=REDIRECT_F
     """
     if required:
         if django.VERSION < (1, 11):
-            actual_decorator = user_passes_test(
-                lambda u: u.is_authenticated(),
-                redirect_field_name=redirect_field_name
-            )
+            actual_decorator = user_passes_test(lambda u: u.is_authenticated(), redirect_field_name=redirect_field_name)
         else:
-            actual_decorator = user_passes_test(
-                lambda u: u.is_authenticated,
-                redirect_field_name=redirect_field_name
-            )
+            actual_decorator = user_passes_test(lambda u: u.is_authenticated, redirect_field_name=redirect_field_name)
         if function:
             return actual_decorator(function)
         return actual_decorator
@@ -74,20 +77,28 @@ def login_required(function=None, required=False, redirect_field_name=REDIRECT_F
     def decorator(view_func):
         def _wrapper(request, *args, **kwargs):
             return function(request, *args, **kwargs)
+
         return wraps(function)(_wrapper)
+
     return method_decorator(decorator)
+
+
 login_required_m = method_decorator(login_required)
 
-def throttle(func, limit=3, duration=900, methods=('POST','GET', 'PUT', 'DELETE', 'OPTIONS')):
+
+def throttle(func, limit=3, duration=900, methods=("POST", "GET", "PUT", "DELETE", "OPTIONS")):
     def inner(request, *args, **kwargs):
         if request.method in methods:
-            remote_addr = request.META.get('HTTP_X_FORWARDED_FOR') or request.META.get('REMOTE_ADDR')
+            remote_addr = request.META.get("HTTP_X_FORWARDED_FOR") or request.META.get("REMOTE_ADDR")
             if cache.get(remote_addr) == limit:
-                return HttpResponseForbidden('Try slowing down a little.')
+                return HttpResponseForbidden("Try slowing down a little.")
             elif not cache.get(remote_addr):
                 cache.set(remote_addr, 1, duration)
             else:
                 cache.incr(remote_addr)
         return func(request, *args, **kwargs)
+
     return inner
+
+
 throttle_m = method_decorator(throttle)

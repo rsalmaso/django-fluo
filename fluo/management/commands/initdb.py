@@ -37,11 +37,11 @@ The full error: %(error)s"""
     def add_arguments(self, parser):
         super().add_arguments(parser)
         parser.add_argument(
-            '--noadmin',
-            action='store_false',
-            dest='noadmin',
+            "--noadmin",
+            action="store_false",
+            dest="noadmin",
             default=True,
-            help='Tells Django to NOT create a default admin user.',
+            help="Tells Django to NOT create a default admin user.",
         )
 
     def execute_sql(self, backend, **options):
@@ -49,9 +49,9 @@ The full error: %(error)s"""
         backend.createdb()
 
     def migrate(self):
-        call_command('migrate')
+        call_command("migrate")
 
     def post_execute(self, **options):
         self.migrate()
-        if options.get('noadmin'):
-            call_command('load_admin_data')
+        if options.get("noadmin"):
+            call_command("load_admin_data")

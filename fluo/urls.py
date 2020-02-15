@@ -20,7 +20,12 @@
 
 from django.conf.urls import handler400, handler403, handler404, handler500
 from django.urls import (
-    NoReverseMatch, Resolver404, ResolverMatch, get_script_prefix, resolve, reverse as django_reverse,
+    NoReverseMatch,
+    Resolver404,
+    ResolverMatch,
+    get_script_prefix,
+    resolve,
+    reverse as django_reverse,
 )
 from django.utils.functional import lazy
 from django.utils.http import urlencode
@@ -43,15 +48,31 @@ except ImportError:
 try:
     from django.urls import URLPattern, URLResolver
 except ImportError:
-    from django.urls import RegexURLPattern as URLPattern, RegexURLResolver as URLResolver
+    from django.urls import (
+        RegexURLPattern as URLPattern,
+        RegexURLResolver as URLResolver,
+    )
 
 
 __all__ = [
-    'handler400', 'handler403', 'handler404', 'handler500',
-    'path', 're_path', 'url', 'include',
-    'NoReverseMatch', 'URLPattern', 'URLResolver', 'ResolverMatch', 'Resolver404', 'get_script_prefix',
-    'reverse', 'reverse_lazy', 'resolve',
-    'UrlsMixin',
+    "handler400",
+    "handler403",
+    "handler404",
+    "handler500",
+    "path",
+    "re_path",
+    "url",
+    "include",
+    "NoReverseMatch",
+    "URLPattern",
+    "URLResolver",
+    "ResolverMatch",
+    "Resolver404",
+    "get_script_prefix",
+    "reverse",
+    "reverse_lazy",
+    "resolve",
+    "UrlsMixin",
 ]
 
 
@@ -67,11 +88,11 @@ class UrlsMixin:
 def reverse(viewname, *, args=None, kwargs=None, request=None, format=None, data=None, **extra):
     if format is not None:
         kwargs = kwargs or {}
-        kwargs['format'] = format
+        kwargs["format"] = format
     url = django_reverse(viewname, args=args, kwargs=kwargs, **extra)
 
     if data is not None:
-        url += '?' + urlencode(data)
+        url += "?" + urlencode(data)
 
     if request:
         url = request.build_absolute_uri(url)

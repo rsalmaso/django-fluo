@@ -20,7 +20,7 @@
 
 from . import sqlite3
 
-__all__ = ['Backend']
+__all__ = ["Backend"]
 
 
 class Backend(sqlite3.Backend):

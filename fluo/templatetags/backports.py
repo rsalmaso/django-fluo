@@ -27,9 +27,9 @@ try:
     from django.template.defaultfilters import json_script
 except ImportError:
     _json_script_escapes = {
-        ord('>'): '\\u003E',
-        ord('<'): '\\u003C',
-        ord('&'): '\\u0026',
+        ord(">"): "\\u003E",
+        ord("<"): "\\u003C",
+        ord("&"): "\\u0026",
     }
 
     @register.filter(is_safe=True)
@@ -41,7 +41,4 @@ except ImportError:
         from django.utils.safestring import mark_safe
 
         json_str = json.dumps(value, cls=DjangoJSONEncoder).translate(_json_script_escapes)
-        return format_html(
-            '<script id="{}" type="application/json">{}</script>',
-            element_id, mark_safe(json_str)
-        )
+        return format_html('<script id="{}" type="application/json">{}</script>', element_id, mark_safe(json_str))

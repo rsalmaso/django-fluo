@@ -22,23 +22,38 @@ from django.core import mail
 
 
 class EmailMessage(mail.EmailMessage):
-    def __init__(self, subject='', body='', from_email=None, to=None, cc=None, bcc=None, connection=None, attachments=None, headers=None):
+    def __init__(
+        self,
+        subject="",
+        body="",
+        from_email=None,
+        to=None,
+        cc=None,
+        bcc=None,
+        connection=None,
+        attachments=None,
+        headers=None,
+    ):
         if isinstance(to, str):
-            to = (to,)
+            to = [to]
         if isinstance(cc, str):
-            cc = (cc,)
+            cc = [cc]
         if isinstance(bcc, str):
-            bcc = (bcc,)
+            bcc = [bcc]
         self.cc = cc
         super().__init__(subject, body, from_email, to, bcc, connection, attachments, headers)
+
     def message(self):
         msg = super().message()
-        msg['Cc'] = ', '.join(self.cc)
+        msg["Cc"] = ", ".join(self.cc)
         return msg
+
     def recipients(self):
         return self.to + self.cc + self.bcc
 
+
 class EmailMultiAlternatives(mail.EmailMessage):
-    multipart_subtype = 'alternative'
+    multipart_subtype = "alternative"
+
     def attach_alternative(self, content, mimetype=None):
         self.attach(content=content, mimetype=mimetype)

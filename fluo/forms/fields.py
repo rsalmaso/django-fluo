@@ -32,11 +32,11 @@ from fluo.utils import json
 from .widgets import GroupedSelect, TimeDeltaWidget
 
 __all__ = (
-    'OrderField',
-    'TextField',
-    'GroupedChoiceField',
-    'TimeDeltaField',
-    'JsonField',
+    "OrderField",
+    "TextField",
+    "GroupedChoiceField",
+    "TimeDeltaField",
+    "JsonField",
 )
 
 
@@ -44,6 +44,7 @@ try:
     # new from django-admin-ui branch
     from django.forms import OrderField
 except ImportError:
+
     class OrderField(forms.IntegerField):
         pass
 
@@ -56,15 +57,19 @@ class TextField(forms.CharField):
 class GroupedChoiceField(forms.ChoiceField):
     widget = GroupedSelect
 
-    def __init__(self, choices=(), required=True, widget=None, label=None, initial=None, help_text=None, *args, **kwargs): # NOQA
+    def __init__(
+        self, choices=(), required=True, widget=None, label=None, initial=None, help_text=None, *args, **kwargs
+    ):  # NOQA
         super().__init__(
-            #choices=choices,
+            # choices=choices,
             required=required,
             widget=widget,
             label=label,
             initial=initial,
             help_text=help_text,
-            *args, **kwargs)
+            *args,
+            **kwargs,
+        )
         self.choices = choices
 
     def clean(self, value):
@@ -72,23 +77,23 @@ class GroupedChoiceField(forms.ChoiceField):
         Validates that the input is in self.choices.
         """
         value = super().clean(value)
-        if value in (None, ''):
-            value = ''
+        if value in (None, ""):
+            value = ""
         value = smart_text(value)
-        if value == '':
+        if value == "":
             return value
         valid_values = []
         for group_label, group in self.choices:
             valid_values += [str(k) for k, v in group]
         if value not in valid_values:
-            raise ValidationError(gettext('Select a valid choice. That choice is not one of the available choices.'))
+            raise ValidationError(gettext("Select a valid choice. That choice is not one of the available choices."))
         return value
 
 
 class TimeDeltaField(forms.MultiValueField):
     """Input accurate timing. Interface with models.TimeDeltaField."""
 
-    LABELS = [_('Hours'), _('Minutes'), _('Seconds'), _('Milliseconds')]
+    LABELS = [_("Hours"), _("Minutes"), _("Seconds"), _("Milliseconds")]
     SECONDS = [60 * 60, 60, 1, 0.001]
 
     def __init__(self, milliseconds=True, *args, **kwargs):
@@ -101,6 +106,7 @@ class TimeDeltaField(forms.MultiValueField):
 
     def compress(self, value):
         from functools import reduce
+
         if value:
             return "{}".format(reduce(add, map(lambda x: mul(*x), zip(map(float, value), self.SECONDS))))
         return None

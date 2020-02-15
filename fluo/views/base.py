@@ -22,32 +22,49 @@ import logging
 
 from django.core.exceptions import ImproperlyConfigured
 from django.http import (
-    HttpResponse, HttpResponseGone, HttpResponseNotAllowed, HttpResponsePermanentRedirect, HttpResponseRedirect,
+    HttpResponse,
+    HttpResponseGone,
+    HttpResponseNotAllowed,
+    HttpResponsePermanentRedirect,
+    HttpResponseRedirect,
 )
 from django.template.response import TemplateResponse
 from django.utils.translation import gettext as _
 
-log = logging.getLogger('fluo')
+log = logging.getLogger("fluo")
 
 
 class View:
-    METHODS = ('head', 'get', 'post', 'put', 'delete', 'trace', 'options', 'connect', 'trace', 'patch',)
+    METHODS = (
+        "head",
+        "get",
+        "post",
+        "put",
+        "delete",
+        "trace",
+        "options",
+        "connect",
+        "trace",
+        "patch",
+    )
     content_type = None
 
     def __init__(self, **kwargs):
         for key, value in kwargs.items():
             if key in self.METHODS:
                 raise TypeError(
-                    "You tried to pass in the %s method name as a keyword argument to %s(). Don't do that." % (key, self.__class__.__name__),
+                    "You tried to pass in the %s method name as a keyword argument to %s(). Don't do that."
+                    % (key, self.__class__.__name__),
                 )
             if not hasattr(self, key):
                 raise TypeError(
-                    "%s() received an invalid keyword %r. only accepts arguments that are already attributes of the class." % (self.__class__.__name__, key),
+                    "%s() received an invalid keyword %r. only accepts arguments that are already attributes of the class."
+                    % (self.__class__.__name__, key),
                 )
             else:
                 setattr(self, key, value)
 
-        if hasattr(self, 'get') and not hasattr(self, 'head'):
+        if hasattr(self, "get") and not hasattr(self, "head"):
             self.head = self.get
 
         self.allowed_methods = []
@@ -66,10 +83,12 @@ class View:
         return method(request, *args, **kwargs)
 
     def http_method_not_allowed(self, request, *args, **kwargs):
-        log.warning('Method Not Allowed (%s): %s', request.method, request.path, extra={
-            'status_code': 405,
-            'request': request,
-        })
+        log.warning(
+            "Method Not Allowed (%s): %s",
+            request.method,
+            request.path,
+            extra={"status_code": 405, "request": request},
+        )
         return HttpResponseNotAllowed(self.allowed_methods)
 
     def options(self, request, *args, **kwargs):
@@ -77,8 +96,8 @@ class View:
         Handles responding to requests for the OPTIONS HTTP verb
         """
         response = HttpResponse()
-        response['Allow'] = ', '.join(self.allowed_methods)
-        response['Content-Length'] = 0
+        response["Allow"] = ", ".join(self.allowed_methods)
+        response["Content-Length"] = 0
         return response
 
 
@@ -86,17 +105,18 @@ class TemplateView(View):
     """
     A view that renders a template.
     """
+
     template_name = None
     content_type = None
 
     def get_context_data(self, **kwargs):
         return {
-            'params': kwargs,
+            "params": kwargs,
         }
 
     def get_template_names(self):
         if self.template_name is not None:
-            return [ self.template_name ]
+            return [self.template_name]
         msg = _("%s must either define 'template_name' or override 'get_template_names()'")
         raise ImproperlyConfigured(msg % self.__class__.__name__)
 
@@ -111,11 +131,7 @@ class TemplateView(View):
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
-        return self.render(
-            request=request,
-            template_name=self.get_template_names(),
-            context=context,
-        )
+        return self.render(request=request, template_name=self.get_template_names(), context=context)
 
 
 class RedirectView(View):
@@ -124,9 +140,9 @@ class RedirectView(View):
     query_string = True
 
     def __init__(self, **kwargs):
-        self.permanent = kwargs.pop('permanent', self.permanent)
-        self.url = kwargs.pop('url', self.url)
-        self.query_string = kwargs.pop('query_string', self.query_string)
+        self.permanent = kwargs.pop("permanent", self.permanent)
+        self.url = kwargs.pop("url", self.url)
+        self.query_string = kwargs.pop("query_string", self.query_string)
         super().__init__(**kwargs)
 
     def get_redirect_url(self, request, **kwargs):
@@ -137,7 +153,7 @@ class RedirectView(View):
         """
         if self.url:
             url = self.url % kwargs
-            args = request.META.get('QUERY_STRING', '')
+            args = request.META.get("QUERY_STRING", "")
             if args and self.query_string:
                 url = "%s?%s" % (url, args)
             return url
@@ -152,10 +168,9 @@ class RedirectView(View):
             else:
                 return HttpResponseRedirect(url)
         else:
-            log.warning('Gone: %s', self.request.path, extra={
-                'status_code': 410,
-                'request': self.request,
-            })
+            log.warning(
+                "Gone: %s", self.request.path, extra={"status_code": 410, "request": self.request},
+            )
             return HttpResponseGone()
 
     def head(self, request, *args, **kwargs):

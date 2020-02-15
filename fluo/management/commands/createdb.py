@@ -33,14 +33,14 @@ The full error: %(error)s"""
     def add_arguments(self, parser):
         super().add_arguments(parser)
         parser.add_argument(
-            '--force',
-            action='store_true',
-            dest='force',
+            "--force",
+            action="store_true",
+            dest="force",
             default=False,
-            help='Drop database if exists before (re)create it.',
+            help="Drop database if exists before (re)create it.",
         )
 
     def execute_sql(self, backend, **options):
-        if options.get('force'):
+        if options.get("force"):
             backend.dropdb()
         backend.createdb()

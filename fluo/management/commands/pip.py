@@ -30,10 +30,18 @@ class Command(BaseCommand):
     requires_model_validation = False
 
     def add_arguments(self, parser):
-        parser.add_argument("--install", "-i", action="store_true", default=True, dest="install", help="intall package")
-        parser.add_argument("--upgrade", "-u", action="store_true", default=False, dest="upgrade", help="upgrade package")
-        parser.add_argument("--uninstall", "-r", action="store_true", default=False, dest="uninstall", help="uninstall package")
-        parser.add_argument("--verbose", action="store_true", default=False, dest="verbose", help="verbose")
+        parser.add_argument(
+            "--install", "-i", action="store_true", default=True, dest="install", help="intall package",
+        )
+        parser.add_argument(
+            "--upgrade", "-u", action="store_true", default=False, dest="upgrade", help="upgrade package",
+        )
+        parser.add_argument(
+            "--uninstall", "-r", action="store_true", default=False, dest="uninstall", help="uninstall package",
+        )
+        parser.add_argument(
+            "--verbose", action="store_true", default=False, dest="verbose", help="verbose",
+        )
         parser.add_argument("pkgs", metavar="pkgs", nargs="+", help="package(s)")
 
     def handle(self, *pkgs, **options):
@@ -55,9 +63,9 @@ class Command(BaseCommand):
             cmd.append("--upgrade")
         if options.get("verbosity") > 1 or options.get("verbose"):
             cmd.append("--verbose")
-        cmd.extend([
-            "--target=%s" % settings.LIB_DIR,
-        ])
+        cmd.extend(
+            ["--target=%s" % settings.LIB_DIR]
+        )
         cmd.extend(pkgs)
         subprocess.call(cmd)
 

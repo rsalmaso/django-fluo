@@ -42,7 +42,7 @@ class Command(BaseCommand):
         username = options.get("username")
 
         try:
-            user = User.objects.get(Q(username__iexact=username)|Q(email__iexact=username))
+            user = User.objects.get(Q(username__iexact=username) | Q(email__iexact=username))
         except User.DoesNotExist:
             raise CommandError("user %s does not exist" % username)
 

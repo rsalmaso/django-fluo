@@ -20,7 +20,7 @@
 
 from .postgresql import Backend as Postgresql
 
-__all__ = ['Backend']
+__all__ = ["Backend"]
 
 
 class Backend(Postgresql):

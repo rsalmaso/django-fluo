@@ -20,7 +20,12 @@
 
 import re
 
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, UserManager
+from django.contrib.auth.models import (
+    AbstractBaseUser,
+    BaseUserManager,
+    PermissionsMixin,
+    UserManager,
+)
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.core import validators
@@ -36,13 +41,20 @@ from . import fields
 from ... import settings
 
 __all__ = [
-    'StatusModel',
-    'OrderedModel', 'TreeOrderedModel',
-    'TimestampModel',
-    'I18NProxy', 'I18NModel', 'TranslationModel',
-    'CategoryModelManager', 'CategoryModel', 'CategoryTranslationModel',
-    'GenericModel',
-    'AbstractUser', 'BaseUserManager', 'UserManager',
+    "StatusModel",
+    "OrderedModel",
+    "TreeOrderedModel",
+    "TimestampModel",
+    "I18NProxy",
+    "I18NModel",
+    "TranslationModel",
+    "CategoryModelManager",
+    "CategoryModel",
+    "CategoryTranslationModel",
+    "GenericModel",
+    "AbstractUser",
+    "BaseUserManager",
+    "UserManager",
 ]
 
 
@@ -55,16 +67,12 @@ class StatusModel(models.Model):
 
 class OrderedModel(models.Model):
     ordering = fields.OrderField(
-        default=0,
-        blank=True,
-        db_index=True,
-        verbose_name=_('ordering'),
-        help_text=_('Ordered'),
+        default=0, blank=True, db_index=True, verbose_name=_("ordering"), help_text=_("Ordered"),
     )
 
     class Meta:
         abstract = True
-        ordering = ("-ordering",)
+        ordering = ["-ordering"]
 
     def save(self, *args, **kwargs):
         if not self.ordering:
@@ -86,13 +94,13 @@ class OrderedModel(models.Model):
 
 class TreeOrderedModel(OrderedModel):
     parent = models.ForeignKey(
-        'self',
+        "self",
         blank=True,
         null=True,
         on_delete=models.CASCADE,
-        related_name='children',
-        verbose_name=_('Parent node'),
-        help_text=_('The parent node of this field.'),
+        related_name="children",
+        verbose_name=_("Parent node"),
+        help_text=_("The parent node of this field."),
     )
 
     class Meta:
@@ -107,12 +115,8 @@ class TreeOrderedModel(OrderedModel):
 
 
 class TimestampModel(models.Model):
-    created_at = fields.CreationDateTimeField(
-        verbose_name=_('created'),
-    )
-    last_modified_at = fields.ModificationDateTimeField(
-        verbose_name=_('modified'),
-    )
+    created_at = fields.CreationDateTimeField(verbose_name=_("created"))
+    last_modified_at = fields.ModificationDateTimeField(verbose_name=_("modified"))
 
     class Meta:
         abstract = True
@@ -125,7 +129,7 @@ class I18NProxy:
 
     def __getattr__(self, name):
         attr = getattr(self._tr, name, None)
-        if not attr or (attr and (attr == '' or attr == '')):
+        if not attr or (attr and (attr == "" or attr == "")):
             attr = getattr(self._original, name)
         return attr
 
@@ -143,16 +147,11 @@ class I18NModel(models.Model):
 
 
 class TranslationModel(models.Model):
-    language = models.CharField(
-        max_length=5,
-        choices=settings.LANGUAGES,
-        db_index=True,
-        verbose_name=_('language'),
-    )
+    language = models.CharField(max_length=5, choices=settings.LANGUAGES, db_index=True, verbose_name=_("language"))
 
     class Meta:
         abstract = True
-        ordering = ['language']
+        ordering = ["language"]
 
 
 class CategoryModelQuerySet(models.QuerySet):
@@ -174,26 +173,21 @@ class CategoryModelManager(models.Manager.from_queryset(CategoryModelQuerySet)):
 class CategoryModel(StatusModel, OrderedModel):
     objects = CategoryModelManager()
 
-    name = models.CharField(
-        unique=True,
-        max_length=255,
-    )
+    name = models.CharField(unique=True, max_length=255)
     slug = models.SlugField(
         unique=True,
         editable=False,
-        verbose_name=_('slug'),
-        help_text=_('A "slug" is a unique URL-friendly title for the object automatically generated from the "name" field.'),  # noqa: E501
+        verbose_name=_("slug"),
+        help_text=_(
+            'A "slug" is a unique URL-friendly title for the object automatically generated from the "name" field.'
+        ),  # noqa: E501
     )
-    default = models.BooleanField(
-        default=False,
-        verbose_name=_('default'),
-        help_text=_('Is the default one?'),
-    )
+    default = models.BooleanField(default=False, verbose_name=_("default"), help_text=_("Is the default one?"))
 
     class Meta:
         abstract = True
         base_manager_name = "objects"
-        ordering = ['name']
+        ordering = ["name"]
 
     def __str__(self):
         return self.name
@@ -213,27 +207,16 @@ class CategoryModel(StatusModel, OrderedModel):
 
 
 class CategoryTranslationModel(TranslationModel):
-    name = models.CharField(
-        max_length=255,
-    )
+    name = models.CharField(max_length=255)
 
     class Meta:
         abstract = True
 
 
 class GenericModel(models.Model):
-    content_type = models.ForeignKey(
-        ContentType,
-        on_delete=models.CASCADE,
-        verbose_name=_('Object Type'),
-    )
-    object_id = models.PositiveIntegerField(
-        verbose_name=_('Object ID'),
-    )
-    content_object = GenericForeignKey(
-        'content_type',
-        'object_id',
-    )
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, verbose_name=_("Object Type"))
+    object_id = models.PositiveIntegerField(verbose_name=_("Object ID"))
+    content_object = GenericForeignKey("content_type", "object_id")
 
     class Meta:
         abstract = True
@@ -252,53 +235,34 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(
         max_length=255,
         unique=True,
-        validators=[
-            validators.RegexValidator(
-                re.compile(r'^[\w.@+-]+$'),
-                _('Enter a valid username.'),
-                'invalid',
-            ),
-        ],
-        verbose_name=_('username'),
-        help_text=_('Required. 255 characters or fewer. Letters, numbers and @/./+/-/_ characters'),
+        validators=[validators.RegexValidator(re.compile(r"^[\w.@+-]+$"), _("Enter a valid username."), "invalid")],
+        verbose_name=_("username"),
+        help_text=_("Required. 255 characters or fewer. Letters, numbers and @/./+/-/_ characters"),
     )
-    first_name = models.CharField(
-        max_length=255,
-        blank=True,
-        verbose_name=_('first name'),
-    )
-    last_name = models.CharField(
-        max_length=255,
-        blank=True,
-        verbose_name=_('last name'),
-    )
-    email = models.EmailField(
-        max_length=255,
-        blank=True,
-        verbose_name=_('email address'),
-    )
+    first_name = models.CharField(max_length=255, blank=True, verbose_name=_("first name"))
+    last_name = models.CharField(max_length=255, blank=True, verbose_name=_("last name"))
+    email = models.EmailField(max_length=255, blank=True, verbose_name=_("email address"))
     is_staff = models.BooleanField(
         default=False,
-        verbose_name=_('staff status'),
-        help_text=_('Designates whether the user can log into this admin site.'),
+        verbose_name=_("staff status"),
+        help_text=_("Designates whether the user can log into this admin site."),
     )
     is_active = models.BooleanField(
         default=True,
-        verbose_name=_('active'),
-        help_text=_('Designates whether this user should be treated as active. Unselect this instead of deleting accounts.'),  # noqa: E501
+        verbose_name=_("active"),
+        help_text=_(
+            "Designates whether this user should be treated as active. Unselect this instead of deleting accounts."
+        ),  # noqa: E501
     )
-    date_joined = models.DateTimeField(
-        default=timezone.now,
-        verbose_name=_('date joined'),
-    )
+    date_joined = models.DateTimeField(default=timezone.now, verbose_name=_("date joined"))
 
-    USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email']
+    USERNAME_FIELD = "username"
+    REQUIRED_FIELDS = ["email"]
 
     class Meta:
         abstract = True
-        verbose_name = _('user')
-        verbose_name_plural = _('users')
+        verbose_name = _("user")
+        verbose_name_plural = _("users")
 
     def get_absolute_url(self):
         return "/users/%s/" % urlquote(self.username)
@@ -307,7 +271,7 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
         """
         Returns the first_name plus the last_name, with a space in between.
         """
-        full_name = '%s %s' % (self.first_name, self.last_name)
+        full_name = "%s %s" % (self.first_name, self.last_name)
         return full_name.strip()
 
     def get_short_name(self):
@@ -322,6 +286,6 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
 
     def get_display_name(self):
         if self.first_name and self.last_name:
-            full_name = '%s %s' % (self.first_name, self.last_name)
+            full_name = "%s %s" % (self.first_name, self.last_name)
             return full_name.strip()
         return self.username

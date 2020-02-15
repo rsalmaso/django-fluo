@@ -18,7 +18,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from django.contrib.contenttypes.forms import BaseGenericInlineFormSet, generic_inlineformset_factory  # NOQA
+from django.contrib.contenttypes.forms import (
+    BaseGenericInlineFormSet,
+    generic_inlineformset_factory,
+)  # NOQA
 from django.forms import *  # NOQA
 
 from .fields import *  # NOQA

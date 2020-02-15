@@ -44,16 +44,16 @@ The full error: %(error)s"""
 
     def add_arguments(self, parser):
         parser.add_argument(
-            '--noinput',
-            action='store_false',
-            dest='interactive',
+            "--noinput",
+            action="store_false",
+            dest="interactive",
             default=True,
-            help='Tells Django to NOT prompt the user for input of any kind.',
+            help="Tells Django to NOT prompt the user for input of any kind.",
         )
         parser.add_argument(
-            '--database',
-            action='store',
-            dest='database',
+            "--database",
+            action="store",
+            dest="database",
             default=DEFAULT_DB_ALIAS,
             help='Nominates a database. Defaults to the "default" database.',
         )
@@ -61,29 +61,26 @@ The full error: %(error)s"""
     def handle(self, *args, **options):
         close_old_connections()
 
-        db = options.get('database')
+        db = options.get("database")
         connection = connections[db]
-        interactive = options.get('interactive')
+        interactive = options.get("interactive")
         settings = dict(connection.settings_dict)
-        name = settings['NAME']
+        name = settings["NAME"]
         if interactive and self.should_ask:
-            msg = ''.join([self.message % {
-                'name': name,
-            }, self.ask_message])
+            msg = "".join([self.message % {"name": name}, self.ask_message])
             confirm = input(msg)
         else:
             confirm = self.default
 
-        if confirm == 'yes':
+        if confirm == "yes":
             backend = get_backend(settings)
             backend.connect()
             try:
                 self.execute_sql(backend, **options)
             except Exception as e:
-                raise CommandError(CommandError(self.error_message % {
-                    'name': name,
-                    'error': e,
-                })).with_traceback(sys.exc_info()[2])
+                raise CommandError(CommandError(self.error_message % {"name": name, "error": e})).with_traceback(
+                    sys.exc_info()[2]
+                )
             finally:
                 backend.close()
 

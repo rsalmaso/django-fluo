@@ -25,29 +25,31 @@ from django.http import *  # NOQA
 from .utils.json import JSONEncoder
 
 __all__ = [
-    'JsonResponse',
-    'HttpResponse',
-    'HttpResponseRedirect',
-    'HttpResponsePermanentRedirect',
-    'HttpResponseNotModified',
-    'HttpResponseBadRequest',
-    'HttpResponseNotFound',
-    'HttpResponseForbidden',
-    'HttpResponseNotAllowed',
-    'HttpResponseGone',
-    'HttpResponseServerError',
-    'Http404',
-    'HttpRequest',
-    'SimpleCookie',
-    'CompatCookie',
-    'parse_cookie',
-    'QueryDict',
-    'BadHeaderError',
+    "JsonResponse",
+    "HttpResponse",
+    "HttpResponseRedirect",
+    "HttpResponsePermanentRedirect",
+    "HttpResponseNotModified",
+    "HttpResponseBadRequest",
+    "HttpResponseNotFound",
+    "HttpResponseForbidden",
+    "HttpResponseNotAllowed",
+    "HttpResponseGone",
+    "HttpResponseServerError",
+    "Http404",
+    "HttpRequest",
+    "SimpleCookie",
+    "CompatCookie",
+    "parse_cookie",
+    "QueryDict",
+    "BadHeaderError",
 ]
 
 
 class JsonResponse(HttpResponse):
-    def __init__(self, content=None, content_type="application/json; charset=utf-8", status=200, indent=2):
+    def __init__(
+        self, content=None, content_type="application/json; charset=utf-8", status=200, indent=2,
+    ):
         """
         return JsonResponse(content={'status': 200, 'message': '', 'data': [] })
         """
@@ -55,4 +57,4 @@ class JsonResponse(HttpResponse):
             content = {}
         data = json.dumps(content, indent=indent, cls=JSONEncoder)
         super().__init__(content=data, content_type=content_type, status=status)
-        self['Content-Length'] = len(data)
+        self["Content-Length"] = len(data)

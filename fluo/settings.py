@@ -21,34 +21,37 @@
 from django.conf import settings
 from django.utils.encoding import iri_to_uri
 
-DATABASES = getattr(settings, 'DATABASES')
-DEBUG = getattr(settings, 'DEBUG')
+DATABASES = getattr(settings, "DATABASES")
+DEBUG = getattr(settings, "DEBUG")
 
-MEDIA_URL = iri_to_uri(getattr(settings, 'MEDIA_URL'))
-MEDIA_ROOT = getattr(settings, 'MEDIA_ROOT')
-FLUO_MEDIA_URL = getattr(settings, 'FLUO_MEDIA_URL', MEDIA_URL + 'fluo/')
-JQUERY_MEDIA_URL = FLUO_MEDIA_URL + 'jquery/'
+MEDIA_URL = iri_to_uri(getattr(settings, "MEDIA_URL"))
+MEDIA_ROOT = getattr(settings, "MEDIA_ROOT")
+FLUO_MEDIA_URL = getattr(settings, "FLUO_MEDIA_URL", MEDIA_URL + "fluo/")
+JQUERY_MEDIA_URL = FLUO_MEDIA_URL + "jquery/"
 
-STATIC_URL = iri_to_uri(getattr(settings, 'STATIC_URL'))
-STATIC_ROOT = getattr(settings, 'STATIC_ROOT')
-FLUO_STATIC_URL = getattr(settings, 'FLUO_STATIC_URL', STATIC_URL + 'fluo/')
-JQUERY_STATIC_URL = FLUO_STATIC_URL + 'jquery/'
+STATIC_URL = iri_to_uri(getattr(settings, "STATIC_URL"))
+STATIC_ROOT = getattr(settings, "STATIC_ROOT")
+FLUO_STATIC_URL = getattr(settings, "FLUO_STATIC_URL", STATIC_URL + "fluo/")
+JQUERY_STATIC_URL = FLUO_STATIC_URL + "jquery/"
 
-SERVE_MEDIA_FILES = getattr(settings, 'SERVE_MEDIA_FILES', True)
+SERVE_MEDIA_FILES = getattr(settings, "SERVE_MEDIA_FILES", True)
 
-JQUERY_MINIFIED = getattr(settings, 'JQUERY_MINIFIED', True)
-LANGUAGES = getattr(settings, 'LANGUAGES')
-LOGGING_FORMAT = getattr(settings, 'LOGGING_FORMAT', '%(asctime)s %(levelname)s %(message)s')
-LOGGING_FILENAME = getattr(settings, 'LOGGING_FILENAME', '/tmp/fluo.log')
+JQUERY_MINIFIED = getattr(settings, "JQUERY_MINIFIED", True)
+LANGUAGES = getattr(settings, "LANGUAGES")
+LOGGING_FORMAT = getattr(settings, "LOGGING_FORMAT", "%(asctime)s %(levelname)s %(message)s")
+LOGGING_FILENAME = getattr(settings, "LOGGING_FILENAME", "/tmp/fluo.log")
 
-DEFAULT_PERMISSIONS = ('list', 'view',)
+DEFAULT_PERMISSIONS = (
+    "list",
+    "view",
+)
 try:
-    DEFAULT_PERMISSIONS += list(getattr(settings, 'DEFAULT_PERMISSIONS'))
+    DEFAULT_PERMISSIONS += list(getattr(settings, "DEFAULT_PERMISSIONS"))
 except:
     pass
 
-NO_LOCALE_PATTERNS = (MEDIA_URL,)
+NO_LOCALE_PATTERNS = [MEDIA_URL]
 try:
-    NO_LOCALE_PATTERNS += getattr(settings, 'NO_LOCALE_PATTERNS',)
+    NO_LOCALE_PATTERNS += getattr(settings, "NO_LOCALE_PATTERNS")
 except:
     pass

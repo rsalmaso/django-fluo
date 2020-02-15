@@ -29,13 +29,9 @@ class Command(TemplateCommand):
     """
 
     def handle(self, *args, **options):
-        if not options['template']:
+        if not options["template"]:
             realpath = os.path.realpath(__file__)
-            path = os.path.split(
-                os.path.split(
-                    os.path.split(realpath)[0]
-                )[0]
-            )[0]
-            options['template'] = os.path.join(path, 'conf', 'app_template')
+            path = os.path.split(os.path.split(os.path.split(realpath)[0])[0])[0]
+            options["template"] = os.path.join(path, "conf", "app_template")
 
         super().handle(*args, **options)

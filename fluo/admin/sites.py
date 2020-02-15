@@ -30,20 +30,22 @@ from django.utils.module_loading import import_string
 from django.utils.translation import gettext as _
 
 __all__ = [
-    'AdminSite',
+    "AdminSite",
 ]
 
 
 class AdminSite(admin.AdminSite):
     def get_urls(self):
         from django.conf.urls import url
+
         def wrap(view, cacheable=False):
             def wrapper(*args, **kwargs):
                 return self.admin_view(view, cacheable)(*args, **kwargs)
+
             return update_wrapper(wrapper, view)
 
         return [
-            url(r'^r/(?P<content_type_id>\d+)/(?P<object_id>.+)/$', wrap(self.view_on_site), name='view_on_site'),
+            url(r"^r/(?P<content_type_id>\d+)/(?P<object_id>.+)/$", wrap(self.view_on_site), name="view_on_site"),
         ] + super().get_urls()
 
     def view_on_site(self, request, content_type_id, object_id):
@@ -54,22 +56,22 @@ class AdminSite(admin.AdminSite):
         try:
             content_type = ContentType.objects.get(pk=content_type_id)
             if not content_type.model_class():
-                raise Http404(_("Content type %(ct_id)s object has no associated model") % {
-                    'ct_id': content_type_id,
-                })
+                raise Http404(
+                    _("Content type %(ct_id)s object has no associated model") % {"ct_id": content_type_id}
+                )
             obj = content_type.get_object_for_this_type(pk=object_id)
         except (ObjectDoesNotExist, ValueError):
-            raise Http404(_("Content type %(ct_id)s object %(obj_id)s doesn't exist") % {
-                'ct_id': content_type_id,
-                'obj_id': object_id,
-            })
+            raise Http404(
+                _("Content type %(ct_id)s object %(obj_id)s doesn't exist")
+                % {"ct_id": content_type_id, "obj_id": object_id}
+            )
 
         try:
             get_absolute_url = obj.get_absolute_url
         except AttributeError:
-            raise Http404(_("%(ct_name)s objects don't have a get_absolute_url() method") % {
-                'ct_name': content_type.name,
-            })
+            raise Http404(
+                _("%(ct_name)s objects don't have a get_absolute_url() method") % {"ct_name": content_type.name}
+            )
         absurl = get_absolute_url()
 
         return HttpResponseRedirect(absurl)
@@ -77,5 +79,5 @@ class AdminSite(admin.AdminSite):
 
 class DefaultAdminSite(LazyObject):
     def _setup(self):
-        AdminSiteClass = import_string(apps.get_app_config('admin').default_site)
+        AdminSiteClass = import_string(apps.get_app_config("admin").default_site)
         self._wrapped = AdminSiteClass()

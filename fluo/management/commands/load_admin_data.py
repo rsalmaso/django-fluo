@@ -30,16 +30,16 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         """Load a default admin user"""
         try:
-            admin = User.objects.get(username='admin')
+            admin = User.objects.get(username="admin")
         except User.DoesNotExist:
             admin = User(
-                username='admin',
-                first_name='admin',
-                last_name='admin',
-                email='admin@localhost.localdomain',
+                username="admin",
+                first_name="admin",
+                last_name="admin",
+                email="admin@localhost.localdomain",
                 is_staff=True,
                 is_active=True,
                 is_superuser=True,
             )
-        admin.set_password('admin')
+        admin.set_password("admin")
         admin.save()

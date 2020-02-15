@@ -27,15 +27,15 @@ from fluo.middleware.locale import get_language_from_request
 register = template.Library()
 
 
-@register.inclusion_tag('fluo/tags/languages.html', takes_context=True)
-def languages_as_li(context, template='fluo/tags/languages_as_li.html'):
-    request = context['request']
-    context['current_language'] = get_language_from_request(request)
-    context['template'] = template
+@register.inclusion_tag("fluo/tags/languages.html", takes_context=True)
+def languages_as_li(context, template="fluo/tags/languages_as_li.html"):
+    request = context["request"]
+    context["current_language"] = get_language_from_request(request)
+    context["template"] = template
     return context
 
 
-@register.inclusion_tag('fluo/tags/content.html', takes_context=True)
+@register.inclusion_tag("fluo/tags/content.html", takes_context=True)
 def page_language_url(context, lang):
-    request = context['request']
-    return {'content': r'/%s%s' % (lang, request.get_full_path())}
+    request = context["request"]
+    return {"content": r"/%s%s" % (lang, request.get_full_path())}

@@ -21,7 +21,7 @@
 from .base import RedirectView, TemplateView, View
 
 __all__ = [
-    'View',
-    'TemplateView',
-    'RedirectView',
+    "View",
+    "TemplateView",
+    "RedirectView",
 ]

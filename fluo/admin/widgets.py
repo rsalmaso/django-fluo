@@ -29,8 +29,8 @@ from django.utils.translation import gettext as _
 from fluo.urls import reverse
 
 __all__ = [
-    'AdminImageFileWidget',
-    'ForeignKeySearchInput',
+    "AdminImageFileWidget",
+    "ForeignKeySearchInput",
 ]
 
 
@@ -41,7 +41,8 @@ class AdminImageFileWidget(forms.FileInput):
     def render(self, name, value, attrs=None):
         output = []
         if value and hasattr(value, "url"):
-            output.append('''
+            output.append(
+                """
 <div>
     <div style="float: left; vertical-align: middle;">
         <a target="_blank" href="%(url)s"><img src="%(url)s" width="40px"/></a>
@@ -49,17 +50,14 @@ class AdminImageFileWidget(forms.FileInput):
     <div style="padding-left: 20px; float: left; vertical-align: middle;">
         %(text)s <a target="_blank" href="%(url)s">%(value)s</a>
         <br />
-        %(change)s ''' % {
-                'text': _('Currently:'),
-                'url': value.url,
-                'value': value,
-                'change': _('Change:'),
-            })
+        %(change)s """
+                % {"text": _("Currently:"), "url": value.url, "value": value, "change": _("Change:")}
+            )
         output.append(super().render(name, value, attrs))
-        output.append('</div>')
+        output.append("</div>")
         if value and hasattr(value, "url"):
-            output.append('</div>')
-        return mark_safe(''.join(output))
+            output.append("</div>")
+        return mark_safe("".join(output))
 
 
 class ForeignKeySearchInput(ForeignKeyRawIdWidget):
@@ -67,20 +65,18 @@ class ForeignKeySearchInput(ForeignKeyRawIdWidget):
     A Widget for displaying ForeignKeys in an autocomplete search input
     instead in a <select> box.
     """
+
     # Set in subclass to render the widget with a different template
     widget_template = None
     # Set this to the patch of the search view
-    search_path = '../foreignkey_autocomplete/'
+    search_path = "../foreignkey_autocomplete/"
 
     def _media(self):
         js_files = [
-            'fluo/jquery-ajaxqueue/jquery.ajaxqueue.min.js',
-            'fluo/jquery-autocomplete/jquery.autocomplete.min.js',
+            "fluo/jquery-ajaxqueue/jquery.ajaxqueue.min.js",
+            "fluo/jquery-autocomplete/jquery.autocomplete.min.js",
         ]
-        return forms.Media(
-            css={'all': ('fluo/jquery-autocomplete/jquery.autocomplete.css',)},
-            js=js_files,
-        )
+        return forms.Media(css={"all": ["fluo/jquery-autocomplete/jquery.autocomplete.css"]}, js=js_files)
 
     media = property(_media)
 
@@ -90,7 +86,7 @@ class ForeignKeySearchInput(ForeignKeyRawIdWidget):
             obj = self.rel.to._default_manager.get(**{key: value})  # django <= 1.11
         except Exception:  # FIXME!!!
             obj = self.rel.remote_field._default_manager.get(**{key: value})  # django >= 2
-        return Truncator(obj).words(14, truncate='...')
+        return Truncator(obj).words(14, truncate="...")
 
     def __init__(self, rel, search_fields, attrs=None):
         self.search_fields = search_fields
@@ -106,36 +102,42 @@ class ForeignKeySearchInput(ForeignKeyRawIdWidget):
             opts = self.rel.to.model._meta  # django <= 1.11
         app_label = opts.app_label
         model_name = opts.object_name.lower()
-        related_url = reverse('{}:{}_{}_changelist'.format(self.admin_site.name, app_label, model_name))
+        related_url = reverse("{}:{}_{}_changelist".format(self.admin_site.name, app_label, model_name))
         params = self.url_parameters()
         if params:
-            url = '?' + '&amp;'.join(['%s=%s' % (k, v) for k, v in params.items()])
+            url = "?" + "&amp;".join(["%s=%s" % (k, v) for k, v in params.items()])
         else:
-            url = ''
-        if 'class' not in attrs:
-            attrs['class'] = 'vForeignKeyRawIdAdminField'
+            url = ""
+        if "class" not in attrs:
+            attrs["class"] = "vForeignKeyRawIdAdminField"
         # Call the TextInput render method directly to have more control
         output = [forms.TextInput.render(self, name, value, attrs)]
-        label = self.label_for_value(value) if value else ''
+        label = self.label_for_value(value) if value else ""
 
         admin_media_prefix = settings.STATIC_URL + "admin/"
 
         context = {
-            'url': url,
-            'related_url': related_url,
-            'admin_media_prefix': admin_media_prefix,
-            'search_path': self.search_path,
-            'search_fields': ','.join(self.search_fields),
-            'model_name': model_name,
-            'app_label': app_label,
-            'label': label,
-            'name': name,
-            'slug': slugify(name).replace('-', '_'),
+            "url": url,
+            "related_url": related_url,
+            "admin_media_prefix": admin_media_prefix,
+            "search_path": self.search_path,
+            "search_fields": ",".join(self.search_fields),
+            "model_name": model_name,
+            "app_label": app_label,
+            "label": label,
+            "name": name,
+            "slug": slugify(name).replace("-", "_"),
         }
-        output.append(render_to_string(self.widget_template or (
-            'fluo/widgets/%s/%s/foreignkey_searchinput.html' % (app_label, model_name),
-            'fluo/widgets/%s/foreignkey_searchinput.html' % app_label,
-            'fluo/widgets/foreignkey_searchinput.html',
-        ), context))
+        output.append(
+            render_to_string(
+                self.widget_template
+                or (
+                    "fluo/widgets/%s/%s/foreignkey_searchinput.html" % (app_label, model_name),
+                    "fluo/widgets/%s/foreignkey_searchinput.html" % app_label,
+                    "fluo/widgets/foreignkey_searchinput.html",
+                ),
+                context,
+            )
+        )
         output.reverse()
-        return mark_safe(''.join(output))
+        return mark_safe("".join(output))

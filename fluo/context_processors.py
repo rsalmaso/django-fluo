@@ -23,22 +23,22 @@ from django.conf import settings
 # media_url & static_url idea is taken from
 # http://www.djangosnippets.org/snippets/1754/
 MEDIA_URL = {
-    True: settings.MEDIA_URL.replace('http://', 'https://'),
+    True: settings.MEDIA_URL.replace("http://", "https://"),
     False: settings.MEDIA_URL,
 }
 STATIC_URL = {
-    True: settings.STATIC_URL.replace('http://', 'https://'),
+    True: settings.STATIC_URL.replace("http://", "https://"),
     False: settings.STATIC_URL,
 }
 
 
 def media(request):
     return {
-        'MEDIA_URL': MEDIA_URL[request.is_secure()],
+        "MEDIA_URL": MEDIA_URL[request.is_secure()],
     }
 
 
 def static(request):
     return {
-        'STATIC_URL': STATIC_URL[request.is_secure()],
+        "STATIC_URL": STATIC_URL[request.is_secure()],
     }

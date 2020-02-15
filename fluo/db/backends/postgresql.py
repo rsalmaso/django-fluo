@@ -22,14 +22,14 @@ import psycopg2
 
 from .. import backend
 
-__all__ = ['Backend']
+__all__ = ["Backend"]
 
 
 class Backend(backend.Backend):
     def connect(self):
-        if self.name == '':
+        if self.name == "":
             raise AssertionError("You must specify a value for database NAME in settings file.")
-        if self.user == '':
+        if self.user == "":
             raise AssertionError("You must specify a value for database USER in settings file.")
         conn_string = ["dbname=postgres"]
         if self.user:
@@ -41,12 +41,12 @@ class Backend(backend.Backend):
         if self.port:
             conn_string.append("port=%s" % self.port)
 
-        self.connection = psycopg2.connect(' '.join(conn_string))
+        self.connection = psycopg2.connect(" ".join(conn_string))
         try:
             self.connection.autocommit = True
         except Exception:
             self.connection.set_isolation_level(0)
-        self.connection.set_client_encoding('UTF8')
+        self.connection.set_client_encoding("UTF8")
         self.cursor = self.connection.cursor()
 
     def close(self):
@@ -58,7 +58,7 @@ class Backend(backend.Backend):
         self.cursor = None
 
     def createdb(self):
-        self.cursor.execute("CREATE DATABASE %s OWNER %s ENCODING 'UTF8'" % (self.name, self.user,))
+        self.cursor.execute("CREATE DATABASE %s OWNER %s ENCODING 'UTF8'" % (self.name, self.user))
 
     def dropdb(self):
         self.cursor.execute("DROP DATABASE IF EXISTS %s" % (self.name,))

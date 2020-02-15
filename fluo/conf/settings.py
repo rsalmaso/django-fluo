@@ -22,7 +22,7 @@
 
 import os
 
-PROJECT_NAME = 'fluo'
+PROJECT_NAME = "fluo"
 PROJECT_PATH = os.path.split(os.path.realpath(__file__))[0]
 BASE_PATH = os.path.split(PROJECT_PATH)[0]
 
@@ -31,25 +31,25 @@ def rel(*args):
     return os.path.normpath(os.path.join(PROJECT_PATH, *args))
 
 
-TIME_ZONE = 'Europe/London'
-LANGUAGE_CODE = 'en-us'
+TIME_ZONE = "Europe/London"
+LANGUAGE_CODE = "en-us"
 SITE_ID = 1
 USE_I18N = True
 USE_L10N = True
-MEDIA_ROOT = rel('media')
-MEDIA_URL = '/media/'
-STATIC_ROOT = rel('static')
-STATIC_URL = '/static/'
+MEDIA_ROOT = rel("media")
+MEDIA_URL = "/media/"
+STATIC_ROOT = rel("static")
+STATIC_URL = "/static/"
 
 INSTALLED_APPS = (
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.sites',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.sites",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
     # Comment the next line to disable the admin:
-    'django.contrib.admin',
+    "django.contrib.admin",
     # Comment the next line to disable south data migration:
-    'fluo',
+    "fluo",
 )
