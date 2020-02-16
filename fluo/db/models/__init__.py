@@ -20,14 +20,14 @@
 
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType, ContentTypeManager
-from django.db.models import *  # NOQA
+from django.db.models import *  # noqa: F401,F403
 from django.db.models import __all__ as django_all
 
-from .fields import *  # NOQA
+from .fields import *  # noqa: F401,F403
 from .fields import __all__ as fields_all
-from .models import *  # NOQA
+from .models import *  # noqa: F401,F403
 from .models import __all__ as models_all
-from .postgresql import *  # NOQA
+from .postgresql import *  # noqa: F401,F403
 from .postgresql import __all__ as postgresql_all
 
 __all__ = [

@@ -58,7 +58,7 @@ class View:
                 )
             if not hasattr(self, key):
                 raise TypeError(
-                    "%s() received an invalid keyword %r. only accepts arguments that are already attributes of the class."
+                    "%s() received an invalid keyword %r. only accepts arguments that are already attributes of the class."  # noqa: E501
                     % (self.__class__.__name__, key),
                 )
             else:

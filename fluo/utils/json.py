@@ -69,7 +69,7 @@ def dump(
     encoding="utf-8",
     default=None,
     **kw,
-):  # NOQA
+):
     """Serialize ``obj`` as a JSON formatted stream to ``fp`` (a
     ``.write()``-supporting file-like object).
 
@@ -141,7 +141,7 @@ def dumps(
     encoding="utf-8",
     default=None,
     **kw,
-):  # NOQA
+):
     """Serialize ``obj`` to a JSON formatted ``str``.
 
     If ``skipkeys`` is false then ``dict`` keys that are not basic types
@@ -207,7 +207,7 @@ def load(
     parse_constant=None,
     object_pairs_hook=None,
     **kw,
-):  # NOQA
+):
     kwargs = {
         "fp": fp,
         "cls": cls,
@@ -235,7 +235,7 @@ def loads(
     parse_constant=None,
     object_pairs_hook=None,
     **kw,
-):  # NOQA
+):
     kwargs = {
         "s": s,
         "cls": cls,

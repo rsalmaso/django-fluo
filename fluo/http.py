@@ -20,7 +20,7 @@
 
 import json
 
-from django.http import *  # NOQA
+from django.http import *  # noqa: F401,F403
 
 from .utils.json import JSONEncoder
 

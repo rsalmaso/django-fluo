@@ -18,7 +18,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from django.contrib.admin import (  # NOQA
+from django.contrib.admin import (  # noqa: F401
     ACTION_CHECKBOX_NAME,
     AllValuesFieldListFilter,
     BooleanFieldListFilter,
@@ -33,15 +33,15 @@ from django.contrib.admin import (  # NOQA
     register,
     site,
 )
-from django.contrib.admin.options import HORIZONTAL, VERTICAL  # NOQA
-from django.contrib.contenttypes.admin import (  # NOQA
+from django.contrib.admin.options import HORIZONTAL, VERTICAL  # noqa: F401
+from django.contrib.contenttypes.admin import (  # noqa: F401
     GenericInlineModelAdmin,
     GenericStackedInline,
     GenericTabularInline,
 )
 
-from .base import CopyObject  # NOQA
-from .models import (  # NOQA
+from .base import CopyObject  # noqa: F401
+from .models import (  # noqa: F401
     CategoryModelAdmin,
     ModelAdmin,
     OrderedModelAdmin,
@@ -54,4 +54,4 @@ from .models import (  # NOQA
     TabularInline,
     TreeOrderedModelAdmin,
 )
-from .sites import AdminSite  # NOQA
+from .sites import AdminSite  # noqa: F401

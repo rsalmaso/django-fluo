@@ -132,7 +132,7 @@ class BackendWrapper:
             except ImportError as e_user:
                 # The database backend wasn't found. Display a helpful error message
                 # listing all possible (built-in) database backends.
-                backend_dir = os.path.join(__path__[0], "backends")  # NOQA
+                backend_dir = os.path.join(__path__[0], "backends")  # noqa: F821
                 try:
                     available_backends = [
                         f

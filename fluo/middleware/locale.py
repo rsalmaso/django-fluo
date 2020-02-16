@@ -166,7 +166,7 @@ class LocaleMiddleware(MiddlewareMixin):
             not skip_translation(path)
             and response.status_code == 200
             and response._headers["content-type"][1].split(";")[0] == "text/html"
-        ):  # NOQA
+        ):
             response.content = SUB.sub(
                 r'<a\1href="/%s/\3"\4>' % request.LANGUAGE_CODE, response.content.decode("utf-8"),
             )

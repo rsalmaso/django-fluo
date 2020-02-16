@@ -59,7 +59,7 @@ class GroupedChoiceField(forms.ChoiceField):
 
     def __init__(
         self, choices=(), required=True, widget=None, label=None, initial=None, help_text=None, *args, **kwargs
-    ):  # NOQA
+    ):
         super().__init__(
             # choices=choices,
             required=required,
