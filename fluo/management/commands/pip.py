@@ -63,9 +63,7 @@ class Command(BaseCommand):
             cmd.append("--upgrade")
         if options.get("verbosity") > 1 or options.get("verbose"):
             cmd.append("--verbose")
-        cmd.extend(
-            ["--target=%s" % settings.LIB_DIR]
-        )
+        cmd.extend(["--target=%s" % settings.LIB_DIR])
         cmd.extend(pkgs)
         subprocess.call(cmd)
 

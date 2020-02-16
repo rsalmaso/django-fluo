@@ -53,9 +53,7 @@ class AdminSite(admin.AdminSite):
         try:
             content_type = ContentType.objects.get(pk=content_type_id)
             if not content_type.model_class():
-                raise Http404(
-                    _("Content type %(ct_id)s object has no associated model") % {"ct_id": content_type_id}
-                )
+                raise Http404(_("Content type %(ct_id)s object has no associated model") % {"ct_id": content_type_id})
             obj = content_type.get_object_for_this_type(pk=object_id)
         except (ObjectDoesNotExist, ValueError):
             raise Http404(

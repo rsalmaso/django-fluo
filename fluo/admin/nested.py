@@ -420,9 +420,7 @@ class NestedInline(InlineModelAdmin):
         # if self.prepopulated_fields:
         # js.extend(['urlify.js', 'prepopulate%s.js' % extra])
         if self.filter_vertical or self.filter_horizontal:
-            js.extend(
-                ["admin/js/SelectBox.js", "admin/js/SelectFilter2.js"]
-            )
+            js.extend(["admin/js/SelectBox.js", "admin/js/SelectFilter2.js"])
         return forms.Media(js=[static(url) for url in js])
 
     def get_inline_instances(self, request, obj=None):
