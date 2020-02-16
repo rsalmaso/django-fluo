@@ -141,7 +141,7 @@ class ModelAdmin(AutocompleteMixin, NestedModelAdmin):
         try:
             to_string_function = self.related_string_functions[model_name]
         except KeyError:
-            to_string_function = lambda x: str(x)
+            to_string_function = str
 
         if search_fields and app_label and model_name and (query or object_pk):
 
