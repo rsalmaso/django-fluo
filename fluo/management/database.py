@@ -87,7 +87,7 @@ The full error: %(error)s"""
             self.post_execute(**options)
 
     def execute_sql(self, backend):
-        raise NotImplemented
+        raise NotImplementedError
 
     def post_execute(self, **options):
         pass

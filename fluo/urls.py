@@ -78,7 +78,7 @@ __all__ = [
 
 class UrlsMixin:
     def get_urls(self):
-        raise NotImplemented
+        raise NotImplementedError
 
     @property
     def urls(self):
