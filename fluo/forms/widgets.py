@@ -36,7 +36,7 @@ from django.utils.encoding import smart_text
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 
-__all__ = (
+__all__ = [
     "DateWidget",
     "TimeWidget",
     "DateTimeWidget",
@@ -44,7 +44,7 @@ __all__ = (
     "SelectYearWidget",
     "SelectMonthYearWidget",
     "TimeDeltaWidget",
-)
+]
 
 
 RE_DATE = re.compile(r"(\d{4})-(\d\d?)-(\d\d?)$")

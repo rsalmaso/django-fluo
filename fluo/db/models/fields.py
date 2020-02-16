@@ -30,7 +30,7 @@ from django.utils.encoding import smart_text
 from django.utils.translation import gettext_lazy as _
 from fluo import forms
 
-__all__ = (
+__all__ = [
     "StatusField",
     "STATUS_ACTIVE",
     "STATUS_INACTIVE",
@@ -43,7 +43,7 @@ __all__ = (
     "StringField",
     "EmailField",
     "URLField",
-)
+]
 
 
 STATUS_ACTIVE = "active"

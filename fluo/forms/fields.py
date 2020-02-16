@@ -31,14 +31,14 @@ from fluo.utils import json
 
 from .widgets import GroupedSelect, TimeDeltaWidget
 
-__all__ = (
+__all__ = [
     "OrderField",
     "StringField",
     "TextField",
     "GroupedChoiceField",
     "TimeDeltaField",
     "JsonField",
-)
+]
 
 
 try:
