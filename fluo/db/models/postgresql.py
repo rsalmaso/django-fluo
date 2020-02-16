@@ -31,7 +31,11 @@ else:
     __all__ = [
         *django_all,
         "CIStringField",
+        "CIURIField",
     ]
 
     class CIStringField(CIText, _fields.StringField):  # noqa: F405
+        pass
+
+    class CIURIField(CIText, _fields.URIField):  # noqa: F405
         pass
