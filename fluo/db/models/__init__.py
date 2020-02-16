@@ -31,7 +31,7 @@ from .postgresql import *  # noqa: F401,F403
 from .postgresql import __all__ as postgresql_all
 
 __all__ = [
-    *django_all,
+    *[model for model in django_all if model not in ["EmailField", "SlugField", "URLField"]],
     *fields_all,
     *models_all,
     *postgresql_all,
