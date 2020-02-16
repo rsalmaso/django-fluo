@@ -47,7 +47,7 @@ class JSONEncoder(DjangoJSONEncoder):
         elif hasattr(obj, "__getitem__"):
             try:
                 return dict(obj)
-            except:
+            except Exception:
                 pass
         elif hasattr(obj, "__iter__"):
             return tuple(item for item in obj)

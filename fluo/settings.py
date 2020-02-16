@@ -47,11 +47,11 @@ DEFAULT_PERMISSIONS = (
 )
 try:
     DEFAULT_PERMISSIONS += list(getattr(settings, "DEFAULT_PERMISSIONS"))
-except:
+except Exception:
     pass
 
 NO_LOCALE_PATTERNS = [MEDIA_URL]
 try:
     NO_LOCALE_PATTERNS += getattr(settings, "NO_LOCALE_PATTERNS")
-except:
+except Exception:
     pass

@@ -178,7 +178,7 @@ class ModelAdmin(AutocompleteMixin, NestedModelAdmin):
             elif object_pk:
                 try:
                     obj = queryset.get(pk=object_pk)
-                except:
+                except Exception:
                     pass
                 else:
                     data = to_string_function(obj)
