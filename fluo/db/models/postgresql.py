@@ -24,25 +24,14 @@ if not apps.get_containing_app_config("django.contrib.postgres"):
     __all__ = []
 else:
     from django.contrib.postgres.fields import *  # noqa
+    from django.contrib.postgres.fields import __all__ as django_all
 
     from . import fields as _fields
 
     __all__ = [
-        "ArrayField",
-        "CICharField",
-        "CIEmailField",
+        *django_all,
         "CIStringField",
-        "CIText",
-        "CITextField",
-        "DateTimeRangeField",
-        "DateRangeField",
-        "IntegerRangeField",
-        "BigIntegerRangeField",
-        "FloatRangeField",
-        "JSONField",
-        "HStoreField",
-        "RangeField",
     ]
 
-    class CIStringField(CIText, _fields.StringField):
+    class CIStringField(CIText, _fields.StringField):  # noqa: F405
         pass
