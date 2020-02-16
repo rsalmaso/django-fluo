@@ -41,6 +41,7 @@ __all__ = (
     "TimeDeltaField",
     "SlugField",
     "StringField",
+    "EmailField",
     "URLField",
 )
 
@@ -229,5 +230,20 @@ class SlugField(StringField):
 
     def formfield(self, **kwargs):
         defaults = {"form_class": forms.SlugField, "allow_unicode": self.allow_unicode}
+        defaults.update(kwargs)
+        return super().formfield(**defaults)
+
+
+class EmailField(StringField):
+    default_validators = [validators.validate_email]
+    description = _("Email address")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def formfield(self, **kwargs):
+        defaults = {
+            "form_class": forms.EmailField,
+        }
         defaults.update(kwargs)
         return super().formfield(**defaults)

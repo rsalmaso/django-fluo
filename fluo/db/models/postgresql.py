@@ -33,6 +33,7 @@ else:
         "CIStringField",
         "CIURLField",
         "CISlugField",
+        "CIEmailField",
     ]
 
     class CIStringField(CIText, _fields.StringField):  # noqa: F405
@@ -42,4 +43,7 @@ else:
         pass
 
     class CISlugField(CIText, _fields.SlugField):  # noqa: F405
+        pass
+
+    class CIEmailField(CIText, _fields.EmailField):  # noqa: F405
         pass
