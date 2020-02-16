@@ -56,7 +56,7 @@ class MediaNode(template.Node):
 def media_tag(parser, token, node_class):
     bits = token.split_contents()
     if len(bits) < 2:
-        raise TemplateSyntaxError("'%s' takes at least one argument, the name of the script." % bits[0])
+        raise template.TemplateSyntaxError("'%s' takes at least one argument, the name of the script." % bits[0])
 
     filename = parser.compile_filter(bits[1])
     args = [bit for bit in bits[2:]]
