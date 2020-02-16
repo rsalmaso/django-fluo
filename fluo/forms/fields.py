@@ -33,6 +33,7 @@ from .widgets import GroupedSelect, TimeDeltaWidget
 
 __all__ = (
     "OrderField",
+    "StringField",
     "TextField",
     "GroupedChoiceField",
     "TimeDeltaField",
@@ -47,6 +48,10 @@ except ImportError:
 
     class OrderField(forms.IntegerField):
         pass
+
+
+class StringField(forms.CharField):
+    pass
 
 
 class TextField(forms.CharField):
