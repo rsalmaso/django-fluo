@@ -9,6 +9,7 @@ exclude = '''
   | \.tox
   | \.venv
   | _build
+  | migrations
   | build
   | dist
 )/
