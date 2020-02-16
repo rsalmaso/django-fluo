@@ -24,11 +24,6 @@ from django.conf import settings
 from django.contrib import admin
 from django.contrib.admin import helpers
 from django.contrib.admin.options import InlineModelAdmin, reverse
-
-try:  # django < 3.0
-    from django.contrib.admin.templatetags.admin_static import static
-except ImportError:
-    from django.templatetags import static
 from django.contrib.admin.utils import unquote
 from django.core.exceptions import PermissionDenied
 from django.db import models, transaction
@@ -39,6 +34,11 @@ from django.utils.encoding import force_text
 from django.utils.html import escape
 from django.utils.translation import gettext as _
 from django.views.decorators.csrf import csrf_protect
+
+try:  # django < 3.0
+    from django.contrib.admin.templatetags.admin_static import static
+except ImportError:
+    from django.templatetags import static
 
 __all__ = [
     "NestedModelAdmin",

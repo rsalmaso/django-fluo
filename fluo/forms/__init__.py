@@ -18,10 +18,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from django.contrib.contenttypes.forms import (  # noqa: F401,F403
-    BaseGenericInlineFormSet,
-    generic_inlineformset_factory,
-)
+from django.contrib.contenttypes.forms import BaseGenericInlineFormSet, generic_inlineformset_factory  # noqa: F401,F403
 from django.forms import *  # noqa: F401,F403
 
 from .fields import *  # noqa: F401,F403

@@ -21,28 +21,13 @@
 import json
 
 from django.http import *  # noqa: F401,F403
+from django.http import __all__ as http_all
 
 from .utils.json import JSONEncoder
 
 __all__ = [
+    *http_all,
     "JsonResponse",
-    "HttpResponse",
-    "HttpResponseRedirect",
-    "HttpResponsePermanentRedirect",
-    "HttpResponseNotModified",
-    "HttpResponseBadRequest",
-    "HttpResponseNotFound",
-    "HttpResponseForbidden",
-    "HttpResponseNotAllowed",
-    "HttpResponseGone",
-    "HttpResponseServerError",
-    "Http404",
-    "HttpRequest",
-    "SimpleCookie",
-    "CompatCookie",
-    "parse_cookie",
-    "QueryDict",
-    "BadHeaderError",
 ]
 
 

@@ -73,6 +73,7 @@ def login_required(function=None, required=False, redirect_field_name=REDIRECT_F
         if function:
             return actual_decorator(function)
         return actual_decorator
+
     # login not required
     def decorator(view_func):
         def _wrapper(request, *args, **kwargs):
