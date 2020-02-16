@@ -40,7 +40,7 @@ __all__ = (
     "OrderField",
     "TimeDeltaField",
     "StringField",
-    "URIField",
+    "URLField",
 )
 
 
@@ -193,9 +193,9 @@ class StringField(models.Field):
         return errors
 
 
-class URIField(StringField):
+class URLField(StringField):
     default_validators = [validators.URLValidator()]
-    description = _("URI")
+    description = _("URL")
 
     def formfield(self, **kwargs):
         # As with StringField, this will cause URL validation to be performed twice.
