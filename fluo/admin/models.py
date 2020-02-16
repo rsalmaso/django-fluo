@@ -55,7 +55,7 @@ __all__ = [
 # set this field for all models
 admin.ModelAdmin.save_on_top = True
 admin.options.FORMFIELD_FOR_DBFIELD_DEFAULTS[models.OrderField] = {"required": False}
-for field in ["StringField", "CIStringField", "URLField", "CIURLField"]:
+for field in ["StringField", "CIStringField", "URLField", "CIURLField", "SlugField", "CISlugField"]:
     if hasattr(models, field):
         admin.options.FORMFIELD_FOR_DBFIELD_DEFAULTS[getattr(models, field)] = {
             "widget": admin.widgets.AdminTextInputWidget
