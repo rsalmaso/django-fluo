@@ -20,12 +20,7 @@
 
 import re
 
-from django.contrib.auth.models import (
-    AbstractBaseUser,
-    BaseUserManager,
-    PermissionsMixin,
-    UserManager,
-)
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, UserManager
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.core import validators
@@ -36,9 +31,9 @@ from django.template.defaultfilters import slugify
 from django.utils import timezone
 from django.utils.http import urlquote
 from django.utils.translation import get_language, gettext_lazy as _
+from fluo import settings
 
 from . import fields
-from ... import settings
 
 __all__ = [
     "StatusModel",

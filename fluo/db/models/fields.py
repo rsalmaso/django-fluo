@@ -28,8 +28,7 @@ from django.db import connection, models
 from django.utils import timezone
 from django.utils.encoding import smart_text
 from django.utils.translation import gettext_lazy as _
-
-from ... import forms
+from fluo import forms
 
 __all__ = (
     "StatusField",
