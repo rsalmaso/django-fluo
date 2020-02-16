@@ -54,28 +54,6 @@ STATUS_CHOICES = (
 )
 
 
-class StatusField(models.CharField):
-    def __init__(
-        self,
-        choices=STATUS_CHOICES,
-        max_length=10,
-        default=STATUS_ACTIVE,
-        blank=False,
-        null=False,
-        verbose_name=_("status"),
-        help_text=_("Is active?"),
-    ):
-        super().__init__(
-            choices=choices,
-            max_length=max_length,
-            default=default,
-            blank=blank,
-            null=null,
-            verbose_name=verbose_name,
-            help_text=help_text,
-        )
-
-
 class CreationDateTimeField(models.DateTimeField):
     """
     By default, sets editable=False, blank=True, default=datetime.now
@@ -247,3 +225,25 @@ class EmailField(StringField):
         }
         defaults.update(kwargs)
         return super().formfield(**defaults)
+
+
+class StatusField(StringField):
+    def __init__(
+        self,
+        choices=STATUS_CHOICES,
+        max_length=None,
+        default=STATUS_ACTIVE,
+        blank=False,
+        null=False,
+        verbose_name=_("status"),
+        help_text=_("Is active?"),
+    ):
+        super().__init__(
+            choices=choices,
+            max_length=max_length,
+            default=default,
+            blank=blank,
+            null=null,
+            verbose_name=verbose_name,
+            help_text=help_text,
+        )
