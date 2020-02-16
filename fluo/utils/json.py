@@ -18,13 +18,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-import datetime
 import json
 
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models.query import QuerySet
-from django.utils.encoding import force_text
-from django.utils.functional import Promise
 
 __all__ = [
     "decoder",

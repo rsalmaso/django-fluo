@@ -22,7 +22,6 @@ from django import template
 from django.apps import apps
 from django.utils.encoding import iri_to_uri
 from django.utils.safestring import mark_safe
-from django.utils.translation import get_language
 from fluo.settings import JQUERY_MINIFIED, MEDIA_URL
 
 if apps.is_installed("django.contrib.staticfiles"):
