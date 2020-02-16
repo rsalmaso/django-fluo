@@ -126,7 +126,7 @@ class BackendWrapper:
         engine = options["engine"]
         try:
             module = import_module("fluo.db.backends.%s" % engine)
-        except ImportError as e:
+        except ImportError:
             try:
                 module = import_module(".db_commands", engine)
             except ImportError as e_user:
