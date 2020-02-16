@@ -24,7 +24,7 @@
 #   - ModificationDateTimeField
 
 from django.core import checks, validators
-from django.db import models
+from django.db import connection, models
 from django.utils import timezone
 from django.utils.encoding import smart_text
 from django.utils.translation import gettext_lazy as _
@@ -140,18 +140,22 @@ class TimeDeltaField(models.DecimalField):
 class StringField(models.Field):
     description = _("String")
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, *args, max_length=None, **kwargs):
+        super().__init__(*args, max_length=max_length, **kwargs)
         if isinstance(self.max_length, int) and self.max_length > 0:
             self.validators.append(validators.MaxLengthValidator(self.max_length))
 
     def check(self, **kwargs):
-        errors = super().check(**kwargs)
-        errors.extend(self._check_max_length_attribute(**kwargs))
-        return errors
+        return [
+            *super().check(**kwargs),
+            *self._check_max_length_attribute(**kwargs),
+        ]
 
     def formfield(self, **kwargs):
         defaults = {"max_length": self.max_length}
+        # see django CharField comment
+        if self.null and not connection.features.interprets_empty_string_as_nulls:
+            defaults["empty_value"] = None
         defaults.update(kwargs)
         return super().formfield(**defaults)
 
