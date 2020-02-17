@@ -133,7 +133,7 @@ class StringField(models.Field):
     def formfield(self, **kwargs):
         defaults = {"max_length": self.max_length, "form_class": forms.StringField}
         # see django CharField comment
-        if self.null and not connection.features.interprets_empty_string_as_nulls:
+        if self.null and not connection.features.interprets_empty_strings_as_nulls:
             defaults["empty_value"] = None
         defaults.update(kwargs)
         return super().formfield(**defaults)
