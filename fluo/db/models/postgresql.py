@@ -24,12 +24,20 @@ if not apps.get_containing_app_config("django.contrib.postgres"):
     __all__ = []
 else:
     from django.contrib.postgres.fields import *  # noqa
-    from django.contrib.postgres.fields import __all__ as django_all
+    from django.contrib.postgres.fields.array import __all__ as array_all
+    from django.contrib.postgres.fields.citext import __all__ as citext_all
+    from django.contrib.postgres.fields.hstore import __all__ as hstore_all
+    from django.contrib.postgres.fields.jsonb import __all__ as jsonb_all
+    from django.contrib.postgres.fields.ranges import __all__ as ranges_all
 
     from . import fields as _fields
 
     __all__ = [
-        *django_all,
+        *array_all,
+        *[k for k in citext_all if k not in ["CIEmailField"]],
+        *hstore_all,
+        *jsonb_all,
+        *ranges_all,
         "CIStringField",
         "CIURLField",
         "CISlugField",
