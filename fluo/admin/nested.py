@@ -29,16 +29,12 @@ from django.core.exceptions import PermissionDenied
 from django.db import models, transaction
 from django.forms.formsets import all_valid
 from django.http import Http404
+from django.templatetags.static import static
 from django.utils.decorators import method_decorator
 from django.utils.encoding import force_text
 from django.utils.html import escape
 from django.utils.translation import gettext as _
 from django.views.decorators.csrf import csrf_protect
-
-try:  # django < 3.0
-    from django.contrib.admin.templatetags.admin_static import static
-except ImportError:
-    from django.templatetags import static
 
 __all__ = [
     "NestedModelAdmin",

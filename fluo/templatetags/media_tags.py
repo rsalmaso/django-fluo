@@ -20,24 +20,12 @@
 
 from django import template
 from django.apps import apps
+from django.templatetags.static import static
 from django.utils.encoding import iri_to_uri
 from django.utils.safestring import mark_safe
 from fluo.settings import JQUERY_MINIFIED, MEDIA_URL
 
-if apps.is_installed("django.contrib.staticfiles"):
-    try:
-        from django.contrib.staticfiles.templatetags.staticfiles import static as _static  # django < 3.0
-    except ImportError:
-        from django.templatetags.static import static as _static  # django >= 3.0
-else:
-    from django.templatetags.static import static as _static
-
 register = template.Library()
-
-
-@register.simple_tag
-def static(path):
-    return _static(path)
 
 
 class MediaNode(template.Node):
@@ -48,7 +36,7 @@ class MediaNode(template.Node):
     def render(self, context):
         filename = self.filename.resolve(context)
         args = " %s" % " ".join(self.args) if self.args else ""
-        script = filename if filename.startswith(("https://", "http://", "//")) else _static(iri_to_uri(filename))
+        script = filename if filename.startswith(("https://", "http://", "//")) else static(iri_to_uri(filename))
         return mark_safe(self.fmt % {"script": script, "args": args})
 
 
@@ -75,7 +63,7 @@ def css_tag(parser, token):
 def css(script, media="all"):
     return mark_safe(
         '<link rel="stylesheet" type="text/css" href="%(script)s" media="%(media)s"/>'
-        % {"script": _static(iri_to_uri(script)), "media": media}
+        % {"script": static(iri_to_uri(script)), "media": media}
     )
 
 
@@ -100,7 +88,7 @@ def js_tag(parser, token):
 
 def js(script):
     return mark_safe(
-        '<script type="text/javascript" src="%(script)s"></script>' % {"script": _static(iri_to_uri(script))}
+        '<script type="text/javascript" src="%(script)s"></script>' % {"script": static(iri_to_uri(script))}
     )
 
 
@@ -134,7 +122,7 @@ def jquery_autocomplete():
 @register.simple_tag
 def static_url():
     """ Returns the string contained in the setting STATIC_URL. """
-    return _static("")
+    return static("")
 
 
 @register.simple_tag
