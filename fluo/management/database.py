@@ -44,7 +44,7 @@ The full error: %(error)s"""
 
     def add_arguments(self, parser):
         parser.add_argument(
-            "--noinput",
+            "--noinput", "--no-input",
             action="store_false",
             dest="interactive",
             default=True,
