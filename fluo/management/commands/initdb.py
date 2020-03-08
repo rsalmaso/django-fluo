@@ -37,7 +37,7 @@ The full error: %(error)s"""
     def add_arguments(self, parser):
         super().add_arguments(parser)
         parser.add_argument(
-            "--noadmin",
+            "--noadmin", "--no-admin",
             action="store_false",
             dest="noadmin",
             default=True,
