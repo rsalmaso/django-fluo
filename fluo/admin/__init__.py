@@ -19,7 +19,6 @@
 # THE SOFTWARE.
 
 from django.contrib.admin import (  # noqa: F401
-    ACTION_CHECKBOX_NAME,
     AllValuesFieldListFilter,
     BooleanFieldListFilter,
     ChoicesFieldListFilter,
