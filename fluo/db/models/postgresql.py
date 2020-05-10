@@ -18,16 +18,25 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+import django
 from django.apps import apps
 
 if not apps.get_containing_app_config("django.contrib.postgres"):
     __all__ = []
 else:
-    from django.contrib.postgres.fields import *  # noqa
+    from django.contrib.postgres.fields.array import *  # noqaa
     from django.contrib.postgres.fields.array import __all__ as array_all
+    from django.contrib.postgres.fields.citext import *  # noqa
     from django.contrib.postgres.fields.citext import __all__ as citext_all
+    from django.contrib.postgres.fields.hstore import *  # noqa
     from django.contrib.postgres.fields.hstore import __all__ as hstore_all
-    from django.contrib.postgres.fields.jsonb import __all__ as jsonb_all
+
+    if django.VERSION >= (3, 1):
+        jsonb_all = []
+    else:
+        from django.contrib.postgres.fields.jsonb import *  # noqa
+        from django.contrib.postgres.fields.jsonb import __all__ as jsonb_all
+    from django.contrib.postgres.fields.ranges import *  # noqa
     from django.contrib.postgres.fields.ranges import __all__ as ranges_all
 
     from . import fields as _fields
