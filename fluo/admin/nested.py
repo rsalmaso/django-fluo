@@ -47,11 +47,7 @@ __all__ = [
 csrf_protect_m = method_decorator(csrf_protect)
 
 
-class NestedModelAdmin(admin.ModelAdmin):
-    class Media:
-        css = {"all": ["fluo/admin/css/forms-nested.css"]}
-        js = ["fluo/admin/js/inlines-nested.js"]
-
+class InlineInstancesMixin:
     def get_inline_instances(self, request, obj=None):
         inline_instances = []
         for inline_class in self.inlines:
@@ -68,6 +64,12 @@ class NestedModelAdmin(admin.ModelAdmin):
             inline_instances.append(inline)
 
         return inline_instances
+
+
+class NestedModelAdmin(InlineInstancesMixin, admin.ModelAdmin):
+    class Media:
+        css = {"all": ["fluo/admin/css/forms-nested.css"]}
+        js = ["fluo/admin/js/inlines-nested{}.js".format("" if settings.DEBUG else ".min")]
 
     def save_formset(self, request, form, formset, change):
         """
@@ -223,14 +225,8 @@ class NestedModelAdmin(admin.ModelAdmin):
                 self.save_model(request, new_object, form, False)
                 self.save_related(request, form, formsets, False)
                 args = ()
-                # Provide `add_message` argument to ModelAdmin.log_addition for
-                # Django 1.9 and up.
-                if VERSION[:2] >= (1, 9):
-                    add_message = self.construct_change_message(request, form, formsets, add=True)
-                    args = (request, new_object, add_message)
-                else:
-                    args = (request, new_object)
-                self.log_addition(*args)
+                add_message = self.construct_change_message(request, form, formsets, add=True)
+                self.log_addittion(request, new_object, add_message)
                 return self.response_add(request, new_object)
         else:
             # Prepare the dict of initial data from the request.
@@ -275,9 +271,12 @@ class NestedModelAdmin(admin.ModelAdmin):
             inline_admin_formsets.append(inline_admin_formset)
             media = media + inline_admin_formset.media
             if hasattr(inline, "inlines") and inline.inlines:
-                media += self.wrap_nested_inline_formsets(request, inline, formset)
+                extra_media = self.wrap_nested_inline_formsets(request, inline, formset)
+                if extra_media:
+                    media += extra_media
 
         context = {
+            **self.admin_site.each_context(request),
             "title": _("Add %s") % force_text(opts.verbose_name),
             "adminform": adminForm,
             "is_popup": "_popup" in request.GET,
@@ -384,9 +383,12 @@ class NestedModelAdmin(admin.ModelAdmin):
             inline_admin_formsets.append(inline_admin_formset)
             media = media + inline_admin_formset.media
             if hasattr(inline, "inlines") and inline.inlines:
-                media += self.wrap_nested_inline_formsets(request, inline, formset)
+                extra_media = self.wrap_nested_inline_formsets(request, inline, formset)
+                if extra_media:
+                    media += extra_media
 
         context = {
+            **self.admin_site.each_context(request),
             "title": _("Change %s") % force_text(opts.verbose_name),
             "adminform": adminForm,
             "object_id": object_id,
@@ -401,7 +403,7 @@ class NestedModelAdmin(admin.ModelAdmin):
         return self.render_change_form(request, context, change=True, obj=obj, form_url=form_url)
 
 
-class NestedInline(InlineModelAdmin):
+class NestedInline(InlineInstancesMixin, InlineModelAdmin):
     inlines = []
     new_objects = []
 
@@ -409,31 +411,15 @@ class NestedInline(InlineModelAdmin):
     def media(self):
         extra = "" if settings.DEBUG else ".min"
         js = [
-            "admin/js/vendor/jquery/jquery%s.js" % extra,
+            "admin/js/vendor/jquery/jquery{}.js".format(extra),
             "admin/js/jquery.init.js",
-            "fluo/admin/js/inlines-nested%s.js" % extra,
+            "fluo/admin/js/inlines-nested{}.js".format(extra),
         ]
         # if self.prepopulated_fields:
         # js.extend(['urlify.js', 'prepopulate%s.js' % extra])
         if self.filter_vertical or self.filter_horizontal:
             js.extend(["admin/js/SelectBox.js", "admin/js/SelectFilter2.js"])
         return forms.Media(js=[static(url) for url in js])
-
-    def get_inline_instances(self, request, obj=None):
-        inline_instances = []
-        for inline_class in self.inlines:
-            inline = inline_class(self.model, self.admin_site)
-            if request:
-                if not (
-                    inline.has_add_permission(request)
-                    or inline.has_change_permission(request, obj)
-                    or inline.has_delete_permission(request, obj)
-                ):
-                    continue
-                if not inline.has_add_permission(request):
-                    inline.max_num = 0
-            inline_instances.append(inline)
-        return inline_instances
 
     def get_formsets_with_inlines(self, request, obj=None):
         for inline in self.get_inline_instances(request):

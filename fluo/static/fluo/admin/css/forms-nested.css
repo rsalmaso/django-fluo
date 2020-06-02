@@ -1,4 +1,4 @@
-@import url('../../../admin/css/widgets.css');
+@import url('widgets.css');
 
 /* FORM ROWS */
 
@@ -140,8 +140,7 @@ fieldset.collapsed h2, fieldset.collapsed {
 }
 
 fieldset.collapsed h2 {
-    background: #f8f8f8;
-    color: #666;
+    color: #999;
 }
 
 fieldset.collapsed .collapse-toggle {
@@ -158,12 +157,11 @@ fieldset.monospace textarea {
 /* SUBMIT ROW */
 
 .submit-row {
-    padding: 12px 14px;
-    margin: 0 0 20px;
-    background: #f8f8f8;
-    border: 1px solid #eee;
-    border-radius: 4px;
+    padding: 5px 7px;
     text-align: right;
+    background-color: white;
+    border: 1px solid #ccc;
+    margin: 5px 0;
     overflow: hidden;
 }
 
@@ -184,18 +182,8 @@ body.popup .submit-row {
 }
 
 .submit-row .deletelink {
-    padding-left: 16px;
-    background: url(../../../admin/img/icon-deletelink.svg) 0 1px no-repeat;
-    color: #fff;
-}
-
-a.deletelink:link, a.deletelink:visited {
-    color: #fff;
-}
-
-a.deletelink:focus, a.deletelink:hover {
-    color: #fff;
-    text-decoration: none;
+    background: url(../img/icon-deletelink.svg) 0 50% no-repeat;
+    padding-left: 14px;
 }
 
 /* CUSTOM FORM FIELDS */
@@ -259,11 +247,10 @@ a.deletelink:focus, a.deletelink:hover {
 .inline-related h3 {
     margin: 0;
     color: #666;
-    padding: 5px;
-    font-size: 13px;
-    background: #f8f8f8;
-    border-top: 1px solid #eee;
-    border-bottom: 1px solid #eee;
+    padding: 3px 5px;
+    font-size: 11px;
+    background-color: #e1e1e1;
+    border-bottom: 1px solid #ddd;
 }
 
 .inline-related h3 span.delete {
@@ -345,22 +332,22 @@ a.deletelink:focus, a.deletelink:hover {
 .inline-group div.add-row,
 .inline-group .tabular tr.add-row td {
     color: #666;
-    background: #f8f8f8;
-    padding: 8px 10px;
-    border-bottom: 1px solid #eee;
+    padding: 3px 5px;
+    border-bottom: 1px solid #ddd;
+    background-color: #e1e1e1;
 }
 
 .inline-group .tabular tr.add-row td {
-    padding: 8px 10px;
-    border-bottom: 1px solid #eee;
+    padding: 4px 5px 3px;
+    border-bottom: none;
 }
 
 .inline-group ul.tools a.add,
 .inline-group div.add-row a,
 .inline-group .tabular tr.add-row td a {
-    background: url(../../../admin/img/icon-addlink.svg) 0 1px no-repeat;
-    padding-left: 16px;
-    font-size: 12px;
+    background: url(../img/icon-addlink.svg) 0 50% no-repeat;
+    padding-left: 14px;
+    font-size: 11px;
     outline: 0; /* Remove dotted border around link */
 }
 
