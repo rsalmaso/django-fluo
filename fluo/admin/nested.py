@@ -67,9 +67,16 @@ class InlineInstancesMixin:
 
 
 class NestedModelAdmin(InlineInstancesMixin, admin.ModelAdmin):
-    class Media:
-        css = {"all": ["fluo/admin/css/forms-nested.css"]}
-        js = ["fluo/admin/js/inlines-nested{}.js".format("" if settings.DEBUG else ".min")]
+    @property
+    def media(self):
+        extra = "" if settings.DEBUG else ".min"
+        css = {"all": [static("fluo/admin/css/forms-nested.css")]}
+        js = [
+            "admin/js/vendor/jquery/jquery{}.js".format(extra),
+            "admin/js/jquery.init.js",
+            "fluo/admin/js/inlines-nested{}.js".format(extra),
+        ]
+        return forms.Media(css=css, js=[static(url) for url in js])
 
     def save_formset(self, request, form, formset, change):
         """
@@ -416,7 +423,7 @@ class NestedInline(InlineInstancesMixin, InlineModelAdmin):
             "fluo/admin/js/inlines-nested{}.js".format(extra),
         ]
         # if self.prepopulated_fields:
-        # js.extend(['urlify.js', 'prepopulate%s.js' % extra])
+        #    js.extend(['urlify.js', 'prepopulate%s.js' % extra])
         if self.filter_vertical or self.filter_horizontal:
             js.extend(["admin/js/SelectBox.js", "admin/js/SelectFilter2.js"])
         return forms.Media(js=[static(url) for url in js])
