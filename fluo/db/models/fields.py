@@ -120,8 +120,8 @@ class TimeDeltaField(models.DecimalField):
 class StringField(models.Field):
     description = _("String")
 
-    def __init__(self, *args, max_length=None, **kwargs):
-        super().__init__(*args, max_length=max_length, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         if isinstance(self.max_length, int) and self.max_length > 0:
             self.validators.append(validators.MaxLengthValidator(self.max_length))
 
