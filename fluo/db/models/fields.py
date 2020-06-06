@@ -87,7 +87,7 @@ class ModificationDateTimeField(CreationDateTimeField):
 
 class OrderField(models.IntegerField):
     def __init__(self, *args, **kwargs):
-        kwargs["default"] = 0
+        kwargs.setdefault("default", 0)
         models.Field.__init__(self, *args, **kwargs)
 
     def formfield(self, **kwargs):
