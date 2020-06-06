@@ -99,11 +99,12 @@ class OrderField(models.IntegerField):
 class TimeDeltaField(models.DecimalField):
     description = _("TimeDelta field")
 
-    def __init__(self, milliseconds=False, verbose_name=None, name=None, default=0, *args, **kwargs):
+    def __init__(self, milliseconds=False, *args, **kwargs):
         self.milliseconds = milliseconds
+        kwargs.setdefault("default", 0)
         kwargs.setdefault("decimal_places", 3)
         kwargs.setdefault("max_digits", 12)
-        super().__init__(verbose_name=verbose_name, name=name, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def formfield(self, **kwargs):
         defaults = {
