@@ -17,28 +17,3 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
-
-from django import template
-
-register = template.Library()
-
-
-try:
-    from django.template.defaultfilters import json_script
-except ImportError:
-    _json_script_escapes = {
-        ord(">"): "\\u003E",
-        ord("<"): "\\u003C",
-        ord("&"): "\\u0026",
-    }
-
-    @register.filter(is_safe=True)
-    def json_script(value, element_id):
-        """ backport of django 2.1 json_script filter """
-        import json
-        from django.core.serializers.json import DjangoJSONEncoder
-        from django.utils.html import format_html
-        from django.utils.safestring import mark_safe
-
-        json_str = json.dumps(value, cls=DjangoJSONEncoder).translate(_json_script_escapes)
-        return format_html('<script id="{}" type="application/json">{}</script>', element_id, mark_safe(json_str))
