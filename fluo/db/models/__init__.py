@@ -30,8 +30,19 @@ from .models import __all__ as models_all
 from .postgresql import *  # noqa: F401,F403
 from .postgresql import __all__ as postgresql_all
 
+try:
+    from .enums import *  # noqa: F401,F403
+    from .enums import __all__ as enums_all
+except ImportError:
+    enums_all = []
+
 __all__ = [
-    *[model for model in django_all if model not in ["EmailField", "SlugField", "URLField"]],
+    *[
+        model
+        for model in django_all
+        if model not in ["Choices", "EmailField", "IntegerChoices", "SlugField", "TextChoices", "URLField"]
+    ],
+    *enums_all,
     *fields_all,
     *models_all,
     *postgresql_all,
