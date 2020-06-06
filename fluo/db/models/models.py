@@ -37,7 +37,6 @@ from fluo import settings
 from . import fields
 
 __all__ = [
-    "StatusModel",
     "OrderedModel",
     "TreeOrderedModel",
     "TimestampModel",
@@ -52,13 +51,6 @@ __all__ = [
     "BaseUserManager",
     "UserManager",
 ]
-
-
-class StatusModel(models.Model):
-    status = fields.StatusField()
-
-    class Meta:
-        abstract = True
 
 
 class OrderedModel(models.Model):
@@ -170,7 +162,9 @@ class CategoryModelManager(models.Manager.from_queryset(CategoryModelQuerySet)):
     silence_use_for_related_fields_deprecation = True
 
 
-class CategoryModel(StatusModel, OrderedModel):
+class CategoryModel(OrderedModel):
+    status = fields.StatusField()
+
     objects = CategoryModelManager()
 
     name = models.CharField(unique=True, max_length=255)
