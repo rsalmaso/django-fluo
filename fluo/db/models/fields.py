@@ -217,9 +217,6 @@ class EmailField(StringField):
     default_validators = [validators.validate_email]
     description = _("Email address")
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
     def formfield(self, **kwargs):
         defaults = {
             "form_class": forms.EmailField,
