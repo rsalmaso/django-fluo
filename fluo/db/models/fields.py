@@ -140,7 +140,7 @@ class StringField(models.Field):
         return super().formfield(**defaults)
 
     def get_internal_type(self):
-        return "TextField" if self.max_length is None else "CharField"
+        return "CharField" if self.max_length else "TextField"
 
     def to_python(self, value):
         if isinstance(value, str) or value is None:
@@ -163,7 +163,7 @@ class StringField(models.Field):
         if (is_integer and is_negative) or (not is_integer and not is_none):
             errors = [
                 checks.Error(
-                    "StringField must define a 'max_length' attribute (can be None or a positive integer).",
+                    "StringField must define a 'max_length' attribute (can be None, 0 or a positive integer).",
                     hint=None,
                     obj=self,
                     id="fluo.E1",
