@@ -233,7 +233,7 @@ class NestedModelAdmin(InlineInstancesMixin, admin.ModelAdmin):
                 self.save_related(request, form, formsets, False)
                 args = ()
                 add_message = self.construct_change_message(request, form, formsets, add=True)
-                self.log_addittion(request, new_object, add_message)
+                self.log_addition(request, new_object, add_message)
                 return self.response_add(request, new_object)
         else:
             # Prepare the dict of initial data from the request.
