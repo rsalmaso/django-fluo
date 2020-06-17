@@ -27,8 +27,6 @@ from .fields import *  # noqa: F401,F403
 from .fields import __all__ as fields_all
 from .models import *  # noqa: F401,F403
 from .models import __all__ as models_all
-from .postgresql import *  # noqa: F401,F403
-from .postgresql import __all__ as postgresql_all
 
 try:
     from .enums import *  # noqa: F401,F403
@@ -45,7 +43,6 @@ __all__ = [
     *enums_all,
     *fields_all,
     *models_all,
-    *postgresql_all,
     "GenericForeignKey",
     "GenericRelation",
     "ContentType",

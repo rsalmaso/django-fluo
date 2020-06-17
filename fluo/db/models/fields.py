@@ -25,12 +25,17 @@
 
 from django.core import checks, validators
 from django.db import connection, models
+from django.db.models import lookups
 from django.utils import timezone
 from django.utils.encoding import smart_text
 from django.utils.translation import gettext_lazy as _
 from fluo import forms
 
+from .postgresql import *  # noqa: F401,F403
+from .postgresql import __all__ as postgresql_all
+
 __all__ = [
+    *postgresql_all,
     "StatusField",
     "STATUS_ACTIVE",
     "STATUS_INACTIVE",
@@ -43,6 +48,10 @@ __all__ = [
     "StringField",
     "EmailField",
     "URLField",
+    "CISlugField",
+    "CIStringField",
+    "CIEmailField",
+    "CIURLField",
 ]
 
 
@@ -245,3 +254,27 @@ class StatusField(StringField):
             verbose_name=verbose_name,
             help_text=help_text,
         )
+
+
+class CIStringField(CIText, StringField):
+    pass
+
+
+class CIURLField(CIText, URLField):
+    pass
+
+
+class CISlugField(CIText, SlugField):
+    pass
+
+
+class CIEmailField(CIText, EmailField):
+    pass
+
+
+for field in [CIStringField, CIURLField, CISlugField, CIEmailField]:
+    field.register_lookup(lookups.IExact, lookup_name="exact")
+    field.register_lookup(lookups.IContains, lookup_name="contains")
+    field.register_lookup(lookups.IStartsWith, lookup_name="startswith")
+    field.register_lookup(lookups.IEndsWith, lookup_name="endswith")
+    field.register_lookup(lookups.IRegex, lookup_name="regex")

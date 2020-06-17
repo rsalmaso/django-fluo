@@ -21,10 +21,8 @@
 import django
 from django.apps import apps
 
-if not apps.get_containing_app_config("django.contrib.postgres"):
-    __all__ = []
-else:
-    from django.contrib.postgres.fields.array import *  # noqaa
+if apps.get_containing_app_config("django.contrib.postgres"):
+    from django.contrib.postgres.fields.array import *  # noqa
     from django.contrib.postgres.fields.array import __all__ as array_all
     from django.contrib.postgres.fields.citext import *  # noqa
     from django.contrib.postgres.fields.citext import __all__ as citext_all
@@ -39,28 +37,26 @@ else:
     from django.contrib.postgres.fields.ranges import *  # noqa
     from django.contrib.postgres.fields.ranges import __all__ as ranges_all
 
-    from . import fields as _fields
-
-    __all__ = [
+    postgres__all__ = [
         *array_all,
         *[k for k in citext_all if k not in ["CIEmailField"]],
         *hstore_all,
         *jsonb_all,
         *ranges_all,
-        "CIStringField",
-        "CIURLField",
-        "CISlugField",
-        "CIEmailField",
     ]
+else:
+    from django.db import models
 
-    class CIStringField(CIText, _fields.StringField):  # noqa: F405
+    postgres__all__ = ["CIText", "CICharField", "CITextField"]
+
+    class CIText:
         pass
 
-    class CIURLField(CIText, _fields.URLField):  # noqa: F405
+    class CICharField(models.CharField):
         pass
 
-    class CISlugField(CIText, _fields.SlugField):  # noqa: F405
+    class CITextField(models.TextField):
         pass
 
-    class CIEmailField(CIText, _fields.EmailField):  # noqa: F405
-        pass
+
+__all__ = postgres__all__
