@@ -19,7 +19,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from django import VERSION, forms
+from django import forms
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.admin import helpers
@@ -231,7 +231,6 @@ class NestedModelAdmin(InlineInstancesMixin, admin.ModelAdmin):
             if self.all_valid_with_nesting(formsets) and form_validated:
                 self.save_model(request, new_object, form, False)
                 self.save_related(request, form, formsets, False)
-                args = ()
                 add_message = self.construct_change_message(request, form, formsets, add=True)
                 self.log_addition(request, new_object, add_message)
                 return self.response_add(request, new_object)
