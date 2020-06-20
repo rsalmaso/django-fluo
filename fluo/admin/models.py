@@ -21,20 +21,17 @@
 # Copyright (C) 2007 Michael Trier
 # Autocomplete feature taken from django-extensions
 
-import operator
-from functools import reduce, update_wrapper
+from functools import update_wrapper
 
-from django.apps import apps
-from django.conf import settings
 from django.contrib import admin
-from django.db.models.query import QuerySet
-from django.http import HttpResponse, HttpResponseNotFound
-from django.utils.encoding import smart_str
-from django.utils.text import get_text_list
+from django.forms.widgets import SelectMultiple
+from django.utils.text import format_lazy
 from django.utils.translation import gettext_lazy as _
 
 from ..db import models
 from .nested import NestedModelAdmin, NestedStackedInline, NestedTabularInline
+from .views import RelatedSearchJsonView
+from .widgets import RelatedSearchSelect, RelatedSearchSelectMultiple
 
 __all__ = [
     "ModelAdmin",
@@ -71,14 +68,83 @@ for field in [
 # end admin customization
 
 
-class ModelAdmin(NestedModelAdmin):
+class RelatedSearchMixin:
+    related_search_fields = {}
+
+    def get_related_search_fields(self, request):
+        """
+        Return a list of ForeignKey and/or ManyToMany fields which should use
+        an related_search widget.
+        """
+        return self.related_search_fields
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if "widget" not in kwargs:
+            if db_field.name in self.get_related_search_fields(request):
+                kwargs["widget"] = RelatedSearchSelect(db_field, self.admin_site, using=kwargs.get("using"))
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        """
+        Get a form Field for a ManyToManyField.
+        """
+        # If it uses an intermediary model that isn't auto created, don't show
+        # a field in admin.
+        if not db_field.remote_field.through._meta.auto_created:
+            return None
+
+        if "widget" not in kwargs:
+            # autocomplete_fields = self.get_autocomplete_fields(request)
+            # if db_field.name in autocomplete_fields:
+            if db_field.name in self.get_related_search_fields(request):
+                kwargs["widget"] = RelatedSearchSelectMultiple(db_field, self.admin_site, db=kwargs.get("using"),)
+        form_field = super().formfield_for_manytomany(db_field, request, **kwargs)
+        if isinstance(form_field.widget, SelectMultiple) and not isinstance(
+            form_field.widget, RelatedSearchSelectMultiple
+        ):
+            msg = _("Hold down “Control”, or “Command” on a Mac, to select more than one.")
+            help_text = form_field.help_text
+            form_field.help_text = format_lazy("{} {}", help_text, msg) if help_text else msg
+        return form_field
+
+    def get_urls(self):
+        from django.urls import path
+
+        def wrap(view):
+            def wrapper(*args, **kwargs):
+                return self.admin_site.admin_view(view)(*args, **kwargs)
+
+            return update_wrapper(wrapper, view)
+
+        info = self.model._meta.app_label, self.model._meta.model_name
+
+        return [
+            path(
+                "related_search/<path:field_name>/", wrap(self.related_search_view), name="%s_%s_related_search" % info
+            ),
+        ] + super().get_urls()
+
+    def related_search_view(self, request, field_name):
+        related_field = self.model._meta.get_field(field_name)
+        related_model = related_field.remote_field.model
+        model_admin = self.admin_site._registry[related_model]
+        search_fields = self.get_related_search_fields(request)[field_name]
+        if not search_fields and model_admin is not None:
+            search_fields = model_admin.get_search_fields(request)
+        return RelatedSearchJsonView.as_view(model_admin=model_admin, search_fields=search_fields)(
+            request, related_field.name
+        )
+
+
+class ModelAdmin(RelatedSearchMixin, NestedModelAdmin):
     pass
 
-class StackedInline(NestedStackedInline):
+
+class StackedInline(RelatedSearchMixin, NestedStackedInline):
     pass
 
 
-class TabularInline(NestedTabularInline):
+class TabularInline(RelatedSearchMixin, NestedTabularInline):
     pass
 
 

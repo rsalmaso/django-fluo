@@ -18,12 +18,17 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+
 from django import forms
+from django.contrib.admin.widgets import AutocompleteMixin
+from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext as _
 
 __all__ = [
     "AdminImageFileWidget",
+    "RelatedSearchSelect",
+    "RelatedSearchSelectMultiple",
 ]
 
 
@@ -51,3 +56,21 @@ class AdminImageFileWidget(forms.FileInput):
         if value and hasattr(value, "url"):
             output.append("</div>")
         return mark_safe("".join(output))
+
+
+class RelatedSearchMixin(AutocompleteMixin):
+    url_name = "%s:%s_%s_related_search"
+
+    def get_url(self):
+        model = self.rel.model
+        return reverse(
+            self.url_name % (self.admin_site.name, model._meta.app_label, model._meta.model_name), args=[self.rel.name]
+        )
+
+
+class RelatedSearchSelect(RelatedSearchMixin, forms.Select):
+    pass
+
+
+class RelatedSearchSelectMultiple(RelatedSearchMixin, forms.SelectMultiple):
+    pass
