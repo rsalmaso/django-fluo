@@ -12,3 +12,4 @@ My personal django reusable stuffs.
 * Drop StatusModel as it is not easyly customizable, use StatusField
 * Remove `jquery_ajaxqueue` templatetag
 * Remove `jquery` templatetag
+* Remove `css_ie` templatetag

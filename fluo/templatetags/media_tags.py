@@ -72,11 +72,6 @@ def css_print(script):
     return mark_safe(css(script, media="print"))
 
 
-@register.simple_tag
-def css_ie(script, media="all"):
-    return mark_safe("""<!--[if IE]>%s<![endif]-->""" % css(script, media))
-
-
 class JsNode(MediaNode):
     fmt = '<script src="%(script)s"%(args)s></script>'
 
