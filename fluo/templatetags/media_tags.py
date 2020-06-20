@@ -100,16 +100,6 @@ def jquery():
 
 
 @register.simple_tag
-def jquery_ajaxqueue():
-    return mark_safe(
-        js(
-            "fluo/jquery-ajaxqueue/%(js)s"
-            % {"js": {True: "jquery.ajaxqueue.min.js", False: "jquery.ajaxqueue.js"}[JQUERY_MINIFIED]},
-        ),
-    )
-
-
-@register.simple_tag
 def static_url():
     """ Returns the string contained in the setting STATIC_URL. """
     return static("")
