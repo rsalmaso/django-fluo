@@ -35,7 +35,6 @@ from django.utils.translation import gettext_lazy as _
 
 from ..db import models
 from .nested import NestedModelAdmin, NestedStackedInline, NestedTabularInline
-from .widgets import ForeignKeySearchInput
 
 __all__ = [
     "ModelAdmin",
@@ -72,137 +71,14 @@ for field in [
 # end admin customization
 
 
-class AutocompleteMixin:
-    """Admin class for models using the autocomplete feature.
+class ModelAdmin(NestedModelAdmin):
+    pass
 
-    There are two additional fields:
-       - related_search_fields: defines fields of managed model that
-         have to be represented by autocomplete input, together with
-         a list of target model fields that are searched for
-         input string, e.g.:
-
-         related_search_fields = {
-            'author': ('first_name', 'email'),
-         }
-
-       - related_string_functions: contains optional functions which
-         take target model instance as only argument and return string
-         representation. By default __unicode__() method of target
-         object is used.
-    """
-
-    class Media:
-        js = [
-            "fluo/jquery/jquery.min.js",
-        ]
-        css = {
-            "all": ["fluo/jquery-autocomplete/jquery.autocomplete.css"],
-        }
-
-    related_search_fields = {}
-    related_string_functions = {}
-    autocomplete_limit = getattr(settings, "FOREIGNKEY_AUTOCOMPLETE_LIMIT", None)
-
-    def get_help_text(self, field_name, model_name):
-        searchable_fields = self.related_search_fields.get(field_name, None)
-        if searchable_fields:
-            help_kwargs = {
-                "model_name": model_name,
-                "field_list": get_text_list(searchable_fields, _("and")),
-            }
-            return _("Use the left field to do %(model_name)s lookups in the fields %(field_list)s.") % help_kwargs
-        return ""
-
-    def formfield_for_foreignkey(self, db_field, request=None, **kwargs):
-        if db_field.name in self.related_search_fields:
-            help_text = self.get_help_text(db_field.name, db_field.remote_field.model._meta.object_name)
-            if kwargs.get("help_text"):
-                help_text = "{} {}".format(kwargs["help_text"], help_text)
-            kwargs["widget"] = ForeignKeySearchInput(db_field.remote_field, self.related_search_fields[db_field.name])
-            kwargs["help_text"] = help_text
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
-
-
-class ModelAdmin(AutocompleteMixin, NestedModelAdmin):
-    def get_urls(self):
-        from django.conf.urls import url
-
-        def wrap(view):
-            def wrapper(*args, **kwargs):
-                return self.admin_site.admin_view(view)(*args, **kwargs)
-
-            return update_wrapper(wrapper, view)
-
-        info = self.model._meta.app_label, self.model._meta.model_name
-
-        return [
-            url(r"autocomplete/$", wrap(self.autocomplete_view), name="%s_%s_autocomplete" % info),
-        ] + super().get_urls()
-
-    def autocomplete_view(self, request):
-        """
-        Searches in the fields of the given related model and returns the
-        result as a simple string to be used by the jQuery Autocomplete plugin
-        """
-        query = request.GET.get("q", None)
-        app_label = request.GET.get("app_label", None)
-        model_name = request.GET.get("model_name", None)
-        search_fields = request.GET.get("search_fields", None)
-        object_pk = request.GET.get("object_pk", None)
-
-        try:
-            to_string_function = self.related_string_functions[model_name]
-        except KeyError:
-            to_string_function = str
-
-        if search_fields and app_label and model_name and (query or object_pk):
-
-            def construct_search(field_name):
-                # use different lookup methods depending on the notation
-                if field_name.startswith("^"):
-                    fmt, name = "{}__istartswith", field_name[1:]
-                elif field_name.startswith("="):
-                    fmt, name = "{}__iexact", field_name[1:]
-                elif field_name.startswith("@"):
-                    fmt, name = "{}__search", field_name[1:]
-                else:
-                    fmt, name = "{}__icontains", field_name
-                return fmt.format(name)
-
-            model = apps.get_model(app_label, model_name)
-            queryset = model._default_manager.all()
-            data = ""
-            if query:
-                for bit in query.split():
-                    or_queries = [
-                        models.Q(**{construct_search(smart_str(field_name)): smart_str(bit)})
-                        for field_name in search_fields.split(",")
-                    ]
-                    other_qs = QuerySet(model)
-                    other_qs.query.select_related = queryset.query.select_related
-                    other_qs = other_qs.filter(reduce(operator.or_, or_queries))
-                    queryset = queryset & other_qs
-
-                if self.autocomplete_limit:
-                    queryset = queryset[: self.autocomplete_limit]
-
-                data = "".join(["{}|{}\n".format(to_string_function(f), f.pk) for f in queryset])
-            elif object_pk:
-                try:
-                    obj = queryset.get(pk=object_pk)
-                except Exception:
-                    pass
-                else:
-                    data = to_string_function(obj)
-            return HttpResponse(data)
-        return HttpResponseNotFound()
-
-
-class StackedInline(AutocompleteMixin, NestedStackedInline):
+class StackedInline(NestedStackedInline):
     pass
 
 
-class TabularInline(AutocompleteMixin, NestedTabularInline):
+class TabularInline(NestedTabularInline):
     pass
 
 

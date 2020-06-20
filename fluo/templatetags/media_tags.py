@@ -110,16 +110,6 @@ def jquery_ajaxqueue():
 
 
 @register.simple_tag
-def jquery_autocomplete():
-    return mark_safe(
-        js(
-            "fluo/jquery-autocomplete/%(js)s"
-            % {"js": {True: "jquery.autocomplete.min.js", False: "jquery.autocomplete.js"}[JQUERY_MINIFIED]}
-        )
-    )
-
-
-@register.simple_tag
 def static_url():
     """ Returns the string contained in the setting STATIC_URL. """
     return static("")
