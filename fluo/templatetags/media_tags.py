@@ -23,7 +23,7 @@ from django.templatetags.static import static
 from django.utils.encoding import iri_to_uri
 from django.utils.safestring import mark_safe
 
-from fluo.settings import JQUERY_MINIFIED, MEDIA_URL
+from fluo.settings import MEDIA_URL
 
 register = template.Library()
 
@@ -89,13 +89,6 @@ def js_tag(parser, token):
 def js(script):
     return mark_safe(
         '<script type="text/javascript" src="%(script)s"></script>' % {"script": static(iri_to_uri(script))},
-    )
-
-
-@register.simple_tag
-def jquery():
-    return mark_safe(
-        js("fluo/jquery/%(jquery)s" % {"jquery": {True: "jquery.min.js", False: "jquery.js"}[JQUERY_MINIFIED]}),
     )
 
 
