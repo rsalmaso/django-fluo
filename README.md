@@ -13,3 +13,4 @@ My personal django reusable stuffs.
 * Remove `jquery_ajaxqueue` templatetag
 * Remove `jquery` templatetag
 * Remove `css_ie` templatetag
+* Remove `css_print` templatetag

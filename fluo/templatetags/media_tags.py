@@ -55,36 +55,18 @@ class CssNode(MediaNode):
     fmt = '<link rel="stylesheet" type="text/css" href="%(script)s"%(args)s/>'
 
 
-@register.tag("css")
-def css_tag(parser, token):
+@register.tag
+def css(parser, token):
     return media_tag(parser, token, CssNode)
-
-
-def css(script, media="all"):
-    return mark_safe(
-        '<link rel="stylesheet" type="text/css" href="%(script)s" media="%(media)s"/>'
-        % {"script": static(iri_to_uri(script)), "media": media},
-    )
-
-
-@register.simple_tag
-def css_print(script):
-    return mark_safe(css(script, media="print"))
 
 
 class JsNode(MediaNode):
     fmt = '<script src="%(script)s"%(args)s></script>'
 
 
-@register.tag("js")
-def js_tag(parser, token):
+@register.tag
+def js(parser, token):
     return media_tag(parser, token, JsNode)
-
-
-def js(script):
-    return mark_safe(
-        '<script type="text/javascript" src="%(script)s"></script>' % {"script": static(iri_to_uri(script))},
-    )
 
 
 @register.simple_tag
