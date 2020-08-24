@@ -23,7 +23,7 @@ from django import forms
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.admin import helpers
-from django.contrib.admin.options import InlineModelAdmin, reverse
+from django.contrib.admin.options import InlineModelAdmin, ModelAdmin, reverse
 from django.contrib.admin.utils import unquote
 from django.core.exceptions import PermissionDenied
 from django.db import models, transaction
@@ -66,17 +66,10 @@ class InlineInstancesMixin:
         return inline_instances
 
 
-class NestedModelAdmin(InlineInstancesMixin, admin.ModelAdmin):
-    @property
-    def media(self):
-        extra = "" if settings.DEBUG else ".min"
+class NestedModelAdmin(InlineInstancesMixin, ModelAdmin):
+    class Meta:
         css = {"all": [static("fluo/admin/css/forms-nested.css")]}
-        js = [
-            "admin/js/vendor/jquery/jquery{}.js".format(extra),
-            "admin/js/jquery.init.js",
-            "fluo/admin/js/inlines-nested{}.js".format(extra),
-        ]
-        return forms.Media(css=css, js=[static(url) for url in js])
+        js = [static(f"fluo/admin/js/inlines-nested{'' if settings.DEBUG else '.min'}.js")]
 
     def save_formset(self, request, form, formset, change):
         """
@@ -413,19 +406,8 @@ class NestedInline(InlineInstancesMixin, InlineModelAdmin):
     inlines = []
     new_objects = []
 
-    @property
-    def media(self):
-        extra = "" if settings.DEBUG else ".min"
-        js = [
-            "admin/js/vendor/jquery/jquery{}.js".format(extra),
-            "admin/js/jquery.init.js",
-            "fluo/admin/js/inlines-nested{}.js".format(extra),
-        ]
-        # if self.prepopulated_fields:
-        #    js.extend(['urlify.js', 'prepopulate%s.js' % extra])
-        if self.filter_vertical or self.filter_horizontal:
-            js.extend(["admin/js/SelectBox.js", "admin/js/SelectFilter2.js"])
-        return forms.Media(js=[static(url) for url in js])
+    class Meta:
+        js = [static(f"fluo/admin/js/inlines-nested{'' if settings.DEBUG else '.min'}.js")]
 
     def get_formsets_with_inlines(self, request, obj=None):
         for inline in self.get_inline_instances(request):
