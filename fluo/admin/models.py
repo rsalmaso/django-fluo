@@ -63,7 +63,7 @@ for field in [
 ]:
     if hasattr(models, field):
         admin.options.FORMFIELD_FOR_DBFIELD_DEFAULTS[getattr(models, field)] = {
-            "widget": admin.widgets.AdminTextInputWidget
+            "widget": admin.widgets.AdminTextInputWidget,
         }
 # end admin customization
 
@@ -97,10 +97,15 @@ class RelatedSearchMixin:
             # autocomplete_fields = self.get_autocomplete_fields(request)
             # if db_field.name in autocomplete_fields:
             if db_field.name in self.get_related_search_fields(request):
-                kwargs["widget"] = RelatedSearchSelectMultiple(db_field, self.admin_site, db=kwargs.get("using"),)
+                kwargs["widget"] = RelatedSearchSelectMultiple(
+                    db_field,
+                    self.admin_site,
+                    db=kwargs.get("using"),
+                )
         form_field = super().formfield_for_manytomany(db_field, request, **kwargs)
         if isinstance(form_field.widget, SelectMultiple) and not isinstance(
-            form_field.widget, RelatedSearchSelectMultiple
+            form_field.widget,
+            RelatedSearchSelectMultiple,
         ):
             msg = _("Hold down “Control”, or “Command” on a Mac, to select more than one.")
             help_text = form_field.help_text
@@ -120,7 +125,9 @@ class RelatedSearchMixin:
 
         return [
             path(
-                "related_search/<path:field_name>/", wrap(self.related_search_view), name="%s_%s_related_search" % info
+                "related_search/<path:field_name>/",
+                wrap(self.related_search_view),
+                name="%s_%s_related_search" % info,
             ),
         ] + super().get_urls()
 
@@ -132,7 +139,8 @@ class RelatedSearchMixin:
         if not search_fields and model_admin is not None:
             search_fields = model_admin.get_search_fields(request)
         return RelatedSearchJsonView.as_view(model_admin=model_admin, search_fields=search_fields)(
-            request, related_field.name
+            request,
+            related_field.name,
         )
 
 

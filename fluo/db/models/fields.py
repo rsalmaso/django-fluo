@@ -29,6 +29,7 @@ from django.db.models import lookups
 from django.utils import timezone
 from django.utils.encoding import smart_text
 from django.utils.translation import gettext_lazy as _
+
 from fluo import forms
 
 from .postgresql import *  # noqa: F401,F403
@@ -176,7 +177,7 @@ class StringField(models.Field):
                     hint=None,
                     obj=self,
                     id="fluo.E1",
-                )
+                ),
             ]
         else:
             errors = []
@@ -256,19 +257,19 @@ class StatusField(StringField):
         )
 
 
-class CIStringField(CIText, StringField):
+class CIStringField(CIText, StringField):  # noqa: F405
     pass
 
 
-class CIURLField(CIText, URLField):
+class CIURLField(CIText, URLField):  # noqa: F405
     pass
 
 
-class CISlugField(CIText, SlugField):
+class CISlugField(CIText, SlugField):  # noqa: F405
     pass
 
 
-class CIEmailField(CIText, EmailField):
+class CIEmailField(CIText, EmailField):  # noqa: F405
     pass
 
 

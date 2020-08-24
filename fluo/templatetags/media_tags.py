@@ -19,10 +19,10 @@
 # THE SOFTWARE.
 
 from django import template
-from django.apps import apps
 from django.templatetags.static import static
 from django.utils.encoding import iri_to_uri
 from django.utils.safestring import mark_safe
+
 from fluo.settings import JQUERY_MINIFIED, MEDIA_URL
 
 register = template.Library()
@@ -63,7 +63,7 @@ def css_tag(parser, token):
 def css(script, media="all"):
     return mark_safe(
         '<link rel="stylesheet" type="text/css" href="%(script)s" media="%(media)s"/>'
-        % {"script": static(iri_to_uri(script)), "media": media}
+        % {"script": static(iri_to_uri(script)), "media": media},
     )
 
 
@@ -88,14 +88,14 @@ def js_tag(parser, token):
 
 def js(script):
     return mark_safe(
-        '<script type="text/javascript" src="%(script)s"></script>' % {"script": static(iri_to_uri(script))}
+        '<script type="text/javascript" src="%(script)s"></script>' % {"script": static(iri_to_uri(script))},
     )
 
 
 @register.simple_tag
 def jquery():
     return mark_safe(
-        js("fluo/jquery/%(jquery)s" % {"jquery": {True: "jquery.min.js", False: "jquery.js"}[JQUERY_MINIFIED]})
+        js("fluo/jquery/%(jquery)s" % {"jquery": {True: "jquery.min.js", False: "jquery.js"}[JQUERY_MINIFIED]}),
     )
 
 
@@ -104,8 +104,8 @@ def jquery_ajaxqueue():
     return mark_safe(
         js(
             "fluo/jquery-ajaxqueue/%(js)s"
-            % {"js": {True: "jquery.ajaxqueue.min.js", False: "jquery.ajaxqueue.js"}[JQUERY_MINIFIED]}
-        )
+            % {"js": {True: "jquery.ajaxqueue.min.js", False: "jquery.ajaxqueue.js"}[JQUERY_MINIFIED]},
+        ),
     )
 
 

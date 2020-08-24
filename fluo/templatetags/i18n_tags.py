@@ -22,6 +22,7 @@
 # Copyright (c) 2008, Batiste Bieler
 
 from django import template
+
 from fluo.middleware.locale import get_language_from_request
 
 register = template.Library()

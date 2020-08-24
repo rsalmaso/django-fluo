@@ -11,14 +11,14 @@
 # All configuration values have a default value; values that are commented out
 # serve to show the default value.
 
-import os, sys
+import os
+import sys
 
 # PATH is the absolute path leading to parent directory
 PATH = os.path.split(os.path.dirname(os.path.realpath(__file__)))[0]
 if PATH not in sys.path:
     sys.path.insert(0, PATH)
-import fluo
-
+import fluo  # noqa: E402 isort:skip
 
 # If your extensions are in another directory, add it here.
 # sys.path.append('some/directory')

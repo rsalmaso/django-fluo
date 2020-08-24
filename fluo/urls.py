@@ -48,10 +48,7 @@ except ImportError:
 try:
     from django.urls import URLPattern, URLResolver
 except ImportError:
-    from django.urls import (
-        RegexURLPattern as URLPattern,
-        RegexURLResolver as URLResolver,
-    )
+    from django.urls import RegexURLPattern as URLPattern, RegexURLResolver as URLResolver
 
 
 __all__ = [

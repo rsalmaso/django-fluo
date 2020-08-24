@@ -49,7 +49,7 @@ class AdminImageFileWidget(forms.FileInput):
         %(text)s <a target="_blank" href="%(url)s">%(value)s</a>
         <br />
         %(change)s """
-                % {"text": _("Currently:"), "url": value.url, "value": value, "change": _("Change:")}
+                % {"text": _("Currently:"), "url": value.url, "value": value, "change": _("Change:")},
             )
         output.append(super().render(name, value, attrs))
         output.append("</div>")
@@ -64,7 +64,8 @@ class RelatedSearchMixin(AutocompleteMixin):
     def get_url(self):
         model = self.rel.model
         return reverse(
-            self.url_name % (self.admin_site.name, model._meta.app_label, model._meta.model_name), args=[self.rel.name]
+            self.url_name % (self.admin_site.name, model._meta.app_label, model._meta.model_name),
+            args=[self.rel.name],
         )
 
 

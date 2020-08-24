@@ -67,7 +67,7 @@ class GroupedSelect(forms.Select):
                 option_label = smart_text(v)
                 selected_html = (option_value == str_value) and ' selected="selected"' or ""
                 output.append(
-                    '<option value="%s"%s>%s</option>' % (escape(option_value), selected_html, escape(option_label))
+                    '<option value="%s"%s>%s</option>' % (escape(option_value), selected_html, escape(option_label)),
                 )
             if group_label:
                 output.append("</optgroup>")

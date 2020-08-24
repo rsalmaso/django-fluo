@@ -86,5 +86,5 @@ class RelatedSearchJsonView(AutocompleteJsonView):
             {
                 "results": [{"id": str(obj.pk), "text": str(obj)} for obj in context["object_list"]],
                 "pagination": {"more": context["page_obj"].has_next()},
-            }
+            },
         )

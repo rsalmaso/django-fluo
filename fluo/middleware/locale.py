@@ -31,15 +31,16 @@ from django.http import HttpResponseRedirect
 from django.utils import translation
 from django.utils.cache import patch_vary_headers
 from django.utils.deprecation import MiddlewareMixin
+
 from fluo.settings import NO_LOCALE_PATTERNS
 
 SUB = re.compile(
     r'<a([^>]+)href="/(?!(%s|%s|%s))([^"]*)"([^>]*)>'
-    % ("|".join(map(lambda l: l[0] + "/", settings.LANGUAGES)), settings.MEDIA_URL[1:], settings.STATIC_URL[1:])
+    % ("|".join(map(lambda l: l[0] + "/", settings.LANGUAGES)), settings.MEDIA_URL[1:], settings.STATIC_URL[1:]),
 )
 SUB2 = re.compile(
     r'<form([^>]+)action="/(?!(%s|%s|%s))([^"]*)"([^>]*)>'
-    % ("|".join(map(lambda l: l[0] + "/", settings.LANGUAGES)), settings.MEDIA_URL[1:], settings.STATIC_URL[1:])
+    % ("|".join(map(lambda l: l[0] + "/", settings.LANGUAGES)), settings.MEDIA_URL[1:], settings.STATIC_URL[1:]),
 )
 SUPPORTED = dict(settings.LANGUAGES)
 START_SUB = re.compile(r"^/(%s)/(.*)" % "|".join(map(lambda l: l[0], settings.LANGUAGES)))
@@ -168,10 +169,12 @@ class LocaleMiddleware(MiddlewareMixin):
             and response._headers["content-type"][1].split(";")[0] == "text/html"
         ):
             response.content = SUB.sub(
-                r'<a\1href="/%s/\3"\4>' % request.LANGUAGE_CODE, response.content.decode("utf-8"),
+                r'<a\1href="/%s/\3"\4>' % request.LANGUAGE_CODE,
+                response.content.decode("utf-8"),
             )
             response.content = SUB2.sub(
-                r'<form\1action="/%s/\3"\4>' % request.LANGUAGE_CODE, response.content.decode("utf-8"),
+                r'<form\1action="/%s/\3"\4>' % request.LANGUAGE_CODE,
+                response.content.decode("utf-8"),
             )
         if response.status_code == 301 or response.status_code == 302:
             if "Content-Language" not in response:

@@ -27,6 +27,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.encoding import smart_text
 from django.utils.translation import gettext, gettext_lazy as _
+
 from fluo.utils import json
 
 from .widgets import GroupedSelect, TimeDeltaWidget
@@ -63,7 +64,15 @@ class GroupedChoiceField(forms.ChoiceField):
     widget = GroupedSelect
 
     def __init__(
-        self, choices=(), required=True, widget=None, label=None, initial=None, help_text=None, *args, **kwargs
+        self,
+        choices=(),
+        required=True,
+        widget=None,
+        label=None,
+        initial=None,
+        help_text=None,
+        *args,
+        **kwargs,
     ):
         super().__init__(
             # choices=choices,

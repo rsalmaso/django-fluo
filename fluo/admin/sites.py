@@ -58,14 +58,14 @@ class AdminSite(admin.AdminSite):
         except (ObjectDoesNotExist, ValueError):
             raise Http404(
                 _("Content type %(ct_id)s object %(obj_id)s doesn't exist")
-                % {"ct_id": content_type_id, "obj_id": object_id}
+                % {"ct_id": content_type_id, "obj_id": object_id},
             )
 
         try:
             get_absolute_url = obj.get_absolute_url
         except AttributeError:
             raise Http404(
-                _("%(ct_name)s objects don't have a get_absolute_url() method") % {"ct_name": content_type.name}
+                _("%(ct_name)s objects don't have a get_absolute_url() method") % {"ct_name": content_type.name},
             )
         absurl = get_absolute_url()
 

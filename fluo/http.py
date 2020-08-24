@@ -31,9 +31,13 @@ __all__ = [
 ]
 
 
-class JsonResponse(HttpResponse):
+class JsonResponse(HttpResponse):  # noqa: F405
     def __init__(
-        self, content=None, content_type="application/json; charset=utf-8", status=200, indent=2,
+        self,
+        content=None,
+        content_type="application/json; charset=utf-8",
+        status=200,
+        indent=2,
     ):
         """
         return JsonResponse(content={'status': 200, 'message': '', 'data': [] })

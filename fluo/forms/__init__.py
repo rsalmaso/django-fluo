@@ -19,8 +19,8 @@
 # THE SOFTWARE.
 
 from django.contrib.contenttypes.forms import BaseGenericInlineFormSet, generic_inlineformset_factory  # noqa: F401,F403
-from django.forms import *  # noqa: F401,F403
 from django.core.exceptions import ValidationError
+from django.forms import *  # noqa: F401,F403
 from django.forms.boundfield import __all__ as django_boundfield_all
 from django.forms.fields import __all__ as django_fields_all
 from django.forms.forms import __all__ as django_forms_all

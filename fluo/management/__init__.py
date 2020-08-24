@@ -106,7 +106,7 @@ ALL data in the database "%s".
 Are you sure you want to do this?
 
 Type 'yes' to continue, or 'no' to cancel: """
-                % database["NAME"]
+                % database["NAME"],
             )
         else:
             confirm = "yes"
@@ -134,14 +134,16 @@ def _get_all_permissions(opts):
 
 
 def create_permissions(app_config, **kwargs):
-    from django.contrib.contenttypes.models import ContentType
     from django.contrib.auth.models import Permission
+    from django.contrib.contenttypes.models import ContentType
 
     for klass in app_config.get_models():
         ctype = ContentType.objects.get_for_model(klass)
         for codename, name in _get_all_permissions(klass._meta):
             p, created = Permission.objects.get_or_create(
-                codename=codename, content_type__pk=ctype.id, defaults={"name": name, "content_type": ctype},
+                codename=codename,
+                content_type__pk=ctype.id,
+                defaults={"name": name, "content_type": ctype},
             )
             if created and kwargs.get("verbosity", 0) >= 2:
                 log.info("Adding permission '{}'".format(p))

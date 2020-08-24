@@ -31,6 +31,7 @@ from django.template.defaultfilters import slugify
 from django.utils import timezone
 from django.utils.http import urlquote
 from django.utils.translation import get_language, gettext_lazy as _
+
 from fluo import settings
 
 from . import fields
@@ -62,7 +63,11 @@ class StatusModel(models.Model):
 
 class OrderedModel(models.Model):
     ordering = fields.OrderField(
-        default=0, blank=True, db_index=True, verbose_name=_("ordering"), help_text=_("Ordered"),
+        default=0,
+        blank=True,
+        db_index=True,
+        verbose_name=_("ordering"),
+        help_text=_("Ordered"),
     )
 
     class Meta:
@@ -174,7 +179,7 @@ class CategoryModel(StatusModel, OrderedModel):
         editable=False,
         verbose_name=_("slug"),
         help_text=_(
-            'A "slug" is a unique URL-friendly title for the object automatically generated from the "name" field.'
+            'A "slug" is a unique URL-friendly title for the object automatically generated from the "name" field.',
         ),  # noqa: E501
     )
     default = models.BooleanField(default=False, verbose_name=_("default"), help_text=_("Is the default one?"))
@@ -246,7 +251,7 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
         default=True,
         verbose_name=_("active"),
         help_text=_(
-            "Designates whether this user should be treated as active. Unselect this instead of deleting accounts."
+            "Designates whether this user should be treated as active. Unselect this instead of deleting accounts.",
         ),  # noqa: E501
     )
     date_joined = models.DateTimeField(default=timezone.now, verbose_name=_("date joined"))

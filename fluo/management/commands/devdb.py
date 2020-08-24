@@ -31,13 +31,28 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         super().add_arguments(parser)
         parser.add_argument(
-            "--username", "-u", action="store", dest="username", default="admin", help="Use username as admin user.",
+            "--username",
+            "-u",
+            action="store",
+            dest="username",
+            default="admin",
+            help="Use username as admin user.",
         )
         parser.add_argument(
-            "--password", "-p", action="store", dest="password", default="admin", help='New password for "admin" user.',
+            "--password",
+            "-p",
+            action="store",
+            dest="password",
+            default="admin",
+            help='New password for "admin" user.',
         )
         parser.add_argument(
-            "--site", "-s", action="store", dest="site", default="1", help="Update this SITE_ID domain/name.",
+            "--site",
+            "-s",
+            action="store",
+            dest="site",
+            default="1",
+            help="Update this SITE_ID domain/name.",
         )
         parser.add_argument(
             "--domain",

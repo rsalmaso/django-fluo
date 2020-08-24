@@ -58,32 +58,32 @@ class Backend:
 
     def do_createdb(self):
         raise ImproperlyConfigured(
-            "%s.%s.do_createdb is not implemented." % (self.__class__.__module__, self.__class__.__name__)
+            "%s.%s.do_createdb is not implemented." % (self.__class__.__module__, self.__class__.__name__),
         )
 
     def do_dropdb(self):
         raise ImproperlyConfigured(
-            "%s.%s.do_dropdb is not implemented." % (self.__class__.__module__, self.__class__.__name__)
+            "%s.%s.do_dropdb is not implemented." % (self.__class__.__module__, self.__class__.__name__),
         )
 
     def connect(self):
         raise ImproperlyConfigured(
-            "%s.%s.connect is not implemented." % (self.__class__.__module__, self.__class__.__name__)
+            "%s.%s.connect is not implemented." % (self.__class__.__module__, self.__class__.__name__),
         )
 
     def close(self):
         raise ImproperlyConfigured(
-            "%s.%s.close is not implemented." % (self.__class__.__module__, self.__class__.__name__)
+            "%s.%s.close is not implemented." % (self.__class__.__module__, self.__class__.__name__),
         )
 
     def createdb(self):
         raise ImproperlyConfigured(
-            "%s.%s.createdb is not implemented." % (self.__class__.__module__, self.__class__.__name__)
+            "%s.%s.createdb is not implemented." % (self.__class__.__module__, self.__class__.__name__),
         )
 
     def dropdb(self):
         raise ImproperlyConfigured(
-            "%s.%s.dropdb is not implemented." % (self.__class__.__module__, self.__class__.__name__)
+            "%s.%s.dropdb is not implemented." % (self.__class__.__module__, self.__class__.__name__),
         )
 
 

@@ -31,16 +31,35 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument(
-            "--install", "-i", action="store_true", default=True, dest="install", help="intall package",
+            "--install",
+            "-i",
+            action="store_true",
+            default=True,
+            dest="install",
+            help="intall package",
         )
         parser.add_argument(
-            "--upgrade", "-u", action="store_true", default=False, dest="upgrade", help="upgrade package",
+            "--upgrade",
+            "-u",
+            action="store_true",
+            default=False,
+            dest="upgrade",
+            help="upgrade package",
         )
         parser.add_argument(
-            "--uninstall", "-r", action="store_true", default=False, dest="uninstall", help="uninstall package",
+            "--uninstall",
+            "-r",
+            action="store_true",
+            default=False,
+            dest="uninstall",
+            help="uninstall package",
         )
         parser.add_argument(
-            "--verbose", action="store_true", default=False, dest="verbose", help="verbose",
+            "--verbose",
+            action="store_true",
+            default=False,
+            dest="verbose",
+            help="verbose",
         )
         parser.add_argument("pkgs", metavar="pkgs", nargs="+", help="package(s)")
 

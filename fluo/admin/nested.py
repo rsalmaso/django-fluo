@@ -19,9 +19,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from django import forms
 from django.conf import settings
-from django.contrib import admin
 from django.contrib.admin import helpers
 from django.contrib.admin.options import InlineModelAdmin, ModelAdmin, reverse
 from django.contrib.admin.utils import unquote
@@ -115,7 +113,9 @@ class NestedModelAdmin(InlineInstancesMixin, ModelAdmin):
                     )
                 else:
                     nested_formset = InlineFormSet(
-                        instance=form.instance, prefix=prefix, queryset=nested_inline.get_queryset(request),
+                        instance=form.instance,
+                        prefix=prefix,
+                        queryset=nested_inline.get_queryset(request),
                     )
                 nested_formsets.append(nested_formset)
                 if nested_inline.inlines:
@@ -142,7 +142,12 @@ class NestedModelAdmin(InlineInstancesMixin, ModelAdmin):
                 readonly = list(nested_inline.get_readonly_fields(request, instance))
                 prepopulated = dict(nested_inline.get_prepopulated_fields(request, instance))
                 wrapped_nested_formset = helpers.InlineAdminFormSet(
-                    nested_inline, nested_formset, fieldsets, prepopulated, readonly, model_admin=self,
+                    nested_inline,
+                    nested_formset,
+                    fieldsets,
+                    prepopulated,
+                    readonly,
+                    model_admin=self,
                 )
                 wrapped_nested_formsets.append(wrapped_nested_formset)
                 media = get_media(wrapped_nested_formset.media)
@@ -177,10 +182,10 @@ class NestedModelAdmin(InlineInstancesMixin, ModelAdmin):
 
                     # TODO - find out why this breaks when extra = 1 and just adding new item with no sub items
                     if (not hasattr(form, "cleaned_data") or not form.cleaned_data) and self.formset_has_nested_data(
-                        form.nested_formsets
+                        form.nested_formsets,
                     ):
                         form._errors["__all__"] = form.error_class(
-                            ["Parent object must be created when creating nested inlines."]
+                            ["Parent object must be created when creating nested inlines."],
                         )
                         return False
         return True
@@ -267,7 +272,12 @@ class NestedModelAdmin(InlineInstancesMixin, ModelAdmin):
             readonly = list(inline.get_readonly_fields(request))
             prepopulated = dict(inline.get_prepopulated_fields(request))
             inline_admin_formset = helpers.InlineAdminFormSet(
-                inline, formset, fieldsets, prepopulated, readonly, model_admin=self
+                inline,
+                formset,
+                fieldsets,
+                prepopulated,
+                readonly,
+                model_admin=self,
             )
             inline_admin_formsets.append(inline_admin_formset)
             media = media + inline_admin_formset.media
@@ -305,14 +315,15 @@ class NestedModelAdmin(InlineInstancesMixin, ModelAdmin):
         if obj is None:
             raise Http404(
                 _("%(name)s object with primary key %(key)r does not exist.")
-                % {"name": force_text(opts.verbose_name), "key": escape(object_id)}
+                % {"name": force_text(opts.verbose_name), "key": escape(object_id)},
             )
 
         if request.method == "POST" and "_saveasnew" in request.POST:
             return self.add_view(
                 request,
                 form_url=reverse(
-                    "admin:%s_%s_add" % (opts.app_label, opts.module_name), current_app=self.admin_site.name,
+                    "admin:%s_%s_add" % (opts.app_label, opts.module_name),
+                    current_app=self.admin_site.name,
                 ),
             )
 
@@ -379,7 +390,12 @@ class NestedModelAdmin(InlineInstancesMixin, ModelAdmin):
             readonly = list(inline.get_readonly_fields(request, obj))
             prepopulated = dict(inline.get_prepopulated_fields(request, obj))
             inline_admin_formset = helpers.InlineAdminFormSet(
-                inline, formset, fieldsets, prepopulated, readonly, model_admin=self
+                inline,
+                formset,
+                fieldsets,
+                prepopulated,
+                readonly,
+                model_admin=self,
             )
             inline_admin_formsets.append(inline_admin_formset)
             media = media + inline_admin_formset.media

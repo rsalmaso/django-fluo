@@ -22,6 +22,7 @@ import sys
 
 from django.core.management.base import BaseCommand, CommandError
 from django.db import DEFAULT_DB_ALIAS, close_old_connections, connections
+
 from fluo.db.backend import get_backend
 
 
@@ -44,7 +45,8 @@ The full error: %(error)s"""
 
     def add_arguments(self, parser):
         parser.add_argument(
-            "--noinput", "--no-input",
+            "--noinput",
+            "--no-input",
             action="store_false",
             dest="interactive",
             default=True,
@@ -79,7 +81,7 @@ The full error: %(error)s"""
                 self.execute_sql(backend, **options)
             except Exception as e:
                 raise CommandError(CommandError(self.error_message % {"name": name, "error": e})).with_traceback(
-                    sys.exc_info()[2]
+                    sys.exc_info()[2],
                 )
             finally:
                 backend.close()
