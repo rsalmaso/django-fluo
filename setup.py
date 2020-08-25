@@ -20,46 +20,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-import io
+from setuptools import setup
 
-import fluo
-from setuptools import find_packages, setup
-
-with io.open("README.md", "rt") as f:
-    long_description = f.read()
-
-
-setup(
-    name="django-fluo",
-    description="various django utilities",
-    long_description=long_description,
-    long_description_content_type="text/markdown",
-    version=fluo.__version__,
-    url="https://bitbucket.org/rsalmaso/django-fluo",
-    author=fluo.__author__,
-    author_email=fluo.__email__,
-    license="MIT",
-    packages=find_packages(),
-    include_package_data=True,
-    platforms="any",
-    classifiers=[
-        "Operating System :: OS Independent",
-        "Programming Language :: Python",
-        "Topic :: Internet :: WWW/HTTP",
-        "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
-        "Topic :: Internet :: WWW/HTTP :: WSGI",
-        "Topic :: Software Development :: Libraries :: Application Frameworks",
-        "Topic :: Software Development :: Libraries :: Python Modules",
-        "Framework :: Django",
-        "Framework :: Django :: 2.2",
-        "Framework :: Django :: 3.0",
-        "Framework :: Django :: 3.1",
-        "License :: OSI Approved :: MIT License",
-        "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.8",
-    ],
-    install_requires=["django"],
-    zip_safe=False,
-)
+setup()

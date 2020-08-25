@@ -23,8 +23,5 @@ from .utils.version import get_version
 VERSION = (0, 4, 13, "final", 0)
 
 __version__ = get_version(VERSION)
-__author__ = "Raffaele Salmaso"
-__email__ = "raffaele@salmaso.org"
-
 
 default_app_config = "fluo.apps.FluoConfig"
