@@ -33,7 +33,7 @@ __all__ = [
 
 class AdminSite(admin.AdminSite):
     def get_urls(self):
-        from django.conf.urls import url
+        from django.urls import path
 
         def wrap(view, cacheable=False):
             def wrapper(*args, **kwargs):
@@ -42,7 +42,7 @@ class AdminSite(admin.AdminSite):
             return update_wrapper(wrapper, view)
 
         return [
-            url(r"^r/(?P<content_type_id>\d+)/(?P<object_id>.+)/$", wrap(self.view_on_site), name="view_on_site"),
+            path("r/<int:content_type_id>/<path:object_id>/", wrap(self.view_on_site), name="view_on_site"),
         ] + super().get_urls()
 
     def view_on_site(self, request, content_type_id, object_id):
