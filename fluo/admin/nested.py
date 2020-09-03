@@ -19,6 +19,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+from django import forms
 from django.conf import settings
 from django.contrib.admin import helpers
 from django.contrib.admin.options import InlineModelAdmin, ModelAdmin, reverse
