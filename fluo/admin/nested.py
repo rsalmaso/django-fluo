@@ -68,8 +68,12 @@ class InlineInstancesMixin:
 class NestedModelAdmin(InlineInstancesMixin, ModelAdmin):
     @property
     def media(self):
-        css = {"all": [static("fluo/admin/css/forms-nested.css")]}
-        js = [static(f"fluo/admin/js/inlines-nested{'' if settings.DEBUG else '.min'}.js")]
+        media = super().media
+        css = media._css
+        css["all"] = css.get("all", []).append("fluo/admin/css/forms-nested.css")
+        js = media._js + [
+            f"fluo/admin/js/inlines-nested{'' if settings.DEBUG else '.min'}.js",
+        ]
         return forms.Media(css=css, js=js)
 
     def save_formset(self, request, form, formset, change):
@@ -427,7 +431,11 @@ class NestedInline(InlineInstancesMixin, InlineModelAdmin):
 
     @property
     def media(self):
-        js = [static(f"fluo/admin/js/inlines-nested{'' if settings.DEBUG else '.min'}.js")]
+        extra = "" if settings.DEBUG else ".min"
+        media = super().media
+        js = media._js + [
+            f"fluo/admin/js/inlines-nested{'' if settings.DEBUG else '.min'}.js",
+        ]
         return forms.Media(js=js)
 
     def get_formsets_with_inlines(self, request, obj=None):
