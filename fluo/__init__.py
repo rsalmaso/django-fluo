@@ -20,7 +20,7 @@
 
 from .utils.version import get_version
 
-VERSION = (0, 4, 17, "final", 0)
+VERSION = (0, 4, 18, "final", 0)
 
 __version__ = get_version(VERSION)
 
