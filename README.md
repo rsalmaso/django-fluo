@@ -8,3 +8,4 @@ My personal django reusable stuffs.
 ### dev
 
 * Drop support for Django < 3.2
+* Add support for Python 3.9 and 3.10
