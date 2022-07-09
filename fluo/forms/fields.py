@@ -20,16 +20,12 @@
 
 from __future__ import annotations
 
-# JsonField taken and adapted from https://github.com/bradjasper/django-jsonfield.git
-# Copyright (c) 2012 Brad Jasper
 from operator import add, mul
 
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.encoding import smart_text
 from django.utils.translation import gettext, gettext_lazy as _
-
-from fluo.utils import json
 
 from .widgets import GroupedSelect, TimeDeltaWidget
 
@@ -39,7 +35,6 @@ __all__ = [
     "TextField",
     "GroupedChoiceField",
     "TimeDeltaField",
-    "JsonField",
 ]
 
 
@@ -125,23 +120,3 @@ class TimeDeltaField(forms.MultiValueField):
         if value:
             return "{}".format(reduce(add, map(lambda x: mul(*x), zip(map(float, value), self.SECONDS))))
         return None
-
-
-class JsonField(forms.CharField):
-    def to_python(self, value):
-        if isinstance(value, str):
-            try:
-                return json.loads(value, **self.load_kwargs)
-            except ValueError:
-                raise ValidationError(_("Enter valid JSON"))
-        return value
-
-    def clean(self, value):
-        if not value and not self.required:
-            return None
-
-        # Trap cleaning errors & bubble them up as JSON errors
-        try:
-            return super().clean(value)
-        except TypeError:
-            raise ValidationError(_("Enter valid JSON"))
