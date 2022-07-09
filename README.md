@@ -16,3 +16,4 @@ My personal django reusable stuffs.
 * Remove `css_print` templatetag
 * Enable PEP 563 – Postponed Evaluation of Annotations
 * Drop `fluo.forms.fields.JsonField`
+* Remove `postgresql_psycopg2` backend
