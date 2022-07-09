@@ -14,3 +14,4 @@ My personal django reusable stuffs.
 * Remove `jquery` templatetag
 * Remove `css_ie` templatetag
 * Remove `css_print` templatetag
+* Enable PEP 563 – Postponed Evaluation of Annotations

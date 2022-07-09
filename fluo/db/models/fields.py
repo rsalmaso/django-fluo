@@ -18,11 +18,12 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+from __future__ import annotations
+
 # Original code for taken and adapted from
 # - django-extensions
 #   - CreationDateTimeField
 #   - ModificationDateTimeField
-
 from django.core import checks, validators
 from django.db import connection, models
 from django.db.models import lookups

@@ -18,9 +18,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+from __future__ import annotations
+
 # Original code taken from django-extensions
 # Copyright (c) 2007 Michael Trier
-
 import getpass
 
 from django.contrib.auth import get_user_model

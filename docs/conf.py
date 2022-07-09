@@ -11,6 +11,8 @@
 # All configuration values have a default value; values that are commented out
 # serve to show the default value.
 
+from __future__ import annotations
+
 import os
 import sys
 

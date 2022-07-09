@@ -19,6 +19,8 @@
 # THE SOFTWARE.
 
 
+from __future__ import annotations
+
 from django import forms
 from django.contrib.admin.widgets import AutocompleteMixin
 from django.urls import reverse

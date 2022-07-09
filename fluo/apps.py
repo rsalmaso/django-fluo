@@ -18,6 +18,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+from __future__ import annotations
+
 from django.apps import AppConfig
 from django.contrib.admin.apps import AdminConfig
 from django.utils.translation import gettext_lazy as _

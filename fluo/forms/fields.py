@@ -18,9 +18,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+from __future__ import annotations
+
 # JsonField taken and adapted from https://github.com/bradjasper/django-jsonfield.git
 # Copyright (c) 2012 Brad Jasper
-
 from operator import add, mul
 
 from django import forms

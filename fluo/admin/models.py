@@ -18,9 +18,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+from __future__ import annotations
+
 # Copyright (C) 2007 Michael Trier
 # Autocomplete feature taken from django-extensions
-
 from functools import update_wrapper
 
 from django.contrib import admin

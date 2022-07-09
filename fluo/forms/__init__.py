@@ -18,6 +18,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+from __future__ import annotations
+
 from django.contrib.contenttypes.forms import BaseGenericInlineFormSet, generic_inlineformset_factory  # noqa: F401,F403
 from django.core.exceptions import ValidationError
 from django.forms import *  # noqa: F401,F403

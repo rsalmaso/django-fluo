@@ -18,9 +18,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+from __future__ import annotations
+
 # taken and adapted from django-cms
 # Copyright (c) 2008, Batiste Bieler
-
 "this is the locale selecting middleware that will look at accept headers"
 
 import re
