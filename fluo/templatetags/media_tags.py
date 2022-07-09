@@ -73,11 +73,11 @@ def js(parser, token):
 
 @register.simple_tag
 def static_url():
-    """ Returns the string contained in the setting STATIC_URL. """
+    """Returns the string contained in the setting STATIC_URL."""
     return static("")
 
 
 @register.simple_tag
 def media_url():
-    """ Returns the string contained in the setting MEDIA_URL. """
+    """Returns the string contained in the setting MEDIA_URL."""
     return MEDIA_URL
