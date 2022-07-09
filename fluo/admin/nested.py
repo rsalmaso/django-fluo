@@ -30,7 +30,6 @@ from django.core.exceptions import FieldDoesNotExist, PermissionDenied
 from django.db import models, transaction
 from django.forms.formsets import all_valid
 from django.http import Http404
-from django.templatetags.static import static
 from django.utils.decorators import method_decorator
 from django.utils.encoding import force_text
 from django.utils.html import escape
@@ -433,7 +432,6 @@ class NestedInline(InlineInstancesMixin, InlineModelAdmin):
 
     @property
     def media(self):
-        extra = "" if settings.DEBUG else ".min"
         media = super().media
         js = media._js + [
             f"fluo/admin/js/inlines-nested{'' if settings.DEBUG else '.min'}.js",
