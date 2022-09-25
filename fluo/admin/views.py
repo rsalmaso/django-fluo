@@ -3,7 +3,10 @@ from __future__ import annotations
 import operator
 from functools import reduce
 
-from django.contrib.admin.utils import lookup_needs_distinct
+try:
+    from django.contrib.admin.utils import lookup_spawns_duplicates
+except ImportError:
+    from django.contrib.admin.utils import lookup_needs_distinct as lookup_spawns_duplicates
 from django.contrib.admin.views.autocomplete import AutocompleteJsonView
 from django.core.exceptions import FieldDoesNotExist
 from django.db import models
@@ -64,7 +67,9 @@ class RelatedSearchJsonView(AutocompleteJsonView):
             for bit in search_term.split():
                 or_queries = [models.Q(**{orm_lookup: bit}) for orm_lookup in orm_lookups]
                 queryset = queryset.filter(reduce(operator.or_, or_queries))
-            use_distinct |= any(lookup_needs_distinct(queryset.model._meta, search_spec) for search_spec in orm_lookups)
+            use_distinct |= any(
+                lookup_spawns_duplicates(queryset.model._meta, search_spec) for search_spec in orm_lookups
+            )
 
         return queryset, use_distinct
 
