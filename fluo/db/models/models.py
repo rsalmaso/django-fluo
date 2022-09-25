@@ -21,6 +21,7 @@
 from __future__ import annotations
 
 import re
+from urllib.parse import quote
 
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, UserManager
 from django.contrib.contenttypes.fields import GenericForeignKey
@@ -31,7 +32,6 @@ from django.db import models
 from django.db.models import Max
 from django.template.defaultfilters import slugify
 from django.utils import timezone
-from django.utils.http import urlquote
 from django.utils.translation import get_language, gettext_lazy as _
 
 from fluo import settings
@@ -261,7 +261,7 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = _("users")
 
     def get_absolute_url(self):
-        return "/users/%s/" % urlquote(self.username)
+        return "/users/%s/" % quote(self.username)
 
     def get_full_name(self):
         """
