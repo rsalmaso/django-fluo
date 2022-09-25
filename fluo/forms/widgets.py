@@ -33,7 +33,7 @@ from django.contrib.admin.widgets import (
 )
 from django.forms.utils import flatatt
 from django.utils.dates import MONTHS
-from django.utils.encoding import smart_text
+from django.utils.encoding import smart_str
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 
@@ -58,14 +58,14 @@ class GroupedSelect(forms.Select):
             value = ""
         final_attrs = self.build_attrs(attrs, name=name)
         output = ["<select%s>" % flatatt(final_attrs)]
-        str_value = smart_text(value)
+        str_value = smart_str(value)
         for group_label, group in self.choices:
             if group_label:  # should belong to an optgroup
-                group_label = smart_text(group_label)
+                group_label = smart_str(group_label)
                 output.append('<optgroup label="%s">' % escape(group_label))
             for k, v in group:
-                option_value = smart_text(k)
-                option_label = smart_text(v)
+                option_value = smart_str(k)
+                option_label = smart_str(v)
                 selected_html = (option_value == str_value) and ' selected="selected"' or ""
                 output.append(
                     '<option value="%s"%s>%s</option>' % (escape(option_value), selected_html, escape(option_label)),

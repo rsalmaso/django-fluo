@@ -24,7 +24,7 @@ from operator import add, mul
 
 from django import forms
 from django.core.exceptions import ValidationError
-from django.utils.encoding import smart_text
+from django.utils.encoding import smart_str
 from django.utils.translation import gettext, gettext_lazy as _
 
 from .widgets import GroupedSelect, TimeDeltaWidget
@@ -89,7 +89,7 @@ class GroupedChoiceField(forms.ChoiceField):
         value = super().clean(value)
         if value in (None, ""):
             value = ""
-        value = smart_text(value)
+        value = smart_str(value)
         if value == "":
             return value
         valid_values = []

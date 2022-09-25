@@ -28,7 +28,7 @@ from django.core import checks, validators
 from django.db import connection, models
 from django.db.models import lookups
 from django.utils import timezone
-from django.utils.encoding import smart_text
+from django.utils.encoding import smart_str
 from django.utils.translation import gettext_lazy as _
 
 from fluo import forms
@@ -156,7 +156,7 @@ class StringField(models.Field):
     def to_python(self, value):
         if isinstance(value, str) or value is None:
             return value
-        return smart_text(value)
+        return smart_str(value)
 
     def get_prep_value(self, value):
         value = super().get_prep_value(value)
