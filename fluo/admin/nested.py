@@ -31,7 +31,7 @@ from django.db import models, transaction
 from django.forms.formsets import all_valid
 from django.http import Http404
 from django.utils.decorators import method_decorator
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 from django.utils.html import escape
 from django.utils.translation import gettext as _
 from django.views.decorators.csrf import csrf_protect
@@ -294,7 +294,7 @@ class NestedModelAdmin(InlineInstancesMixin, ModelAdmin):
 
         context = {
             **self.admin_site.each_context(request),
-            "title": _("Add %s") % force_text(opts.verbose_name),
+            "title": _("Add %s") % force_str(opts.verbose_name),
             "adminform": adminForm,
             "is_popup": "_popup" in request.GET,
             "show_delete": False,
@@ -321,7 +321,7 @@ class NestedModelAdmin(InlineInstancesMixin, ModelAdmin):
         if obj is None:
             raise Http404(
                 _("%(name)s object with primary key %(key)r does not exist.")
-                % {"name": force_text(opts.verbose_name), "key": escape(object_id)},
+                % {"name": force_str(opts.verbose_name), "key": escape(object_id)},
             )
 
         if request.method == "POST" and "_saveasnew" in request.POST:
@@ -412,7 +412,7 @@ class NestedModelAdmin(InlineInstancesMixin, ModelAdmin):
 
         context = {
             **self.admin_site.each_context(request),
-            "title": _("Change %s") % force_text(opts.verbose_name),
+            "title": _("Change %s") % force_str(opts.verbose_name),
             "adminform": adminForm,
             "object_id": object_id,
             "original": obj,
