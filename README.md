@@ -8,6 +8,7 @@ My personal django reusable stuffs.
 ### dev
 
 * Drop support for Django < 3.2
+* Add support for Django 4.1
 * Drop support for Python < 3.8
 * Add support for Python 3.9, 3.10, 3.11
 * Drop StatusModel as it is not easyly customizable, use StatusField
