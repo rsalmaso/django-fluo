@@ -16,4 +16,4 @@ exclude = '''
 '''
 line-length = 120
 safe = true
-target-version = ['py36']
+target-version = ['py38']
