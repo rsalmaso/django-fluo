@@ -5,7 +5,7 @@ My personal django reusable stuffs.
 
 ## CHANGES ##
 
-### dev
+### 0.5.0
 
 * Drop support for Django < 3.2
 * Add support for Django 4.1
